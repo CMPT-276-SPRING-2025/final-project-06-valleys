@@ -1,1 +1,9 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=17733104&assignment_repo_type=AssignmentRepo)
+# Deep Phishing - 06 Valleys
+A webapplication created to educate users about phishing scams, their consequences, and how to prevent falling victim to these potential scams. By providing features that allow people to upload files or documents to see potential red flags and learn more about these red flags. By giving people the knowledge of potential phishing scams they will be able to identify whether or not something sent directly towards them is a phishing scheme.
+
+
+## Group Members
+* Philip Ho - 301472672  
+* Amraj Koonar - 301559468  
+* Kimchhorn Sambath - 301637407  
+* Nathan Huynh - 301608957
