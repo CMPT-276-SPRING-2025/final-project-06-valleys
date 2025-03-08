@@ -2,14 +2,25 @@
   "name": "src",
   "version": "0.1.0",
   "private": true,
+  "lint-staged": {
+    "*.{js,ts,tsx,json}": [
+      "prettier --write"
+    ]
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
+    "prettier": "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "lint-staged": "^15.4.3",
     "next": "15.2.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -18,8 +29,12 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "22.13.9",
     "@types/react": "19.0.10",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.1",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.2.1",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
     "tailwindcss": "^4"
   }
 }
