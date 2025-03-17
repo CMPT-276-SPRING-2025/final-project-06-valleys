@@ -22,7 +22,7 @@
   Sincerely, Secure Service Support Team`;
 
   // Construct the prompt to instruct the model to flag scam keywords
-  export const prompt = `
+  export const firstPrompt = `
   You are a scam detector. Identify potential scam keywords in the following email and annotate them.
   Highlight any suspicious words or phrases that may indicate a scam.
   

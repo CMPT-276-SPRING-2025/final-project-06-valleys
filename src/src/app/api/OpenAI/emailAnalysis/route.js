@@ -1,59 +1,55 @@
-import OpenAI from "openai";
+import OpenAI from "openai"; 
 import dotenv from 'dotenv';
-// import { NextResponse } from 'next/server';
-
-// export async function POST(request){
-//   try{
-//     const formData = await request.formData();
-//     let text = formData.get("text");
-
-//     const file = formData.get("text");
-//     if (file){
-//       const buffer = await file.arrayBuffer();
-//       text = new TextDecoder().decode(buffer);
-//     }
-
-//     if(!text){
-//       return NextResponse.json({error: "No Text Provided"}, {status: 404});
-//     }
-//     const annotatatedText = hightlightScamwards(text);
-//     return NextResponse.json({annotatedText});
-//   }
-//   catch (err) {
-//   console.error("Error processing request:", err);
-//   return NextResponse.json({ error: "Failed to analyze email" }, { status: 500 });
-//   }
-// }
+import * as prompt from './aiPrompt.js';
+import { NextResponse } from 'next/server';
 
 dotenv.config({ path: '.env' });
+
 const token = process.env["OPENAI_API_KEY"];
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";
 
-export async function main() {
-  const client = new OpenAI({ baseURL: endpoint, apiKey: token });
-
- 
+export async function POST(request) {
   try {
-    // Get the response from OpenAI
+    const formData = await request.formData();
+    let text = formData.get("text");
+
+    // Handle file input if provided
+    const file = formData.get("file");
+    if (file) {
+      const buffer = await file.arrayBuffer();
+      text = new TextDecoder().decode(buffer);
+    }
+
+    if (!text) {
+      return NextResponse.json({ error: "No text provided" }, { status: 400 });
+    }
+
+    const client = new OpenAI({ baseURL: endpoint, apiKey: token });
+
+    // Send the text to OpenAI for annotation
     const response = await client.chat.completions.create({
       messages: [
-        { role: "system", content: "You are a scam detector." },
-        { role: "user", content: prompt }
-        { role: "system", content: aiResponse }
+        { role: "system", content: `You are a scam detector. Identify potential scam keywords in the following email and annotate them.
+        Highlight in green or red in HTML any suspicious words or phrases that may indicate a scam.` },
+        { role: "user", content: prompt.scamEmailText },
+        { role: "system", content: prompt.scamEmailAiResponse },
+        { role: "user", content: prompt.notScamEmailText },
+        { role: "system", content: prompt.notScamEmailAiResponse },
+        { role: "user", content: text }
       ],
       temperature: 1.0,
       top_p: 1.0,
       max_tokens: 1000,
       model: modelName
     });
-  console.log(response.choices[0].message.content);
-  } catch (err) {
-    console.error("Error during OpenAI API request:", err);
-  }
-  
-}
 
-main().catch((err) => {
-  console.error("The sample encountered an error:", err);
-});
+    const annotatedText = response.choices[0].message.content;
+
+    // Return the annotated text to the client
+    return NextResponse.json({ annotatedText });
+  } catch (err) {
+    console.error("Error processing request:", err);
+    return NextResponse.json({ error: "Failed to analyze email" }, { status: 500 });
+  }
+}
