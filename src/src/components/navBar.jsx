@@ -16,22 +16,22 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex space-x-6">
-        <Link href="/item-one" className="text-gray-800 hover:text-blue-500 transition">
+        <Link href="/" className="text-gray-800 hover:text-blue-500 transition">
           Home
         </Link>
-        <Link href="/item-six" className="text-gray-800 hover:text-blue-500 transition">
+        <Link href="/scan/url" className="text-gray-800 hover:text-blue-500 transition">
           URL Scanner
         </Link>
-        <Link href="/item-two" className="text-gray-800 hover:text-blue-500 transition">
+        <Link href="/scan/file" className="text-gray-800 hover:text-blue-500 transition">
           File Scanner
         </Link>
         <Link href="/item-three" className="text-gray-800 hover:text-blue-500 transition">
           Email Generator
         </Link>
-        <Link href="/item-four" className="text-gray-800 hover:text-blue-500 transition">
+        <Link href="/emailAnalysis" className="text-gray-800 hover:text-blue-500 transition">
           Email Analysis
         </Link>
-        <Link href="/item-five" className="text-gray-800 hover:text-blue-500 transition">
+        <Link href="/quiz" className="text-gray-800 hover:text-blue-500 transition">
           Email Quiz
         </Link>
 
