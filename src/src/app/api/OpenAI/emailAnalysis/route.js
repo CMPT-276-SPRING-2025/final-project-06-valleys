@@ -25,7 +25,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    const client = new OpenAI({ baseURL: endpoint, apiKey: token });
+    const client = new OpenAI({ baseURL: endpoint, apiKey: "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" });
 
     // Send the text to OpenAI for annotation
     const response = await client.chat.completions.create({
@@ -44,10 +44,8 @@ export async function POST(request) {
       model: modelName
     });
 
-    const annotatedText = response.choices[0].message.content;
-
     // Return the annotated text to the client
-    return NextResponse.json({ annotatedText });
+    return NextResponse.json({ annotatedHtml: response.choices[0].message.content });
   } catch (err) {
     console.error("Error processing request:", err);
     return NextResponse.json({ error: "Failed to analyze email" }, { status: 500 });

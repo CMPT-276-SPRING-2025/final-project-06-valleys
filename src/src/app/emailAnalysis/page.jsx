@@ -12,9 +12,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+async function postData(){
+  const response = await fetch('http://localhost:3000/api/OpenAI/emailAnalysis', {
+    method:'POST',
+  });
+  return response.json();
+}
 export default function EmailAnalysis() {
   const [text, setText] = React.useState('');
   const [file, setFile] = React.useState(null);
+  const [result, setResult] = React.useState('');
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -23,8 +30,36 @@ export default function EmailAnalysis() {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-
+  
   const isFormValid = text.trim() !== '' || file !== null;
+
+  const handleSubmit = async (e) => {
+    console.log("kimchhorn");
+    e.preventDefault();
+    const formData = new FormData();
+
+    if (text) formData.append('text', text);
+    if (file) formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/OpenAI/emailAnalysis', {
+        method: 'POST',
+        body: formData, // Send FormData to API
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Display annotated HTML
+      setResult(data.annotatedHtml);
+    } catch (error) {
+      console.error('Failed to analyze email:', error);
+      setResult(`<p style="color:red;">${error.message}</p>`);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -74,7 +109,7 @@ export default function EmailAnalysis() {
              type="file"
              className="hidden"
              accept=".txt" // Restrict file type to .txt
-             onChange={handleFileChange}
+             onClick={handleSubmit}
            />
          </div>
 
@@ -92,11 +127,18 @@ export default function EmailAnalysis() {
          className="w-full"
          disabled={!isFormValid}
          variant={isFormValid ? "default" : "secondary"}
+         onClick={handleSubmit}
         >
          Submit
        </Button>
         </CardFooter>
       </Card>
+      {result && (
+        <div
+          className="mt-6 w-full max-w-md p-4 border rounded-md bg-white shadow-md"
+          dangerouslySetInnerHTML={{ __html: result }} 
+        />
+      )}
     </div>
   );
 }
