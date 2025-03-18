@@ -26,15 +26,16 @@ export default function RootLayout({ children }) {
     <html lang="en">
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Pass the handleMenuToggle and isOpen state to the NavBar */}
-        <NavBar toggleMenu={handleMenuToggle} isOpen={isMenuOpen} />
+        <div className="min-h-screen flex flex-col">
+          <NavBar toggleMenu={handleMenuToggle} isOpen={isMenuOpen} />
 
-        {/* Main content, add top padding and margin adjustment when the menu is open */}
-        <div className={`transition-all pt-16 ${isMenuOpen ? "mt-60" : ""}`}>
-          {children}
+          <main className={`flex-grow transition-all pt-16 ${isMenuOpen ? "mt-60" : ""}`}>
+            {children}
+          </main>
+
+          <Footer />
         </div>
       </body>
-      <Footer/>
     </html>
   );
 }
