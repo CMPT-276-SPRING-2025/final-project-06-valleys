@@ -7,7 +7,7 @@ export function LoadingState({ status }) {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-2xl">
-            Analyzing URL...
+            Analyzing...
           </CardTitle>
           <CardDescription className="text-center">
             This may take a minute or two

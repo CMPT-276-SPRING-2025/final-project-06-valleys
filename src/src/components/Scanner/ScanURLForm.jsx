@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { Shield } from "lucide-react"; // Import shield icon
+import { Shield } from "lucide-react"; 
 
 export default function ScanUrlForm() {
   const [url, setUrl] = useState("");
@@ -29,7 +29,6 @@ export default function ScanUrlForm() {
     setLoading(true);
 
     try {
-      // Step 1: Submit the URL and get the analysis ID
       const submitResponse = await fetch(
         `/api/virustotal/url?url=${encodeURIComponent(url)}`,
       );
