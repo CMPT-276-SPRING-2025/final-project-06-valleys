@@ -2,7 +2,7 @@ import ScanUrlForm from "@/components/Scanner/ScanURLForm";
 
 export default function ScanURLPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between max-w-screen-xl mx-auto py-8 px-4">
+    <main className="mx-auto flex min-h-[50dvh] max-w-screen-xl flex-col items-center justify-center px-4 py-8">
       <ScanUrlForm />
     </main>
   );

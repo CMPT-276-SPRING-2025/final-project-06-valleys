@@ -67,7 +67,7 @@ export default function ScanUrlForm() {
           potential threats.
         </p>
 
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-4 md:gap-2 sm:flex-row">
           <Input
             type="search"
             placeholder="Enter URL, domain, or IP address"
