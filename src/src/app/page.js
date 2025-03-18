@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import { Button } from "@/components/button";
 
+export const metadata = {
+  title: 'Deep Phishing',
+  name:"description",
+   content:"Help Detect Scam Email",
+}
 
 
 
