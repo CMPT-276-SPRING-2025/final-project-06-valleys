@@ -1,24 +1,34 @@
-"use client"; 
+"use client";
 
-import { useState } from "react";
-import { Button } from "@/components/button"; 
-import { Input } from "@/components/input"; 
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { Shield } from "lucide-react"; 
 
 export default function ScanUrlForm() {
   const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false); 
-  const [analysisResults, setAnalysisResults] = useState(null); 
+  const [loading, setLoading] = useState(false);
+  const [isValidUrl, setIsValidUrl] = useState(false);
+  const router = useRouter();
+
+  // Validate URL whenever the input changes
+  useEffect(() => {
+    // Simple URL validation regex
+    const urlPattern =
+      /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+    setIsValidUrl(urlPattern.test(url));
+  }, [url]);
 
   const handleScan = async () => {
-    if (!url) {
-      alert("Please enter a URL");
+    if (!isValidUrl) {
+      alert("Please enter a valid URL");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Step 1: Submit the URL and get the analysis ID
       const submitResponse = await fetch(
         `/api/virustotal/url?url=${encodeURIComponent(url)}`,
       );
@@ -28,50 +38,53 @@ export default function ScanUrlForm() {
         throw new Error("Failed to get analysis ID");
       }
 
-      // Step 2: Fetch analysis results using the analysis ID
-      const analysisResponse = await fetch(
-        `/api/virustotal/analysis?id=${submitData.analysisId}`,
-      );
-      const analysisData = await analysisResponse.json();
-
-      if (analysisResponse.ok) {
-        setAnalysisResults(analysisData); 
-      } else {
-        throw new Error(
-          analysisData.error || "Failed to fetch analysis results",
-        );
-      }
+      // Instead of fetching results here, redirect to the results page
+      router.push(`/scan/url/${submitData.analysisId}`);
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred. Please try again.");
-    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="mx-auto mt-10 flex flex-col space-y-4">
-      <h1 className="text-center text-2xl font-bold">
-        Scan URL with VirusTotal
-      </h1>
-      <Input
-        type="search"
-        placeholder="Enter URL to scan"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        disabled={loading}
-      />
-      <Button onClick={handleScan} disabled={loading}>
-        {loading ? "Scanning..." : "Scan URL"}
-      </Button>
+    <div className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center justify-center p-4">
+      <div className="text-primary mb-2">
+        <Shield size={48} />
+      </div>
 
-      {/* Display analysis results */}
-      {analysisResults && (
-        <div className="mt-4 rounded-lg bg-gray-100 p-4">
-          <h2 className="text-xl font-bold">Analysis Results</h2>
-          <pre>{JSON.stringify(analysisResults, null, 2)}</pre>
+      <h1 className="mb-2 text-center text-3xl font-bold">URL Scanner</h1>
+
+      <p className="mb-6 text-center text-sm text-neutral-600">
+        Scan URLs, domains, and IP addresses to detect potential security
+        threats
+      </p>
+
+      <div className="w-full rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-1 text-xl font-medium">Enter a URL to scan</h2>
+        <p className="mb-4 text-sm text-neutral-600">
+          We'll check the URL against multiple security databases to identify
+          potential threats.
+        </p>
+
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            type="search"
+            placeholder="Enter URL, domain, or IP address"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            disabled={loading}
+            className="flex-grow"
+          />
+          <Button
+            onClick={handleScan}
+            disabled={loading || !isValidUrl}
+            className="whitespace-nowrap"
+          >
+            {loading ? "Scanning..." : "Scan"}
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
