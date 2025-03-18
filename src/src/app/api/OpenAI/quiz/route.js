@@ -17,15 +17,14 @@ export async function POST(request) {
     });
 
     const response = await client.chat.completions.create({
-      messages: 
-      [
+      messages: [
         { 
           role: "system", 
           content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object." 
         },
         { 
           role: "user",
-          content: `Generate 5 multiple-choice questions on phishing emails using this JSON structure. 
+          content: `Generate 5 multiple-choice questions on phishing emails using this JSON structure. Make sure that there is only fake option and real option, nothing else. 
           Do NOT include markdown (\`\`\`json) or explanations. Return ONLY a valid JSON object.
 
           {
@@ -67,6 +66,8 @@ export async function POST(request) {
 
     const rawContent = response.choices[0].message.content.trim();
     const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
+
+    console.log(cleanedResponse);
 
     let parsedContent;
     try 
