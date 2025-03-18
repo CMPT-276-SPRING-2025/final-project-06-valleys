@@ -1,4 +1,8 @@
 import Image from 'next/image';
+import { Button } from "@/components/button";
+
+
+
 
 export default function Home() {
   return (
@@ -22,7 +26,7 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
-
+        <Button>Click me</Button>
         <div className="flex flex-col items-center gap-4 sm:flex-row">
           <a
             className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm transition-colors hover:bg-[#383838] sm:h-12 sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
