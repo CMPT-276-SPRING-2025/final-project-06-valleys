@@ -9,37 +9,54 @@ const modelName = "gpt-4o";
 
 export async function POST(request) {
   try {
+    console.log("API route reached");
+
     const client = new OpenAI({
       baseURL: endpoint,
-      apiKey: "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"
+      apiKey: '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',
     });
 
     const response = await client.chat.completions.create({
-      messages: [
-        { role: "system", content: "" },
-        {
+      messages: 
+      [
+        { 
+          role: "system", 
+          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object." 
+        },
+        { 
           role: "user",
-          content: `Give me 5 multiple choice questions on phsing emails using this format make sure u give 2 potential answers in format give in the json skeleton make sure to give me the fake email real email fake message real message and correct message make sure to use real companies and follow this template I have provided make sure that the fake and real messages have white space gaps after parts like real emails. also make sure that both the fake and real emails have a similar problem occurring
-      
-      "questions": [ { "fake_subject": "Problem with your recent Amazon delivery", "real_subject": "Your Amazon order #402-9372841-4921557 has shipped ", "fake_email": "shipping@amazon-delivery.net", "real_email": "noreply@amazon.com", "fake_message": "Dear Amazon Customer,
-      
-      We regret to inform you that we encountered a problem delivering your recent Amazon order.
-      
-      To reschedule your delivery, please verify your delivery address by clicking the link below: [VERIFY ADDRESS LINK]
-      
-      If we don't hear from you within 24 hours, your package will be returned to our warehouse.
-      
-      Amazon Delivery Team", "real_message": "Hello,
-      
-      Your Amazon order of \"Wireless Headphones\" has shipped.
-      
-      You can track your package at any time by visiting Your Orders on Amazon.com.
-      
-      Arriving: Thursday, June 8 Shipped to: Your default address
-      
-      Thank you for shopping with us. Amazon.com", "correct_email": "noreply@amazon.com" },
-      
-      " }`
+          content: `Generate 5 multiple-choice questions on phishing emails using this JSON structure. 
+          Do NOT include markdown (\`\`\`json) or explanations. Return ONLY a valid JSON object.
+
+          {
+            "questions": [
+              {
+                "fake_subject": "Problem with your recent Amazon delivery",
+                "real_subject": "Your Amazon order #402-9372841-4921557 has shipped",
+                "fake_email": "shipping@amazon-delivery.net",
+                "real_email": "noreply@amazon.com",
+                "fake_message": "Dear Amazon Customer,
+
+                We regret to inform you that we encountered a problem delivering your recent Amazon order.
+
+                To reschedule your delivery, please verify your delivery address by clicking the link below: [VERIFY ADDRESS LINK]
+
+                If we don't hear from you within 24 hours, your package will be returned to our warehouse.
+
+                Amazon Delivery Team",
+                "real_message": "Hello,
+
+                Your Amazon order of 'Wireless Headphones' has shipped.
+
+                You can track your package at any time by visiting Your Orders on Amazon.com.
+
+                Arriving: Thursday, June 8 Shipped to: Your default address
+
+                Thank you for shopping with us. Amazon.com",
+                "correct_email": "noreply@amazon.com"
+              }
+            ]
+          }`
         }
       ],
       model: modelName,
@@ -48,19 +65,26 @@ export async function POST(request) {
       top_p: 1
     });
 
-    const rawContent = response.choices[0].message.content;
+    const rawContent = response.choices[0].message.content.trim();
+    const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
 
     let parsedContent;
-    try {
-      parsedContent = JSON.parse(rawContent);
-    } catch (error) {
+    try 
+    {
+      parsedContent = JSON.parse(cleanedResponse);
+    } 
+    catch (error) 
+    {
       console.error("Failed to parse AI response as JSON:", error);
-      return NextResponse.json(
+      return NextResponse.json
+      (
         {
           error: "Failed to parse AI response as JSON",
           rawContent
         },
-        { status: 500 }
+        { 
+          status: 500 
+        }
       );
     }
 
