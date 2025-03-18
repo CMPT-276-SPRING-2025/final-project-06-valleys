@@ -23,7 +23,10 @@ export default function EmailAnalysis() {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
   };
 
   const isFormValid = text.trim() !== '' || file !== null;
@@ -36,7 +39,7 @@ export default function EmailAnalysis() {
 
     const formData = new FormData();
     if (text) formData.append('text', text);
-    if (file) formData.append('file', file);
+    if (file) formData.append('file', file); // ✅ Fix: Append the file correctly
 
     try {
       const response = await fetch('/api/OpenAI/emailAnalysis', {
@@ -60,85 +63,88 @@ export default function EmailAnalysis() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {/* Shield Logo */}
-      <ShieldLogo />
+      {/* Centered Logo and Title */}
+      <div className="flex flex-col items-center mb-6">
+        <ShieldLogo />
+        <h1 className="text-3xl font-bold mt-4">Email Analysis</h1>
+        <p className="text-gray-600 text-center mt-2">
+          AI-powered tool to analyze emails for potential phishing indicators.
+        </p>
+      </div>
 
-      {/* Title */}
-      <h1 className="text-3xl font-bold mt-4">Email Analysis</h1>
+      {/* Main Content (Two Columns) */}
+      <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
+        {/* Left Column - Card */}
+        <Card className="p-4 shadow-lg">
+          <CardHeader>
+            <CardTitle>Email Content</CardTitle>
+            <CardDescription>
+              Paste the email content or upload a file for analysis.
+            </CardDescription>
+          </CardHeader>
 
-      {/* Subtitle */}
-      <p className="text-gray-600 text-center mt-2">
-        AI-powered tool to analyze emails for potential phishing indicators.
-      </p>
-
-      {/* Card */}
-      <Card className="mt-6 w-full max-w-md p-4 shadow-lg">
-        <CardHeader>
-          <CardTitle>Email Content</CardTitle>
-          <CardDescription>
-            Paste the email content or upload a file for analysis.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          {/* Text Area */}
-          <textarea
-            className="w-full h-40 border rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Paste the full content here, including headers if available..."
-            value={text}
-            onChange={handleTextChange}
-          />
-
-          <p className="text-blue-00 text-sm mt-2">
-            Please upload only <span className="font-semibold">.txt</span> files.
-          </p>
-
-          {/* Choose File Button */}
-          <div className="mt-4">
-            <Button
-              as="label"
-              htmlFor="file-upload"
-              className="w-full border-blue-600 border rounded-md hover:text-white transition"
-            >
-              Choose File
-            </Button>
-            <input
-              id="file-upload"
-              type="file"
-              className="hidden"
-              accept=".txt"
-              onChange={handleFileChange}
+          <CardContent>
+            {/* Text Area */}
+            <textarea
+              className="w-full h-40 border rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Paste the full content here, including headers if available..."
+              value={text}
+              onChange={handleTextChange}
             />
-          </div>
 
-          {/* Display uploaded file name */}
-          {file && (
-            <p className="text-sm text-gray-600 mt-2">
-              {file.name}
+            <p className="text-blue-00 text-sm mt-2">
+              Please upload only <span className="font-semibold">.txt</span> files.
             </p>
-          )}
-        </CardContent>
 
-        {/* Submit Button */}
-        <CardFooter>
-          <Button
-            className="w-full"
-            disabled={!isFormValid || loading} 
-            variant={isFormValid ? "default" : "secondary"}
-            onClick={handleSubmit}
-          >
-            {loading ? 'Analyzing...' : 'Submit'}
-          </Button>
-        </CardFooter>
-      </Card>
+            <div className="flex items-center mt-4 space-x-2">
+             {/* File Upload Button */}
+             <label
+               htmlFor="file-upload"
+               className="px-4 py-2 text-sm text-white rounded-md transition cursor-pointer hover:bg-blue-500"
+               style={{ backgroundColor: '#5e7ab8' }}
+             >
+               Choose File
+             </label>
+           
+             {/* Hidden but accessible input */}
+             <input
+               id="file-upload"
+               type="file"
+               accept=".txt"
+               onChange={handleFileChange}
+               className="absolute w-0 h-0 overflow-hidden"
+             />
+           
+             {/* File Name or Placeholder */}
+             <span className="text-sm text-gray-500">
+               {file ? file.name : 'No file chosen'}
+             </span>
+           </div>
 
-      {/* Display Result */}
-      {result && (
-        <div
-          className="mt-6 w-full max-w-md p-4 border rounded-md bg-white shadow-md"
-          dangerouslySetInnerHTML={{ __html: result }}
-        />
-      )}
+
+          </CardContent>
+
+          {/* Submit Button */}
+          <CardFooter>
+            <Button
+              className="w-full"
+              disabled={!isFormValid || loading} 
+              variant={isFormValid ? "default" : "secondary"}
+              onClick={handleSubmit}
+            >
+              {loading ? 'Analyzing...' : 'Submit'}
+            </Button>
+          </CardFooter>
+        </Card>
+
+        {/* Right Column - Result */}
+        {result && (
+          <div
+            className="border rounded-md p-4 shadow-md bg-white"
+            dangerouslySetInnerHTML={{ __html: result }}
+          />
+        )}
+      </div>
     </div>
   );
 }
