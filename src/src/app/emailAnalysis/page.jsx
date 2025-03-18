@@ -12,16 +12,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-async function postData(){
-  const response = await fetch('http://localhost:3000/api/OpenAI/emailAnalysis', {
-    method:'POST',
-  });
-  return response.json();
-}
 export default function EmailAnalysis() {
   const [text, setText] = React.useState('');
   const [file, setFile] = React.useState(null);
   const [result, setResult] = React.useState('');
+  const [loading, setLoading] = React.useState(false); 
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -30,21 +25,23 @@ export default function EmailAnalysis() {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  
+
   const isFormValid = text.trim() !== '' || file !== null;
 
   const handleSubmit = async (e) => {
-    console.log("kimchhorn");
     e.preventDefault();
-    const formData = new FormData();
+    if (!isFormValid || loading) return;
 
+    setLoading(true); 
+
+    const formData = new FormData();
     if (text) formData.append('text', text);
     if (file) formData.append('file', file);
 
     try {
       const response = await fetch('/api/OpenAI/emailAnalysis', {
         method: 'POST',
-        body: formData, // Send FormData to API
+        body: formData,
       });
 
       if (!response.ok) {
@@ -52,12 +49,12 @@ export default function EmailAnalysis() {
       }
 
       const data = await response.json();
-
-      // Display annotated HTML
       setResult(data.annotatedHtml);
     } catch (error) {
       console.error('Failed to analyze email:', error);
       setResult(`<p style="color:red;">${error.message}</p>`);
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -92,26 +89,27 @@ export default function EmailAnalysis() {
             onChange={handleTextChange}
           />
 
-           <p className="text-blue-00 text-sm mt-2">
+          <p className="text-blue-00 text-sm mt-2">
             Please upload only <span className="font-semibold">.txt</span> files.
-           </p>
-           <div className="mt-4">
-           {/* Choose File Button */}
-           <Button
-             as="label" // Button as a label for the file input
-             htmlFor="file-upload"
-             className="w-full  border-blue-600 border rounded-md  hover:text-white transition"
-           >
-             Choose File
-           </Button>
-           <input
-             id="file-upload"
-             type="file"
-             className="hidden"
-             accept=".txt" // Restrict file type to .txt
-             onClick={handleSubmit}
-           />
-         </div>
+          </p>
+
+          {/* Choose File Button */}
+          <div className="mt-4">
+            <Button
+              as="label"
+              htmlFor="file-upload"
+              className="w-full border-blue-600 border rounded-md hover:text-white transition"
+            >
+              Choose File
+            </Button>
+            <input
+              id="file-upload"
+              type="file"
+              className="hidden"
+              accept=".txt"
+              onChange={handleFileChange}
+            />
+          </div>
 
           {/* Display uploaded file name */}
           {file && (
@@ -123,20 +121,22 @@ export default function EmailAnalysis() {
 
         {/* Submit Button */}
         <CardFooter>
-        <Button
-         className="w-full"
-         disabled={!isFormValid}
-         variant={isFormValid ? "default" : "secondary"}
-         onClick={handleSubmit}
-        >
-         Submit
-       </Button>
+          <Button
+            className="w-full"
+            disabled={!isFormValid || loading} 
+            variant={isFormValid ? "default" : "secondary"}
+            onClick={handleSubmit}
+          >
+            {loading ? 'Analyzing...' : 'Submit'}
+          </Button>
         </CardFooter>
       </Card>
+
+      {/* Display Result */}
       {result && (
         <div
           className="mt-6 w-full max-w-md p-4 border rounded-md bg-white shadow-md"
-          dangerouslySetInnerHTML={{ __html: result }} 
+          dangerouslySetInnerHTML={{ __html: result }}
         />
       )}
     </div>

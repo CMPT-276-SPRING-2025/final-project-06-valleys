@@ -1,9 +1,6 @@
 import OpenAI from "openai"; 
-import dotenv from 'dotenv';
 import * as prompt from './aiPrompt.js';
 import { NextResponse } from 'next/server';
-
-dotenv.config({ path: '.env' });
 
 const token = process.env["OPENAI_API_KEY"];
 const endpoint = "https://models.inference.ai.azure.com";
@@ -25,7 +22,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    const client = new OpenAI({ baseURL: endpoint, apiKey: "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" });
+    const client = new OpenAI({ baseURL: endpoint, apiKey: token });
 
     // Send the text to OpenAI for annotation
     const response = await client.chat.completions.create({
