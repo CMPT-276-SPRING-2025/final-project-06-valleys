@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from 'react';
-import ShieldLogo from '../../components/shieldlogo';
+import * as React from "react";
+import ShieldLogo from "../../components/shieldlogo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,13 +10,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
+import { X } from "lucide-react";
 
 export default function EmailAnalysis() {
-  const [text, setText] = React.useState('');
+  const [text, setText] = React.useState("");
   const [file, setFile] = React.useState(null);
-  const [result, setResult] = React.useState('');
-  const [loading, setLoading] = React.useState(false); 
+  const [result, setResult] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [isHovering, setIsHovering] = React.useState(false);
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -29,21 +31,27 @@ export default function EmailAnalysis() {
     }
   };
 
-  const isFormValid = text.trim() !== '' || file !== null;
+  const handleRemoveFile = () => {
+    setFile(null);
+    const fileInput = document.getElementById("file-upload");
+    if (fileInput) fileInput.value = "";
+  };
+
+  const isFormValid = text.trim() !== "" || file !== null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid || loading) return;
 
-    setLoading(true); 
+    setLoading(true);
 
     const formData = new FormData();
-    if (text) formData.append('text', text);
-    if (file) formData.append('file', file); // ✅ Fix: Append the file correctly
+    if (text) formData.append("text", text);
+    if (file) formData.append("file", file);
 
     try {
-      const response = await fetch('/api/OpenAI/emailAnalysis', {
-        method: 'POST',
+      const response = await fetch("/api/OpenAI/emailAnalysis", {
+        method: "POST",
         body: formData,
       });
 
@@ -54,28 +62,28 @@ export default function EmailAnalysis() {
       const data = await response.json();
       setResult(data.annotatedHtml);
     } catch (error) {
-      console.error('Failed to analyze email:', error);
+      console.error("Failed to analyze email:", error);
       setResult(`<p style="color:red;">${error.message}</p>`);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
       {/* Centered Logo and Title */}
-      <div className="flex flex-col items-center mb-6">
+      <div className="mb-6 flex flex-col items-center">
         <ShieldLogo />
-        <h1 className="text-3xl font-bold mt-4">Email Analysis</h1>
-        <p className="text-gray-600 text-center mt-2">
+        <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
+        <p className="mt-2 text-center text-gray-600">
           AI-powered tool to analyze emails for potential phishing indicators.
         </p>
       </div>
 
       {/* Main Content (Two Columns) */}
-      <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
+      <div className="grid w-full max-w-screen-lg gap-6 p-4 md:grid-cols-2">
         {/* Left Column - Card */}
-        <Card className="p-4 shadow-lg">
+        <Card className="max-h-max p-4 shadow-lg">
           <CardHeader>
             <CardTitle>Email Content</CardTitle>
             <CardDescription>
@@ -86,53 +94,74 @@ export default function EmailAnalysis() {
           <CardContent>
             {/* Text Area */}
             <textarea
-              className="w-full h-40 border rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-48 w-full rounded-md border p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Paste the full content here, including headers if available..."
               value={text}
               onChange={handleTextChange}
             />
 
-            <p className="text-blue-00 text-sm mt-2">
-              Please upload only <span className="font-semibold">.txt</span> files.
+            <p className="text-blue-00 mt-2 text-sm">
+              Or upload a <span className="font-semibold">.txt</span> file.
             </p>
 
-            <div className="flex items-center mt-4 space-x-2">
-             {/* File Upload Button */}
-             <label
-               htmlFor="file-upload"
-               className="px-4 py-2 text-sm text-white rounded-md transition cursor-pointer hover:bg-blue-500"
-               style={{ backgroundColor: '#5e7ab8' }}
-             >
-               Choose File
-             </label>
-           
-             {/* Hidden but accessible input */}
-             <input
-               id="file-upload"
-               type="file"
-               accept=".txt"
-               onChange={handleFileChange}
-               className="absolute w-0 h-0 overflow-hidden"
-             />
-           
-             {/* File Name or Placeholder */}
-             <span className="text-sm text-gray-500">
-               {file ? file.name : 'No file chosen'}
-             </span>
-           </div>
+            <div className="mt-4 flex items-center space-x-2">
+              {/* File Upload Button */}
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer rounded-md px-4 py-2 text-sm text-white transition hover:bg-blue-500"
+                style={{ backgroundColor: "#5e7ab8" }}
+              >
+                Choose File
+              </label>
 
+              {/* Hidden but accessible input */}
+              <input
+                id="file-upload"
+                type="file"
+                accept=".txt"
+                onChange={handleFileChange}
+                className="absolute h-0 w-0 overflow-hidden"
+              />
 
+              {/* File Name or Placeholder with Remove option */}
+              {file ? (
+                <div
+                  className="relative flex cursor-pointer items-center"
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                  onClick={handleRemoveFile}
+                >
+                  <span className="mr-2 text-sm text-gray-500">
+                    {file.name}
+                  </span>
+                  <span
+                    className={`text-red-500 transition-opacity ${isHovering ? "opacity-100" : "opacity-0"}`}
+                  >
+                    <X size={16} />
+                  </span>
+
+                  {/* Overlay hint on hover */}
+                  {isHovering && (
+                    <div className="bg-opacity-20 absolute inset-0 flex items-center justify-center rounded">
+                      <span className="sr-only">Remove file</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <span className="text-sm text-gray-500">No file chosen</span>
+              )}
+            </div>
           </CardContent>
 
           {/* Submit Button */}
           <CardFooter>
             <Button
               className="w-full"
-              disabled={!isFormValid || loading} 
+              disabled={!isFormValid || loading}
               variant={isFormValid ? "default" : "secondary"}
               onClick={handleSubmit}
             >
-              {loading ? 'Analyzing...' : 'Submit'}
+              {loading ? "Analyzing..." : "Submit"}
             </Button>
           </CardFooter>
         </Card>
@@ -140,7 +169,7 @@ export default function EmailAnalysis() {
         {/* Right Column - Result */}
         {result && (
           <div
-            className="border rounded-md p-4 shadow-md bg-white"
+            className="max-h-max rounded-md border bg-white p-4 shadow-md"
             dangerouslySetInnerHTML={{ __html: result }}
           />
         )}
