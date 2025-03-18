@@ -1,5 +1,10 @@
 import Image from 'next/image';
 
+export const metadata = {
+  title: 'Deep Phishing',
+  name:"description",
+   content:"Help Detect Scam Email",
+}
 
 
 
