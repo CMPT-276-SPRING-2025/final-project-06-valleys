@@ -28,7 +28,6 @@ export async function GET(request) {
         // Return the IP information to the client
         return NextResponse.json(data);
     } catch (err) {
-        console.error(err);
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }
@@ -50,7 +49,6 @@ export async function POST(request) {
         // For IPs, we can use the IP itself as the identifier
         return NextResponse.json({ analysisId: ip });
     } catch (err) {
-        console.error(err);
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }

@@ -34,7 +34,6 @@ export async function GET(request) {
         // Return the analysis ID to the client
         return NextResponse.json({ analysisId: data.data.id });
     } catch (err) {
-        console.error(err);
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }

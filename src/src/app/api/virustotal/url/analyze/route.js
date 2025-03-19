@@ -56,15 +56,6 @@ export async function GET(request) {
                 votesData = await votesResponse.json();
             }
             
-            // Fetch historical analyses for this URL
-            // const historicalAnalysesResponse = await fetch(
-            //     `https://www.virustotal.com/api/v3/urls/${urlId}/analyses?limit=5`,
-            //     options
-            // );
-            
-            // if (historicalAnalysesResponse.ok) {
-            //     historicalAnalysesData = await historicalAnalysesResponse.json();
-            // }
         }
 
         // Combine all data into a single response
@@ -72,13 +63,11 @@ export async function GET(request) {
             ...analysisData,
             comments: commentsData,
             votes: votesData,
-            // historicalAnalyses: historicalAnalysesData
         };
 
         // Return the combined results
         return NextResponse.json(responseData);
     } catch (err) {
-        console.error(err);
         return NextResponse.json(
             { error: 'Internal Server Error' },
             { status: 500 }

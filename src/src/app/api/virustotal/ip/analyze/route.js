@@ -34,7 +34,6 @@ export async function GET(request) {
         // Return the IP information to the client
         return NextResponse.json(data);
     } catch (err) {
-        console.error(err);
         return NextResponse.json(
             { error: err.message || 'Internal Server Error' },
             { status: 500 }
