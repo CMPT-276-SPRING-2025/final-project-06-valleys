@@ -29,6 +29,7 @@ export default function NavBar({ toggleMenu, isOpen }) {
       {/* Desktop Links */}
       <div className="hidden md:flex space-x-6">
         <Link href="/" className="text-gray-800 hover:text-blue-500 transition">Home</Link>
+        <Link href="/scan/ip" className="text-gray-800 hover:text-blue-500 transition">IP Scanner</Link>
         <Link href="/scan/url" className="text-gray-800 hover:text-blue-500 transition">URL Scanner</Link>
         <Link href="/scan/file" className="text-gray-800 hover:text-blue-500 transition">File Scanner</Link>
         <Link href="/item-three" className="text-gray-800 hover:text-blue-500 transition">Email Generator</Link>
@@ -40,6 +41,7 @@ export default function NavBar({ toggleMenu, isOpen }) {
       <div className={`md:hidden ${isOpen ? "block" : "hidden"} absolute top-16 left-0 w-full bg-gray-100 p-4 shadow-lg`}>
         <div className="flex flex-col items-center justify-center space-y-4">
           <Link href="/" className="text-gray-800 hover:text-blue-500 transition">Home</Link>
+          <Link href="/scan/ip" className="text-gray-800 hover:text-blue-500 transition">IP Scanner</Link>
           <Link href="/scan/url" className="text-gray-800 hover:text-blue-500 transition">URL Scanner</Link>
           <Link href="/scan/file" className="text-gray-800 hover:text-blue-500 transition">File Scanner</Link>
           <Link href="/item-three" className="text-gray-800 hover:text-blue-500 transition">Email Generator</Link>
