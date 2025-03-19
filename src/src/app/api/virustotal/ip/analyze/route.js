@@ -15,7 +15,7 @@ export async function GET(request) {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                'x-apikey': process.env.VIRUSTOTAL_API_KEY, // Ensure this is set in your environment
+                'x-apikey': process.env.VIRUSTOTAL_API_KEY,
             },
         };
 
@@ -23,6 +23,12 @@ export async function GET(request) {
             `https://www.virustotal.com/api/v3/ip_addresses/${ip}`,
             options
         );
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error?.message || "Failed to fetch IP analysis");
+        }
+        
         const data = await response.json();
 
         // Return the IP information to the client
@@ -30,29 +36,7 @@ export async function GET(request) {
     } catch (err) {
         console.error(err);
         return NextResponse.json(
-            { error: 'Internal Server Error' },
-            { status: 500 }
-        );
-    }
-}
-
-export async function POST(request) {
-    try {
-        // Extract IP from request body
-        const body = await request.json();
-        const ip = body.ip;
-
-        if (!ip) {
-            return NextResponse.json({ error: 'IP address is required' }, { status: 400 });
-        }
-
-        // Return the IP as the analysis ID
-        // For IPs, we can use the IP itself as the identifier
-        return NextResponse.json({ analysisId: ip });
-    } catch (err) {
-        console.error(err);
-        return NextResponse.json(
-            { error: 'Internal Server Error' },
+            { error: err.message || 'Internal Server Error' },
             { status: 500 }
         );
     }
