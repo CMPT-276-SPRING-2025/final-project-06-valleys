@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { LoadingState } from "@/components/Scanner/LoadingState";
@@ -11,26 +10,26 @@ import { ResultsChart } from "@/components/Scanner/ResultsChart";
 import { StatsCards } from "@/components/Scanner/StatsCards";
 import { AdditionalStats } from "@/components/Scanner/AdditionalStats";
 import { SecurityVendorsTable } from "@/components/Scanner/SecurityVendorsTable";
-import { URLInformation } from "@/components/Scanner/URLInformation";
 import { RawResults } from "@/components/Scanner/RawResults";
 import { CommentsSection } from "@/components/Scanner/CommentsSection";
 
 import { prepareChartData } from "@/utils/chartUtils";
 
-export default function URLResultPage() {
+export default function IPResultPage() {
   const params = useParams();
   const [analysisResults, setAnalysisResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const analysisId = params.url;
+    const ipAddress = params.ip;
     let pollingInterval;
 
     const fetchResults = async () => {
       try {
+        // Using the new API route for IP analysis
         const analysisResponse = await fetch(
-          `/api/virustotal/url/analyze?id=${analysisId}`,
+          `/api/virustotal/ip/analyze?ip=${ipAddress}`,
         );
         const analysisData = await analysisResponse.json();
 
@@ -42,16 +41,15 @@ export default function URLResultPage() {
 
         setAnalysisResults(analysisData);
 
-        // Check if the analysis is completed
-        if (analysisData.data?.attributes?.status === "completed") {
+        if (analysisData.data && analysisData.data.attributes) {
           clearInterval(pollingInterval);
           setLoading(false);
-        } else if (analysisData.data?.attributes?.status === "failed") {
+        } else if (analysisData.error) {
           clearInterval(pollingInterval);
           setError("Analysis failed. Please try again.");
           setLoading(false);
         }
-        // If status is still "queued" or "in-progress", we'll continue polling
+        // If we don't have data yet, we'll continue polling
       } catch (error) {
         console.error("Error:", error);
         setError(error.message);
@@ -70,9 +68,9 @@ export default function URLResultPage() {
     return () => {
       if (pollingInterval) clearInterval(pollingInterval);
     };
-  }, [params.url]);
+  }, [params.ip]);
 
-  // Prepare chart data
+  // Rest of the component remains the same
   if (loading) {
     return <LoadingState status={analysisResults?.data?.attributes?.status} />;
   }
@@ -92,15 +90,11 @@ export default function URLResultPage() {
           <CardHeader>
             <CardTitle className={""}>
               <h1 className="text-3xl font-bold">
-                Results For:&nbsp;
-                {analysisResults.meta.url_info.url ? (
-                  <Link
-                    href={analysisResults.meta.url_info.url}
-                    target="_blank"
-                    className="text-primary hover:text-primary/80 truncate text-base transition-colors md:text-3xl"
-                  >
-                    {analysisResults.meta.url_info.url}
-                  </Link>
+                Results For IP:&nbsp;
+                {analysisResults.data?.id ? (
+                  <span className="text-primary truncate text-base md:text-3xl">
+                    {analysisResults.data.id}
+                  </span>
                 ) : null}
               </h1>
             </CardTitle>
@@ -121,28 +115,58 @@ export default function URLResultPage() {
               </div>
             )}
 
+            {/* IP Information */}
+            {analysisResults.data?.attributes && (
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">IP Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">IP Address</p>
+                      <p>{analysisResults.data.id}</p>
+                    </div>
+                    {analysisResults.data.attributes.country && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Country</p>
+                        <p>{analysisResults.data.attributes.country}</p>
+                      </div>
+                    )}
+                    {analysisResults.data.attributes.as_owner && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">AS Owner</p>
+                        <p>{analysisResults.data.attributes.as_owner}</p>
+                      </div>
+                    )}
+                    {analysisResults.data.attributes.continent && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">Continent</p>
+                        <p>{analysisResults.data.attributes.continent}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Security Vendors Analysis */}
-            {analysisResults.data?.attributes?.results && (
+            {analysisResults.data?.attributes?.last_analysis_results && (
               <SecurityVendorsTable
-                results={analysisResults.data.attributes.results}
+                results={analysisResults.data.attributes.last_analysis_results} 
               />
             )}
 
-            {/* URL Information */}
-            {analysisResults.data?.attributes?.url && (
-              <URLInformation url={analysisResults.data.attributes.url} />
-            )}
-
+            {/* Comments Section */}
             {analysisResults.comments && (
               <CommentsSection 
                 comments={analysisResults.comments.data} 
                 votes={analysisResults.votes?.data || []} 
               />
             )}
+
             {/* Raw Results (Collapsible) */}
             <RawResults data={analysisResults} />
-            
-            {/* Comments Section */}
           </CardContent>
         </Card>
       )}
