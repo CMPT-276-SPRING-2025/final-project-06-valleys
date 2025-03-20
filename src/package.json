@@ -30,6 +30,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0",
     "shadcn-ui": "^0.9.5",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7"
