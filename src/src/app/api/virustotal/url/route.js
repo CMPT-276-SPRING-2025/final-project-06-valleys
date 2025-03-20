@@ -21,10 +21,29 @@ export async function GET(request) {
       body: new URLSearchParams({ url }).toString(),
     };
 
-    const response = await fetch(
-      "https://www.virustotal.com/api/v3/urls",
-      options
-    );
+    // Add a try-catch specifically for the fetch operation
+    let response;
+    try {
+      response = await fetch(
+        "https://www.virustotal.com/api/v3/urls",
+        options
+      );
+    } catch (fetchError) {
+      return NextResponse.json(
+        { error: "Failed to connect to VirusTotal API", details: fetchError.message },
+        { status: 500 }
+      );
+    }
+    
+    // Check if the response is ok
+    if (!response || !response.ok) {
+      const status = response?.status || 500;
+      return NextResponse.json(
+        { error: `VirusTotal API error: ${status}` },
+        { status }
+      );
+    }
+    
     const data = await response.json();
 
     if (!data.data || !data.data.id) {
@@ -35,7 +54,7 @@ export async function GET(request) {
     return NextResponse.json({ analysisId: data.data.id });
   } catch (err) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error", details: err.message },
       { status: 500 }
     );
   }

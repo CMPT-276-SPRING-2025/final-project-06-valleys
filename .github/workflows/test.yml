@@ -1,4 +1,4 @@
-name: Run Jest Tests
+name: Run Playwright Tests
 
 on:
   push:
@@ -25,13 +25,17 @@ jobs:
       working-directory: ./src
       run: npm ci
 
+    - name: Install Playwright browsers
+      working-directory: ./src
+      run: npx playwright install --with-deps chromium
+
     - name: Run Prettier
       working-directory: ./src
       run: npm run prettier
 
-    - name: Run Unit Tests
+    - name: Run Playwright Tests
       working-directory: ./src
       env:
         VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: npm run test:coverage
+      run: npm test
