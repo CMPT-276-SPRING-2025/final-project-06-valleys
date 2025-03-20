@@ -2,8 +2,9 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { NextResponse } from "next/server";
 
-dotenv.config({ path: ".env" });
+dotenv.config();
 
+const api_key = process.env.OPENAI_API_KEY;
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";
 
@@ -13,7 +14,7 @@ export async function POST(request) {
 
     const client = new OpenAI({
       baseURL: endpoint,
-      apiKey: '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',
+      apiKey: api_key,
     });
 
     const response = await client.chat.completions.create({
