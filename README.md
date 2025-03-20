@@ -9,8 +9,18 @@ A web application created to educate users about phishing scams, their consequen
 - **Email Analysis Tool**: This tool scans emails for potential phishing indicators. Users can either paste email content into the text box or upload an email file, and our system will analyze it for risks using API integration.
 - **Phishing Email Quiz**: This page is designed to educate users on phishing threats, this AI-powered quiz presents two emails side by side, and users must identify which one is a phishing attempt. This helps them learn key differences between real and fraudulent emails.
 
-## Group Members
-* Philip Ho - 301472672  
-* Amraj Koonar - 301559468  
-* Kimchhorn Sambath - 301637407  
-* Nathan Huynh - 301608957
+## Tech Stack
+- **Frontend**: Next.js 15, React 19, TailwindCSS
+- **UI Components**: shadcn/ui
+- **API Integration**: VirusTotal API, OpenAI API
+- **Code Quality**: ESLint, Prettier
+- **Testing**: Jest
+
+
+## Getting Started
+
+### Prerequisites
+- Node.js 20 or higher
+- npm or yarn
+- VirusTotal API key
+- OpenAI API key
