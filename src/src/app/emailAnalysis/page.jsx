@@ -71,13 +71,15 @@ export default function EmailAnalysis() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
+       {/* <div className="flex-1 flex items-center justify-center"> */}
       {/* Centered Logo and Title */}
-      <div className="mb-6 flex flex-col items-center">
+      <div className="flex-shrink-0 mb-4 flex flex-col items-center">
         <ShieldLogo />
         <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
         <p className="mt-2 text-center text-gray-600">
           AI-powered tool to analyze emails for potential phishing indicators.
         </p>
+      {/* </div> */}
       </div>
 
       {/* Main Content (Two Columns) */}
@@ -165,15 +167,16 @@ export default function EmailAnalysis() {
             </Button>
           </CardFooter>
         </Card>
-
+       
         {/* Right Column - Result */}
         {result && (
           <div
-            className="max-h-max rounded-md border bg-white p-4 shadow-md"
+            className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md"
             dangerouslySetInnerHTML={{ __html: result }}
           />
         )}
       </div>
+
     </div>
   );
 }
