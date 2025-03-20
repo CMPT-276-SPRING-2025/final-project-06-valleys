@@ -13,20 +13,22 @@ export function FileMetadata({ fileInfo }) {
       <CardContent>
         <div className="grid gap-2">
           <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
-            <span className="font-medium text-muted-foreground">Size:</span>
+            <span className="text-muted-foreground font-medium">Size:</span>
             <span>{(fileInfo.size / 1024).toFixed(2)} KB</span>
           </div>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
-            <span className="font-medium text-muted-foreground">SHA256:</span>
-            <span className="break-all font-mono text-sm">{fileInfo.sha256}</span>
+            <span className="text-muted-foreground font-medium">SHA256:</span>
+            <span className="font-mono text-sm break-all">
+              {fileInfo.sha256}
+            </span>
           </div>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
-            <span className="font-medium text-muted-foreground">MD5:</span>
-            <span className="break-all font-mono text-sm">{fileInfo.md5}</span>
+            <span className="text-muted-foreground font-medium">MD5:</span>
+            <span className="font-mono text-sm break-all">{fileInfo.md5}</span>
           </div>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
-            <span className="font-medium text-muted-foreground">SHA1:</span>
-            <span className="break-all font-mono text-sm">{fileInfo.sha1}</span>
+            <span className="text-muted-foreground font-medium">SHA1:</span>
+            <span className="font-mono text-sm break-all">{fileInfo.sha1}</span>
           </div>
         </div>
       </CardContent>

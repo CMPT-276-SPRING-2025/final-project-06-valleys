@@ -24,7 +24,7 @@ export default function FileScanPage() {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile) {
       validateAndSetFile(droppedFile);
@@ -40,13 +40,13 @@ export default function FileScanPage() {
 
   const validateAndSetFile = (file) => {
     setErrorMessage("");
-    
+
     // Check file size (max 32MB)
     if (file.size > 32 * 1024 * 1024) {
       setErrorMessage("File size exceeds the 32MB limit");
       return;
     }
-    
+
     setFile(file);
   };
 
@@ -56,35 +56,37 @@ export default function FileScanPage() {
       setErrorMessage("Please select a file to scan");
       return;
     }
-  
+
     setIsSubmitting(true);
     setErrorMessage("");
-  
+
     try {
       const formData = new FormData();
       formData.append("file", file);
-      
+
       const response = await fetch("/api/virustotal/file", {
         method: "POST",
         body: formData,
       });
-      
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(data.error || "Failed to upload file");
       }
-  
+
       const analysisId = data.analysisId || data.data?.id;
       if (!analysisId) {
         throw new Error("Failed to get analysis ID from response");
       }
-  
+
       // Redirect to results page
       router.push(`/scan/file/${analysisId}`);
     } catch (error) {
       console.error("Error:", error);
-      setErrorMessage(error.message || "Failed to scan file. Please try again.");
+      setErrorMessage(
+        error.message || "Failed to scan file. Please try again."
+      );
       setIsSubmitting(false);
     }
   };
@@ -104,7 +106,8 @@ export default function FileScanPage() {
       <div className="w-full rounded-lg bg-white p-6 shadow-sm">
         <h2 className="mb-1 text-xl font-medium">Upload a file to scan</h2>
         <p className="mb-4 text-sm text-neutral-600">
-          We'll analyze your file using multiple antivirus engines to detect potential threats
+          We'll analyze your file using multiple antivirus engines to detect
+          potential threats
         </p>
 
         {errorMessage && (
@@ -113,20 +116,24 @@ export default function FileScanPage() {
           </div>
         )}
 
-        <div 
-          className={`mb-4 flex relative hover:bg-primary/10 flex-col items-center justify-center rounded-md border-2 border-dashed p-8 transition-colors ${
+        <div
+          className={`hover:bg-primary/10 relative mb-4 flex flex-col items-center justify-center rounded-md border-2 border-dashed p-8 transition-colors ${
             isDragging ? "border-primary bg-primary/5" : "border-gray-300"
           }`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <div className="mb-2 text-primary">
+          <div className="text-primary mb-2">
             <Upload size={32} />
           </div>
-          <p className="mb-2 text-center text-sm">Click to upload or drag and drop</p>
-          <p className="text-center text-xs text-gray-500">Max file size: 32MB</p>
-          
+          <p className="mb-2 text-center text-sm">
+            Click to upload or drag and drop
+          </p>
+          <p className="text-center text-xs text-gray-500">
+            Max file size: 32MB
+          </p>
+
           <input
             type="file"
             onChange={handleFileChange}
@@ -137,7 +144,9 @@ export default function FileScanPage() {
         {file && (
           <div className="mb-4 rounded-md bg-gray-50 p-3">
             <p className="text-sm font-medium">Selected file:</p>
-            <p className="text-sm">{file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+            <p className="text-sm">
+              {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
           </div>
         )}
 

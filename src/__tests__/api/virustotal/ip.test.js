@@ -1,4 +1,4 @@
-import { GET } from '@/app/api/virustotal/ip/route';
+import { GET } from "@/app/api/virustotal/ip/route";
 
 // Mock Request
 global.Request = class Request {
@@ -7,20 +7,20 @@ global.Request = class Request {
   }
 };
 
-describe('VirusTotal IP API Route', () => {
+describe("VirusTotal IP API Route", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('returns 400 when no IP is provided', async () => {
-    const request = new Request('http://localhost:3000/api/virustotal/ip');
+  it("returns 400 when no IP is provided", async () => {
+    const request = new Request("http://localhost:3000/api/virustotal/ip");
     const response = await GET(request);
 
     expect(response.status).toBe(400);
-    expect(response.data).toEqual({ error: 'IP address is required' });
+    expect(response.data).toEqual({ error: "IP address is required" });
   });
 
-  it('successfully fetches IP analysis results', async () => {
+  it("successfully fetches IP analysis results", async () => {
     const mockResponse = {
       data: {
         attributes: {
@@ -42,16 +42,16 @@ describe('VirusTotal IP API Route', () => {
     );
 
     const request = new Request(
-      'http://localhost:3000/api/virustotal/ip?ip=8.8.8.8'
+      "http://localhost:3000/api/virustotal/ip?ip=8.8.8.8"
     );
     const response = await GET(request);
 
     expect(global.fetch).toHaveBeenCalledWith(
-      'https://www.virustotal.com/api/v3/ip_addresses/8.8.8.8',
+      "https://www.virustotal.com/api/v3/ip_addresses/8.8.8.8",
       expect.objectContaining({
-        method: 'GET',
+        method: "GET",
         headers: expect.objectContaining({
-          'x-apikey': process.env.VIRUSTOTAL_API_KEY,
+          "x-apikey": process.env.VIRUSTOTAL_API_KEY,
         }),
       })
     );
@@ -60,17 +60,17 @@ describe('VirusTotal IP API Route', () => {
     expect(response.data).toEqual(mockResponse);
   });
 
-  it('handles network error', async () => {
+  it("handles network error", async () => {
     global.fetch.mockImplementationOnce(() =>
-      Promise.reject(new Error('Network error'))
+      Promise.reject(new Error("Network error"))
     );
 
     const request = new Request(
-      'http://localhost:3000/api/virustotal/ip?ip=8.8.8.8'
+      "http://localhost:3000/api/virustotal/ip?ip=8.8.8.8"
     );
     const response = await GET(request);
 
     expect(response.status).toBe(500);
-    expect(response.data).toEqual({ error: 'Internal Server Error' });
+    expect(response.data).toEqual({ error: "Internal Server Error" });
   });
-}); 
+});

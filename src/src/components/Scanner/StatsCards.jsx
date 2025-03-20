@@ -16,7 +16,7 @@ export function StatsCards({ stats, totalEngines }) {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card className="border-green-100 bg-green-50/70 py-0">
             <CardContent className="p-4">
               <p className="font-medium">Undetected</p>
@@ -28,7 +28,7 @@ export function StatsCards({ stats, totalEngines }) {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card className="border-red-200 bg-red-50 py-0">
             <CardContent className="p-4">
               <p className="font-medium">Malicious</p>
