@@ -44,7 +44,6 @@ export async function POST(request) {
     // Return the annotated text to the client
     return NextResponse.json({ annotatedHtml: response.choices[0].message.content });
   } catch (err) {
-    console.error("Error processing request:", err);
     return NextResponse.json({ error: "Failed to analyze email" }, { status: 500 });
   }
 }
