@@ -69,6 +69,11 @@ export function SecurityVendorsTable({ results }) {
                               <span className="h-2 w-2 rounded-full bg-green-500"></span>
                               Clean
                             </Badge>
+                          ) : result.category === "undetected" ? (
+                            <Badge variant="outline" className="flex items-center gap-1 bg-green-50 text-green-500">
+                              <span className="h-2 w-2 rounded-full bg-green-300"></span>
+                              Undetected
+                            </Badge>
                           ) : (
                             <Badge variant="outline" className="flex items-center gap-1">
                               <span className="h-2 w-2 rounded-full bg-gray-500"></span>
@@ -165,6 +170,13 @@ function renderBadge(category) {
         <Badge variant="outline" className="flex items-center gap-1 bg-green-100 text-green-800">
           <span className="h-2 w-2 rounded-full bg-green-500"></span>
           Clean
+        </Badge>
+      );
+    case "undetected":
+      return (
+        <Badge variant="outline" className="flex items-center gap-1 bg-green-50 text-green-600">
+          <span className="h-2 w-2 rounded-full bg-green-300"></span>
+          Undetected
         </Badge>
       );
     default:

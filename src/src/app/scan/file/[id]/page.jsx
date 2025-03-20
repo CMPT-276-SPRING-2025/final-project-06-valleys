@@ -2,34 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { LoadingState } from "@/components/Scanner/LoadingState";
 import { ErrorState } from "@/components/Scanner/ErrorState";
 import { ResultsChart } from "@/components/Scanner/ResultsChart";
 import { StatsCards } from "@/components/Scanner/StatsCards";
-import { AdditionalStats } from "@/components/Scanner/AdditionalStats";
 import { SecurityVendorsTable } from "@/components/Scanner/SecurityVendorsTable";
-import { URLInformation } from "@/components/Scanner/URLInformation";
-import { CommentsSection } from "@/components/Scanner/CommentsSection";
 
 import { prepareChartData } from "@/utils/chartUtils";
 
-export default function URLResultPage() {
+import { FileMetadata } from "@/components/Scanner/FileMetadata";
+
+export default function FileResultPage() {
   const params = useParams();
   const [analysisResults, setAnalysisResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const analysisId = params.url;
+    const analysisId = params.id;
     let pollingInterval;
 
     const fetchResults = async () => {
       try {
         const analysisResponse = await fetch(
-          `/api/virustotal/url/analyze?id=${analysisId}`,
+          `/api/virustotal/file/analyze?id=${analysisId}`,
         );
         const analysisData = await analysisResponse.json();
 
@@ -50,15 +48,15 @@ export default function URLResultPage() {
           setError("Analysis failed. Please try again.");
           setLoading(false);
         }
-        // If status is still "queued" or "in-progress", continue refreshing
+        // If status is still "queued" or "in-progress", continue polling
       } catch (error) {
+        console.error("Error:", error);
         setError(error.message);
         clearInterval(pollingInterval);
         setLoading(false);
       }
     };
 
-    // Initial fetch
     fetchResults();
 
     pollingInterval = setInterval(fetchResults, 5000);
@@ -66,7 +64,7 @@ export default function URLResultPage() {
     return () => {
       if (pollingInterval) clearInterval(pollingInterval);
     };
-  }, [params.url]);
+  }, [params.id]);
 
   if (loading) {
     return <LoadingState status={analysisResults?.data?.attributes?.status} />;
@@ -87,20 +85,16 @@ export default function URLResultPage() {
           <CardHeader>
             <CardTitle className={""}>
               <h1 className="text-3xl font-bold">
-                Results For:&nbsp;
-                {analysisResults.meta.url_info.url ? (
-                  <Link
-                    href={analysisResults.meta.url_info.url}
-                    target="_blank"
-                    className="text-primary hover:text-primary/80 truncate text-base transition-colors md:text-3xl"
-                  >
-                    {analysisResults.meta.url_info.url}
-                  </Link>
-                ) : null}
+                File Scan Results
               </h1>
             </CardTitle>
           </CardHeader>
           <CardContent>
+            {/* Add FileMetadata component here */}
+            {analysisResults.meta?.file_info && (
+              <FileMetadata fileInfo={analysisResults.meta.file_info} />
+            )}
+
             {stats && (
               <div className="mb-6">
                 <h3 className="text-lg font-semibold">Summary</h3>
@@ -110,31 +104,16 @@ export default function URLResultPage() {
                   <ResultsChart chartData={chartData} />
                   <StatsCards stats={stats} totalEngines={totalEngines} />
                 </div>
-
-                {/* Additional stats in grid */}
-                <AdditionalStats stats={stats} totalEngines={totalEngines} />
               </div>
             )}
 
             {/* Security Vendors Analysis */}
             {analysisResults.data?.attributes?.results && (
               <SecurityVendorsTable
-                results={analysisResults.data.attributes.results}
+                results={analysisResults.data.attributes.results} 
               />
             )}
 
-            {/* URL Information */}
-            {analysisResults.data?.attributes?.url && (
-              <URLInformation url={analysisResults.data.attributes.url} />
-            )}
-
-            {/* Comments Section */}
-            {analysisResults.comments && (
-              <CommentsSection
-                comments={analysisResults.comments.data}
-                votes={analysisResults.votes?.data || []}
-              />
-            )}
           </CardContent>
         </Card>
       )}

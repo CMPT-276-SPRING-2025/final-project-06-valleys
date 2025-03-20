@@ -70,7 +70,7 @@ export default function ScanUrlForm() {
         <div className="flex flex-col gap-4 md:gap-2 sm:flex-row">
           <Input
             type="search"
-            placeholder="Enter URL, domain, or IP address"
+            placeholder="Enter URL To Scan"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             disabled={loading}
