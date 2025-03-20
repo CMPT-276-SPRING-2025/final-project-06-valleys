@@ -10,7 +10,6 @@ import { ResultsChart } from "@/components/Scanner/ResultsChart";
 import { StatsCards } from "@/components/Scanner/StatsCards";
 import { AdditionalStats } from "@/components/Scanner/AdditionalStats";
 import { SecurityVendorsTable } from "@/components/Scanner/SecurityVendorsTable";
-import { RawResults } from "@/components/Scanner/RawResults";
 import { CommentsSection } from "@/components/Scanner/CommentsSection";
 
 import { prepareChartData } from "@/utils/chartUtils";
@@ -27,15 +26,14 @@ export default function IPResultPage() {
 
     const fetchResults = async () => {
       try {
-        // Using the new API route for IP analysis
         const analysisResponse = await fetch(
-          `/api/virustotal/ip/analyze?ip=${ipAddress}`,
+          `/api/virustotal/ip/analyze?ip=${ipAddress}`
         );
         const analysisData = await analysisResponse.json();
 
         if (!analysisResponse.ok) {
           throw new Error(
-            analysisData.error || "Failed to fetch analysis results",
+            analysisData.error || "Failed to fetch analysis results"
           );
         }
 
@@ -49,7 +47,6 @@ export default function IPResultPage() {
           setError("Analysis failed. Please try again.");
           setLoading(false);
         }
-        // If we don't have data yet, we'll continue polling
       } catch (error) {
         console.error("Error:", error);
         setError(error.message);
@@ -58,19 +55,15 @@ export default function IPResultPage() {
       }
     };
 
-    // Initial fetch
     fetchResults();
 
-    // Set up polling every 5 seconds
     pollingInterval = setInterval(fetchResults, 5000);
 
-    // Clean up interval on component unmount
     return () => {
       if (pollingInterval) clearInterval(pollingInterval);
     };
   }, [params.ip]);
 
-  // Rest of the component remains the same
   if (loading) {
     return <LoadingState status={analysisResults?.data?.attributes?.status} />;
   }
@@ -79,7 +72,17 @@ export default function IPResultPage() {
     return <ErrorState error={error} />;
   }
 
-  const stats = analysisResults?.data?.attributes?.stats;
+  // Calculate stats from last_analysis_results if stats is not available
+  let stats = analysisResults?.data?.attributes?.stats;
+  if (!stats && analysisResults?.data?.attributes?.last_analysis_results) {
+    const results = analysisResults.data.attributes.last_analysis_results;
+    stats = Object.values(results).reduce((acc, result) => {
+      const category = result.category;
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
   const chartData = prepareChartData(stats);
   const totalEngines = chartData.reduce((sum, item) => sum + item.value, 0);
 
@@ -100,8 +103,50 @@ export default function IPResultPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            {/* IP Information */}
+            {analysisResults.data?.attributes && (
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">IP Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        IP Address
+                      </p>
+                      <p>{analysisResults.data.id}</p>
+                    </div>
+                    {analysisResults.data.attributes.country && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Country
+                        </p>
+                        <p>{analysisResults.data.attributes.country}</p>
+                      </div>
+                    )}
+                    {analysisResults.data.attributes.as_owner && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          AS Owner
+                        </p>
+                        <p>{analysisResults.data.attributes.as_owner}</p>
+                      </div>
+                    )}
+                    {analysisResults.data.attributes.continent && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Continent
+                        </p>
+                        <p>{analysisResults.data.attributes.continent}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             {stats && (
-              <div className="mb-6">
+              <div className="my-6">
                 <h3 className="text-lg font-semibold">Summary</h3>
 
                 {/* Chart section */}
@@ -115,58 +160,20 @@ export default function IPResultPage() {
               </div>
             )}
 
-            {/* IP Information */}
-            {analysisResults.data?.attributes && (
-              <Card className="mt-6">
-                <CardHeader>
-                  <CardTitle className="text-lg">IP Information</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                      <p className="text-sm font-medium text-gray-500">IP Address</p>
-                      <p>{analysisResults.data.id}</p>
-                    </div>
-                    {analysisResults.data.attributes.country && (
-                      <div>
-                        <p className="text-sm font-medium text-gray-500">Country</p>
-                        <p>{analysisResults.data.attributes.country}</p>
-                      </div>
-                    )}
-                    {analysisResults.data.attributes.as_owner && (
-                      <div>
-                        <p className="text-sm font-medium text-gray-500">AS Owner</p>
-                        <p>{analysisResults.data.attributes.as_owner}</p>
-                      </div>
-                    )}
-                    {analysisResults.data.attributes.continent && (
-                      <div>
-                        <p className="text-sm font-medium text-gray-500">Continent</p>
-                        <p>{analysisResults.data.attributes.continent}</p>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Security Vendors Analysis */}
             {analysisResults.data?.attributes?.last_analysis_results && (
               <SecurityVendorsTable
-                results={analysisResults.data.attributes.last_analysis_results} 
+                results={analysisResults.data.attributes.last_analysis_results}
               />
             )}
 
             {/* Comments Section */}
             {analysisResults.comments && (
-              <CommentsSection 
-                comments={analysisResults.comments.data} 
-                votes={analysisResults.votes?.data || []} 
+              <CommentsSection
+                comments={analysisResults.comments.data}
+                votes={analysisResults.votes?.data || []}
               />
             )}
-
-            {/* Raw Results (Collapsible) */}
-            <RawResults data={analysisResults} />
           </CardContent>
         </Card>
       )}

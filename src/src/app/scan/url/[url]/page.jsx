@@ -12,7 +12,6 @@ import { StatsCards } from "@/components/Scanner/StatsCards";
 import { AdditionalStats } from "@/components/Scanner/AdditionalStats";
 import { SecurityVendorsTable } from "@/components/Scanner/SecurityVendorsTable";
 import { URLInformation } from "@/components/Scanner/URLInformation";
-import { RawResults } from "@/components/Scanner/RawResults";
 import { CommentsSection } from "@/components/Scanner/CommentsSection";
 
 import { prepareChartData } from "@/utils/chartUtils";
@@ -51,9 +50,8 @@ export default function URLResultPage() {
           setError("Analysis failed. Please try again.");
           setLoading(false);
         }
-        // If status is still "queued" or "in-progress", we'll continue polling
+        // If status is still "queued" or "in-progress", continue refreshing
       } catch (error) {
-        console.error("Error:", error);
         setError(error.message);
         clearInterval(pollingInterval);
         setLoading(false);
@@ -63,16 +61,13 @@ export default function URLResultPage() {
     // Initial fetch
     fetchResults();
 
-    // Set up polling every 5 seconds
     pollingInterval = setInterval(fetchResults, 5000);
 
-    // Clean up interval on component unmount
     return () => {
       if (pollingInterval) clearInterval(pollingInterval);
     };
   }, [params.url]);
 
-  // Prepare chart data
   if (loading) {
     return <LoadingState status={analysisResults?.data?.attributes?.status} />;
   }
@@ -133,16 +128,13 @@ export default function URLResultPage() {
               <URLInformation url={analysisResults.data.attributes.url} />
             )}
 
+            {/* Comments Section */}
             {analysisResults.comments && (
-              <CommentsSection 
-                comments={analysisResults.comments.data} 
-                votes={analysisResults.votes?.data || []} 
+              <CommentsSection
+                comments={analysisResults.comments.data}
+                votes={analysisResults.votes?.data || []}
               />
             )}
-            {/* Raw Results (Collapsible) */}
-            <RawResults data={analysisResults} />
-            
-            {/* Comments Section */}
           </CardContent>
         </Card>
       )}
