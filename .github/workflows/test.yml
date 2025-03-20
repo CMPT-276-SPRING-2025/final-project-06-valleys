@@ -11,22 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         cache-dependency-path: src/package-lock.json
 
     - name: Install dependencies
       working-directory: ./src
       run: npm ci
+    # Linting with Next.js strict linting
+    - name: Run Linting
+      working-directory: ./src
+      run: npm run lint:strict
 
-    - name: Run tests
+    - name: Run Prettier
+      working-directory: ./src
+      run: npm run prettier
+
+    - name: Run Unit Tests
       working-directory: ./src
       env:
         VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: npm test
+      run: npm run test:coverage
