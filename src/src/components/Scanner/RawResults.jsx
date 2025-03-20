@@ -8,9 +8,7 @@ export function RawResults({ data }) {
       </summary>
       <Card className="mt-2">
         <CardContent className="max-h-96 overflow-auto p-4">
-          <pre className="text-sm">
-            {JSON.stringify(data, null, 2)}
-          </pre>
+          <pre className="text-sm">{JSON.stringify(data, null, 2)}</pre>
         </CardContent>
       </Card>
     </details>

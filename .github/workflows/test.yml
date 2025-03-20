@@ -2,21 +2,22 @@ name: Run Jest Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '**' ]
   pull_request:
-    branches: [ main ]
+    branches: [ '**' ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         cache-dependency-path: src/package-lock.json
 
@@ -24,8 +25,13 @@ jobs:
       working-directory: ./src
       run: npm ci
 
-    - name: Run tests
+    - name: Run Prettier
+      working-directory: ./src
+      run: npm run prettier
+
+    - name: Run Unit Tests
       working-directory: ./src
       env:
         VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
-      run: npm test
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: npm run test:coverage

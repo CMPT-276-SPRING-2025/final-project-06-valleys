@@ -1,0 +1,46 @@
+name: Deploy to Staging
+
+on:
+  workflow_run:
+    workflows: [ "Build", "Run Tests" ]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: src/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./src
+      run: npm ci
+
+    - name: Deploy to Staging
+      working-directory: ./src
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        # Uncomment this for either vcel or netlify deploy
+        # npx vercel --token $VERCEL_TOKEN --prod=false
+        # npx netlify deploy --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} --site ${{ secrets.NETLIFY_SITE_ID }} --prod
+
+    - name: Validate Deployment
+      run: |
+        # Add health check or validation step
+        # curl -f https://staging.example.com/health || exit 1
