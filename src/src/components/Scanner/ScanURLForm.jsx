@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { Shield } from "lucide-react"; 
+import { Shield } from "lucide-react";
 
 export default function ScanUrlForm() {
   const [url, setUrl] = useState("");
@@ -30,7 +30,7 @@ export default function ScanUrlForm() {
 
     try {
       const submitResponse = await fetch(
-        `/api/virustotal/url?url=${encodeURIComponent(url)}`,
+        `/api/virustotal/url?url=${encodeURIComponent(url)}`
       );
       const submitData = await submitResponse.json();
 
@@ -67,7 +67,7 @@ export default function ScanUrlForm() {
           potential threats.
         </p>
 
-        <div className="flex flex-col gap-4 md:gap-2 sm:flex-row">
+        <div className="flex flex-col gap-4 sm:flex-row md:gap-2">
           <Input
             type="search"
             placeholder="Enter URL To Scan"

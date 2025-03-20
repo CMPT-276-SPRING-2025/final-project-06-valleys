@@ -29,13 +29,13 @@ export default function URLResultPage() {
     const fetchResults = async () => {
       try {
         const analysisResponse = await fetch(
-          `/api/virustotal/url/analyze?id=${analysisId}`,
+          `/api/virustotal/url/analyze?id=${analysisId}`
         );
         const analysisData = await analysisResponse.json();
 
         if (!analysisResponse.ok) {
           throw new Error(
-            analysisData.error || "Failed to fetch analysis results",
+            analysisData.error || "Failed to fetch analysis results"
           );
         }
 

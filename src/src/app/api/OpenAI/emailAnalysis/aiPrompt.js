@@ -1,4 +1,4 @@
-  export const scamEmailAiResponse = `<p>Here are the potential scam keywords/phrases identified in the email:</p>
+export const scamEmailAiResponse = `<p>Here are the potential scam keywords/phrases identified in the email:</p>
 
   <ul>
     <li><span style="color: red;">"temporarily suspended"</span> - Often used in scam emails to create urgency.</li>
@@ -11,7 +11,7 @@
   <p>These are phrases that may indicate this email is suspicious and should be investigated further.</p>
   `;
 
-  export const scamEmailText = `Dear Valued Customer,
+export const scamEmailText = `Dear Valued Customer,
   We are writing to inform you that your account has been temporarily suspended due to suspicious activity.
   To restore access to your account, we require you to confirm your personal information immediately.
   If you fail to do so within 24 hours, your account will be permanently locked.
@@ -21,8 +21,8 @@
   Thank you for your prompt attention to this matter. We appreciate your cooperation.
   Sincerely, Secure Service Support Team`;
 
-  // Construct the prompt to instruct the model to flag scam keywords
-  export const firstPrompt = `
+// Construct the prompt to instruct the model to flag scam keywords
+export const firstPrompt = `
   You are a scam detector. Identify potential scam keywords in the following email and annotate them.
   Highlight any suspicious words or phrases that may indicate a scam.
   
@@ -31,7 +31,7 @@
   
   Annotate the scam keywords and explain why they are suspicious.`;
 
-  export const notScamEmailText = `Dear [Customer Name],
+export const notScamEmailText = `Dear [Customer Name],
 
   We hope you are doing well. This is a friendly reminder that your monthly statement is now available for viewing in your account. You can access it by logging into your account on our website.
 
@@ -41,7 +41,7 @@
 
   Best regards,
   The Company Team`;
-  export const notScamEmailAiResponse  = `<p>Here is the email with annotations showing it is not a scam email:</p>
+export const notScamEmailAiResponse = `<p>Here is the email with annotations showing it is not a scam email:</p>
 
   <ul>
     <li><span style="color: green;">"Dear [Customer Name]"</span> - This is a standard, personalized greeting commonly used in legitimate emails.</li>

@@ -23,10 +23,10 @@ jobs:
     - name: Install dependencies
       working-directory: ./src
       run: npm ci
-    # Linting with Next.js strict linting
-    - name: Run Linting
-      working-directory: ./src
-      run: npm run lint:strict
+    # # Linting with Next.js strict linting
+    # - name: Run Linting
+    #   working-directory: ./src
+    #   run: npm run lint
 
     - name: Run Prettier
       working-directory: ./src

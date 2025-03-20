@@ -1,4 +1,4 @@
-import { GET } from '@/app/api/virustotal/url/route';
+import { GET } from "@/app/api/virustotal/url/route";
 
 // Mock Request
 global.Request = class Request {
@@ -7,23 +7,23 @@ global.Request = class Request {
   }
 };
 
-describe('VirusTotal URL API Route', () => {
+describe("VirusTotal URL API Route", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('returns 400 when no URL is provided', async () => {
-    const request = new Request('http://localhost:3000/api/virustotal/url');
+  it("returns 400 when no URL is provided", async () => {
+    const request = new Request("http://localhost:3000/api/virustotal/url");
     const response = await GET(request);
 
     expect(response.status).toBe(400);
-    expect(response.data).toEqual({ error: 'URL is required' });
+    expect(response.data).toEqual({ error: "URL is required" });
   });
 
-  it('successfully submits URL to VirusTotal', async () => {
+  it("successfully submits URL to VirusTotal", async () => {
     const mockResponse = {
       data: {
-        id: 'test-analysis-id',
+        id: "test-analysis-id",
       },
     };
 
@@ -35,53 +35,53 @@ describe('VirusTotal URL API Route', () => {
     );
 
     const request = new Request(
-      'http://localhost:3000/api/virustotal/url?url=https://example.com'
+      "http://localhost:3000/api/virustotal/url?url=https://example.com"
     );
     const response = await GET(request);
 
     expect(global.fetch).toHaveBeenCalledWith(
-      'https://www.virustotal.com/api/v3/urls',
+      "https://www.virustotal.com/api/v3/urls",
       expect.objectContaining({
-        method: 'POST',
+        method: "POST",
         headers: expect.objectContaining({
-          'x-apikey': process.env.VIRUSTOTAL_API_KEY,
+          "x-apikey": process.env.VIRUSTOTAL_API_KEY,
         }),
         body: expect.any(String),
       })
     );
 
     expect(response.status).toBe(200);
-    expect(response.data).toEqual({ analysisId: 'test-analysis-id' });
+    expect(response.data).toEqual({ analysisId: "test-analysis-id" });
   });
 
-  it('handles invalid VirusTotal response', async () => {
+  it("handles invalid VirusTotal response", async () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ error: 'Invalid response' }),
+        json: () => Promise.resolve({ error: "Invalid response" }),
       })
     );
 
     const request = new Request(
-      'http://localhost:3000/api/virustotal/url?url=https://example.com'
+      "http://localhost:3000/api/virustotal/url?url=https://example.com"
     );
     const response = await GET(request);
 
     expect(response.status).toBe(500);
-    expect(response.data).toEqual({ error: 'Internal Server Error' });
+    expect(response.data).toEqual({ error: "Internal Server Error" });
   });
 
-  it('handles network error', async () => {
+  it("handles network error", async () => {
     global.fetch.mockImplementationOnce(() =>
-      Promise.reject(new Error('Network error'))
+      Promise.reject(new Error("Network error"))
     );
 
     const request = new Request(
-      'http://localhost:3000/api/virustotal/url?url=https://example.com'
+      "http://localhost:3000/api/virustotal/url?url=https://example.com"
     );
     const response = await GET(request);
 
     expect(response.status).toBe(500);
-    expect(response.data).toEqual({ error: 'Internal Server Error' });
+    expect(response.data).toEqual({ error: "Internal Server Error" });
   });
-}); 
+});

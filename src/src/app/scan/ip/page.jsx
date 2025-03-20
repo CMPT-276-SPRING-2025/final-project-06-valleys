@@ -1,4 +1,4 @@
-"use client";  
+"use client";
 
 import { Shield } from "lucide-react";
 import IPScanForm from "@/components/Scanner/IPScanForm";
@@ -10,10 +10,13 @@ export default function IPScanPage() {
         <Shield size={48} />
       </div>
 
-      <h1 className="mb-2 text-center text-3xl font-bold">IP Address Scanner</h1>
+      <h1 className="mb-2 text-center text-3xl font-bold">
+        IP Address Scanner
+      </h1>
 
       <p className="mb-6 text-center text-sm text-neutral-600">
-        Scan IP addresses to detect potential security threats and gather intelligence
+        Scan IP addresses to detect potential security threats and gather
+        intelligence
       </p>
 
       <IPScanForm />

@@ -27,13 +27,13 @@ export default function FileResultPage() {
     const fetchResults = async () => {
       try {
         const analysisResponse = await fetch(
-          `/api/virustotal/file/analyze?id=${analysisId}`,
+          `/api/virustotal/file/analyze?id=${analysisId}`
         );
         const analysisData = await analysisResponse.json();
 
         if (!analysisResponse.ok) {
           throw new Error(
-            analysisData.error || "Failed to fetch analysis results",
+            analysisData.error || "Failed to fetch analysis results"
           );
         }
 
@@ -84,9 +84,7 @@ export default function FileResultPage() {
         <Card className="w-full gap-2">
           <CardHeader>
             <CardTitle className={""}>
-              <h1 className="text-3xl font-bold">
-                File Scan Results
-              </h1>
+              <h1 className="text-3xl font-bold">File Scan Results</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -110,10 +108,9 @@ export default function FileResultPage() {
             {/* Security Vendors Analysis */}
             {analysisResults.data?.attributes?.results && (
               <SecurityVendorsTable
-                results={analysisResults.data.attributes.results} 
+                results={analysisResults.data.attributes.results}
               />
             )}
-
           </CardContent>
         </Card>
       )}

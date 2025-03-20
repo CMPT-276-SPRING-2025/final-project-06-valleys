@@ -7,7 +7,6 @@ const modelName = "gpt-4o";
 
 export async function POST(request) {
   try {
-
     const client = new OpenAI({
       baseURL: endpoint,
       apiKey: api_key,
@@ -15,11 +14,12 @@ export async function POST(request) {
 
     const response = await client.chat.completions.create({
       messages: [
-        { 
-          role: "system", 
-          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object." 
+        {
+          role: "system",
+          content:
+            "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object.",
         },
-        { 
+        {
           role: "user",
           content: `Generate 5 multiple-choice questions on phishing emails using this JSON structure. Make sure that there is only fake option and real option, nothing else. 
           Do NOT include markdown (\`\`\`json) or explanations. Return ONLY a valid JSON object.
@@ -52,40 +52,35 @@ export async function POST(request) {
                 "correct_email": "noreply@amazon.com"
               }
             ]
-          }`
-        }
+          }`,
+        },
       ],
       model: modelName,
       temperature: 1,
       max_tokens: 4096,
-      top_p: 1
+      top_p: 1,
     });
 
     const rawContent = response.choices[0].message.content.trim();
     const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
 
     let parsedContent;
-    try 
-    {
+    try {
       parsedContent = JSON.parse(cleanedResponse);
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       console.error("Failed to parse AI response as JSON:", error);
-      return NextResponse.json
-      (
+      return NextResponse.json(
         {
           error: "Failed to parse AI response as JSON",
-          rawContent
+          rawContent,
         },
-        { 
-          status: 500 
+        {
+          status: 500,
         }
       );
     }
 
     return NextResponse.json(parsedContent);
-
   } catch (err) {
     console.error("Error processing request:", err);
     return NextResponse.json(
