@@ -2,16 +2,17 @@ name: Run Jest Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '**' ]
   pull_request:
-    branches: [ main ]
+    branches: [ '**' ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -23,10 +24,6 @@ jobs:
     - name: Install dependencies
       working-directory: ./src
       run: npm ci
-    # # Linting with Next.js strict linting
-    # - name: Run Linting
-    #   working-directory: ./src
-    #   run: npm run lint
 
     - name: Run Prettier
       working-directory: ./src

@@ -1,8 +1,10 @@
-name: Build and Test
+name: Build
 
 on:
   push:
+    branches: [ '**' ]
   pull_request:
+    branches: [ '**' ]
 
 jobs:
   build:
@@ -29,6 +31,8 @@ jobs:
       working-directory: ./src
       env:
         NODE_ENV: production
+        VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: npm run build
 
     - name: Cache Next.js build
