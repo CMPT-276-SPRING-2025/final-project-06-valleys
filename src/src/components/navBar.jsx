@@ -4,7 +4,13 @@ import * as React from "react";
 import Link from "next/link";
 import ShieldLogo from "./shieldlogo";
 
-export default function NavBar({ toggleMenu, isOpen }) {
+export default function NavBar() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-between border-b bg-gray-100 p-4">
       {/* Logo */}
