@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export function LoadingState({ status }) {
@@ -6,9 +12,7 @@ export function LoadingState({ status }) {
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">
-            Analyzing...
-          </CardTitle>
+          <CardTitle className="text-center text-2xl">Analyzing...</CardTitle>
           <CardDescription className="text-center">
             This may take a minute or two
           </CardDescription>

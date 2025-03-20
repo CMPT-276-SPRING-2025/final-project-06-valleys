@@ -1,31 +1,35 @@
-import { POST } from '@/app/api/virustotal/file/route';
+import { POST } from "@/app/api/virustotal/file/route";
 
-describe('VirusTotal File Upload API', () => {
+describe("VirusTotal File Upload API", () => {
   // Helper to create a mock file
-  const createMockFile = (name = 'test.txt', size = 1024, type = 'text/plain') => {
+  const createMockFile = (
+    name = "test.txt",
+    size = 1024,
+    type = "text/plain"
+  ) => {
     const buffer = new ArrayBuffer(size);
     const file = new File([buffer], name, { type });
-    
+
     file.arrayBuffer = jest.fn().mockResolvedValue(buffer);
-    
+
     return file;
   };
 
   const createMockFormData = (file) => {
     const formData = new FormData();
     if (file) {
-      formData.append('file', file);
+      formData.append("file", file);
     }
-    
+
     formData.get = jest.fn((key) => {
-      if (key === 'file') return file;
+      if (key === "file") return file;
       return null;
     });
-    
+
     return formData;
   };
 
-  it('returns 400 if no file is uploaded', async () => {
+  it("returns 400 if no file is uploaded", async () => {
     const request = {
       formData: jest.fn().mockResolvedValue(createMockFormData(null)),
     };
@@ -33,12 +37,12 @@ describe('VirusTotal File Upload API', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    expect(response.data).toEqual({ error: 'No file uploaded' });
+    expect(response.data).toEqual({ error: "No file uploaded" });
   });
 
-  it('returns 400 if file size exceeds limit', async () => {
-    const largeFile = createMockFile('large.txt', 33 * 1024 * 1024);
-    
+  it("returns 400 if file size exceeds limit", async () => {
+    const largeFile = createMockFile("large.txt", 33 * 1024 * 1024);
+
     const request = {
       formData: jest.fn().mockResolvedValue(createMockFormData(largeFile)),
     };
@@ -46,12 +50,14 @@ describe('VirusTotal File Upload API', () => {
     const response = await POST(request);
 
     expect(response.status).toBe(400);
-    expect(response.data).toEqual({ error: 'File size exceeds the 32MB limit' });
+    expect(response.data).toEqual({
+      error: "File size exceeds the 32MB limit",
+    });
   });
 
-  it('successfully uploads file to VirusTotal', async () => {
-    const validFile = createMockFile('valid.txt', 1024);
-    
+  it("successfully uploads file to VirusTotal", async () => {
+    const validFile = createMockFile("valid.txt", 1024);
+
     const request = {
       formData: jest.fn().mockResolvedValue(createMockFormData(validFile)),
     };
@@ -60,39 +66,40 @@ describe('VirusTotal File Upload API', () => {
     global.fetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          data: {
-            id: 'test-analysis-id',
-            type: 'analysis',
-          },
-        }),
+        json: () =>
+          Promise.resolve({
+            data: {
+              id: "test-analysis-id",
+              type: "analysis",
+            },
+          }),
       })
     );
 
     const response = await POST(request);
 
     expect(global.fetch).toHaveBeenCalledWith(
-      'https://www.virustotal.com/api/v3/files',
+      "https://www.virustotal.com/api/v3/files",
       expect.objectContaining({
-        method: 'POST',
+        method: "POST",
         headers: expect.objectContaining({
-          'x-apikey': process.env.VIRUSTOTAL_API_KEY,
+          "x-apikey": process.env.VIRUSTOTAL_API_KEY,
         }),
       })
     );
 
     expect(response.status).toBe(200);
     expect(response.data).toEqual({
-      analysisId: 'test-analysis-id',
-      fileName: 'valid.txt',
+      analysisId: "test-analysis-id",
+      fileName: "valid.txt",
       fileSize: 1024,
-      status: 'queued'
+      status: "queued",
     });
   });
 
-  it('handles VirusTotal API error', async () => {
-    const validFile = createMockFile('valid.txt', 1024);
-    
+  it("handles VirusTotal API error", async () => {
+    const validFile = createMockFile("valid.txt", 1024);
+
     const request = {
       formData: jest.fn().mockResolvedValue(createMockFormData(validFile)),
     };
@@ -101,28 +108,29 @@ describe('VirusTotal File Upload API', () => {
       Promise.resolve({
         ok: false,
         status: 403,
-        json: () => Promise.resolve({
-          error: {
-            message: 'API key invalid',
-          },
-        }),
+        json: () =>
+          Promise.resolve({
+            error: {
+              message: "API key invalid",
+            },
+          }),
       })
     );
 
     const response = await POST(request);
 
     expect(response.status).toBe(403);
-    expect(response.data).toEqual({ error: 'API key invalid' });
+    expect(response.data).toEqual({ error: "API key invalid" });
   });
 
-  it('handles unexpected errors', async () => {
+  it("handles unexpected errors", async () => {
     const request = {
-      formData: jest.fn().mockRejectedValue(new Error('Unexpected error')),
+      formData: jest.fn().mockRejectedValue(new Error("Unexpected error")),
     };
 
     const response = await POST(request);
 
     expect(response.status).toBe(500);
-    expect(response.data).toEqual({ error: 'Failed to process file upload' });
+    expect(response.data).toEqual({ error: "Failed to process file upload" });
   });
 });
