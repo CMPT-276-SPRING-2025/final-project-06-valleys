@@ -174,9 +174,8 @@ export default function EmailAnalysis() {
             className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md"
             dangerouslySetInnerHTML={{ __html: result }}
           />
-        )}
-      </div>
-
+        )} 
+     </div> 
     </div>
   );
 }

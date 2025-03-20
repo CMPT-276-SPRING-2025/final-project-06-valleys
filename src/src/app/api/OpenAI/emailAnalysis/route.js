@@ -19,7 +19,7 @@ export async function POST(request) {
     }
 
     if (!text) {
-      return NextResponse.json({ error: "No text provided" }, { status: 400 });
+      return NextResponse.json({ error: "Email content is required" }, { status: 400 });
     }
 
     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
