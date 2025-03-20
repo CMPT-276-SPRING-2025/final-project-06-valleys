@@ -15,7 +15,7 @@ test.describe('VirusTotal File API', () => {
     
     // Create a large test file (32MB - just over most API limits)
     largeFilePath = path.join(process.cwd(), 'large-test-file.bin');
-    const largeBuffer = Buffer.alloc(33 * 1024 * 1024); // 33MB
+    const largeBuffer = Buffer.alloc(33 * 1024 * 1024); // 33MB, 32MB is current limit
     fs.writeFileSync(largeFilePath, largeBuffer);
     
     // Create an invalid file (empty file with executable extension)

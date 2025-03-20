@@ -29,18 +29,23 @@ jobs:
       working-directory: ./src
       run: npm ci
 
-    - name: Deploy to Staging
+    - name: Install Vercel CLI
+      run: npm install -g vercel
+
+    - name: Deploy to Vercel
       working-directory: ./src
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        # Uncomment this for either vcel or netlify deploy
-        # npx vercel --token $VERCEL_TOKEN --prod=false
-        # npx netlify deploy --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} --site ${{ secrets.NETLIFY_SITE_ID }} --prod
+        # Deploy and capture the output URL
+        DEPLOYMENT_URL=$(vercel deploy --token $VERCEL_TOKEN --prod=false --yes)
+        echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+        echo "Deployed to: $DEPLOYMENT_URL"
 
     - name: Validate Deployment
       run: |
-        # Add health check or validation step
-        # curl -f https://staging.example.com/health || exit 1
+        # Use the dynamic deployment URL captured from the previous step
+        curl -f $DEPLOYMENT_URL/api/health || exit 1
+        echo "Deployment validated successfully"
