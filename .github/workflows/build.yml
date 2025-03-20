@@ -24,8 +24,13 @@ jobs:
     - name: Install dependencies
       working-directory: ./src
       run: |
-        NODE_ENV=development npm ci
+        npm ci
+        
+    - name: Install Tailwind CSS and dependencies
+      working-directory: ./src
+      run: |
         npm install -D tailwindcss postcss autoprefixer
+        npm rebuild @tailwindcss/oxide
 
     - name: Build project
       working-directory: ./src
