@@ -2,7 +2,6 @@
   "name": "deep_phishing",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
@@ -23,9 +22,8 @@
     "lint:fix": "next lint --fix",
     "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
     "prettier": "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "playwright test",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
@@ -45,8 +43,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.51.1",
     "@tailwindcss/postcss": "^4",
-    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "22.13.9",
@@ -55,9 +53,8 @@
     "eslint-config-next": "^15.2.1",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^15.5.0",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.5.3",
     "simple-git-hooks": "^2.11.1"
   },
