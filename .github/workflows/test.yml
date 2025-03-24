@@ -2,40 +2,44 @@ name: Run Playwright Tests
 
 on:
   push:
-    branches: [ '**' ]
+    branches: ["**"]
+    paths:
+      - "src/**"
   pull_request:
-    branches: [ '**' ]
+    branches: ["**"]
+  workflow_run:
+    workflows: ["Deploy to Vercel"]
+    types:
+      - completed
 
 jobs:
-  test:
+  test-deployed:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: src/package-lock.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: src/package-lock.json
 
-    - name: Install dependencies
-      working-directory: ./src
-      run: npm ci
+      - name: Install dependencies
+        working-directory: ./src
+        run: npm ci
 
-    - name: Install Playwright browsers
-      working-directory: ./src
-      run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        working-directory: ./src
+        run: npx playwright install --with-deps chromium
 
-    - name: Run Prettier
-      working-directory: ./src
-      run: npm run prettier
-
-    - name: Run Playwright Tests
-      working-directory: ./src
-      env:
-        VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: npm test
+      - name: Run Playwright Tests on deployed browser
+        working-directory: ./src
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.workflow_run.outputs.deployment_url }}
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm test

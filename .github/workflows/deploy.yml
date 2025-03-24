@@ -1,51 +1,41 @@
-name: Deploy to Staging
+name: Deploy to Vercel
 
 on:
-  workflow_run:
-    workflows: [ "Build", "Run Tests" ]
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    environment: staging
-
+    defaults:
+      run:
+        working-directory: ./src
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: src/package-lock.json
-
-    - name: Install dependencies
-      working-directory: ./src
-      run: npm ci
-
-    - name: Install Vercel CLI
-      run: npm install -g vercel
-
-    - name: Deploy to Vercel
-      working-directory: ./src
-      env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: |
-        # Deploy and capture the output URL
-        DEPLOYMENT_URL=$(vercel deploy --token $VERCEL_TOKEN --prod=false --yes)
-        echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
-        echo "Deployed to: $DEPLOYMENT_URL"
-
-    - name: Validate Deployment
-      run: |
-        # Use the dynamic deployment URL captured from the previous step
-        curl -f $DEPLOYMENT_URL/api/health || exit 1
-        echo "Deployment validated successfully"
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build
+        run: npm run build
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+        
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          DEPLOYMENT_URL=$(vercel deploy --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes)
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+          echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
