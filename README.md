@@ -97,3 +97,7 @@ npm run test
 - Kimchhorn Sambath - 301637407
 - Nathan Huynh - 301608957
 
+---
+## License & Usage
+
+This project is for **educational and training purposes only**. Do not use the email generator for real phishing attempts. Always test responsibly and with informed consent.
