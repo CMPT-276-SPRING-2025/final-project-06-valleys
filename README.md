@@ -18,11 +18,11 @@ A web application created to educate users about phishing scams, their consequen
 
 ---
 
-## 🌐 Live Website  
-👉 [https://deep-phishing.vercel.app/](https://deep-phishing.vercel.app/)
+## Live Website  
+[https://deep-phishing.vercel.app/](https://deep-phishing.vercel.app/)
 
-## 🎨 Figma Design  
-👉 [View on Figma](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
+## Figma Design  
+[View on Figma](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
 
 ---
 
