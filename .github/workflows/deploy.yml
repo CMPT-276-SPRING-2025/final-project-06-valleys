@@ -32,10 +32,9 @@ jobs:
         run: npm install -g vercel
         
       - name: Deploy to Vercel
-        id: deploy
         run: |
-          DEPLOYMENT_URL=$(vercel deploy --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes)
-          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
-          echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          vercel deploy --prod --token="${{ secrets.VERCEL_TOKEN }}" --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
