@@ -18,7 +18,7 @@ A web application created to educate users about phishing scams, their consequen
 - **UI Components**: shadcn/ui
 - **API Integration**: VirusTotal API, OpenAI API
 - **Code Quality**: ESLint, Prettier
-- **Testing**: Jest
+- **Testing**: Playwright
 
 ---
 
@@ -80,7 +80,7 @@ http://localhost:3000
 ```
 
 ### 6. Run Tests (Optional)
-**To run tests with Jest, open another terminal:**
+**To run tests with Playwright, open another terminal:**
 ```sh
 npm run test
 ```
@@ -93,4 +93,4 @@ npm run test
 ---
 ## License & Usage
 
-This project is for **educational and training purposes only**. Do not use the email generator for real phishing attempts. Always test responsibly and with informed consent.
+This project is licensed under the **MIT license** and is intended strictly for **educational and training purposes**. The email generator must not be used for real phishing attempts. Always conduct testing responsibly and with informed consent.
