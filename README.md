@@ -22,14 +22,6 @@ A web application created to educate users about phishing scams, their consequen
 
 ---
 
-## Live Website  
-[https://deep-phishing.vercel.app/](https://deep-phishing.vercel.app/)
-
-## Figma Design  
-[View on Figma](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
-
----
-
 ## Getting Started – Local Deployment Instructions
 
 Follow these steps to run the project locally on your machine.
@@ -93,3 +85,9 @@ http://localhost:3000
 npm run test
 ```
 ---
+## Project Links
+- **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
+- **Demo Video:** _[Add video link here]_
+- **Project Report:** _[Add report link here]_
+- **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
+
