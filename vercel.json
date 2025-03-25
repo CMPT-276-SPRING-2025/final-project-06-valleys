@@ -1,13 +1,13 @@
 {
   "functions": {
-    "src/app/api/**/*": {
+    "src/src/app/api/**/*": {
       "maxDuration": 60 
     }
   },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/src/app/api/$1"
+      "dest": "/src/src/app/api/$1"
     }
   ]
 }
