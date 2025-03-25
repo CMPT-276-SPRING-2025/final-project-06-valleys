@@ -28,10 +28,18 @@ A web application created to educate users about phishing scams, their consequen
 
 
 
-## Getting Started
+## Getting Started – Local Deployment Instructions
 
-### Prerequisites
-- Node.js 20 or higher
-- npm or yarn
-- VirusTotal API key
-- OpenAI API key
+Follow these steps to run the project locally on your machine.
+
+### 1. **Prerequisites**
+
+Make sure the following are installed:
+
+- [Node.js](https://nodejs.org/en) (version **20** or higher)
+- `npm` or `yarn`
+- **VirusTotal API Key**
+- **OpenAI API Key**
+
+---
+
