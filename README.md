@@ -30,8 +30,6 @@ A web application created to educate users about phishing scams, their consequen
 
 ---
 
-
-
 ## Getting Started – Local Deployment Instructions
 
 Follow these steps to run the project locally on your machine.
@@ -89,3 +87,9 @@ yarn dev
 http://localhost:3000
 ```
 
+### 6. Run Tests (Optional)
+**To run tests with Jest:**
+```sh
+npm run test
+```
+---
