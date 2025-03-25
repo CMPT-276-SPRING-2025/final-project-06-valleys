@@ -55,7 +55,7 @@ cd final-project-06-valleys
 ```
 
 ### 3. Install Dependencies
-**Using npm:******
+**Using npm:**
 ```sh
 npm install
 ```
