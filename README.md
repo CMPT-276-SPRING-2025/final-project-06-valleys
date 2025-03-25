@@ -48,9 +48,11 @@ Make sure the following are installed:
 ---
 
 ### 2. Clone the Repository
-
-```bash
+```sh
 git clone git@github.com:CMPT-276-SPRING-2025/final-project-06-valleys.git
+```
+**Navigate to the root directory**
+```sh
 cd final-project-06-valleys
 ```
 
