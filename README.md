@@ -87,7 +87,7 @@ npm run test
 ---
 ## Project Links
 - **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
-- **Demo Video:** <add the link here when ready>
-- **Project Report:** <add the link here when ready>
+- **Demo Video:** `add the link here when ready`
+- **Project Report:** `add the link here when ready`
 - **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
 
