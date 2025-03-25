@@ -91,3 +91,9 @@ npm run test
 - **Project Report:** `<add the link here when ready>`
 - **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
 
+## Project Members 
+- Philip Ho - 301472672
+- Amraj Koonar - 301559468
+- Kimchhorn Sambath - 301637407
+- Nathan Huynh - 301608957
+
