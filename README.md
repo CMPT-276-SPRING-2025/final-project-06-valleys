@@ -54,5 +54,15 @@ git clone git@github.com:CMPT-276-SPRING-2025/final-project-06-valleys.git
 cd final-project-06-valleys
 ```
 
----
+### 3. Install Dependencies
+**Using npm:******
+```sh
+npm install
+```
+
+**Or using yarn:**
+```sh
+yarn install
+```
+
 
