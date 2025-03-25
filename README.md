@@ -74,5 +74,18 @@ OPENAI_API_KEY=your_openai_api_key
 ```
 **Replace** `your_virustotal_api_key` **and** `your_openai_api_key` **with your actual API keys.**
 
+### 5. Run the Development Server
+**Using npm:**
+```sh
+npm run dev
+```
+**Or using yarn:**
+```sh
+yarn dev
+```
 
+**Then open your browser and go to:**
+```
+http://localhost:3000
+```
 
