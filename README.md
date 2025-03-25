@@ -65,4 +65,14 @@ npm install
 yarn install
 ```
 
+### 4. Set Up Environment Variables
+
+**Create a `.env.local` file in the root directory and add the following:**
+```env
+VIRUSTOTAL_API_KEY=your_virustotal_api_key
+OPENAI_API_KEY=your_openai_api_key
+```
+**Replace** `your_virustotal_api_key` **and** `your_openai_api_key` **with your actual API keys.**
+
+
 
