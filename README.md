@@ -41,7 +41,7 @@ git clone git@github.com:CMPT-276-SPRING-2025/final-project-06-valleys.git
 ```
 **Navigate to the root directory**
 ```sh
-cd final-project-06-valleys
+cd final-project-06-valleys/src
 ```
 
 ### 3. Install Dependencies

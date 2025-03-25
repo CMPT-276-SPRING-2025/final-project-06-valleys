@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: ["**"]
   workflow_run:
-    workflows: ["Deploy to Vercel"]
+    workflows: ["Deploy to Vercel", "Build and Preview"]
     types:
       - completed
 
@@ -39,7 +39,7 @@ jobs:
       - name: Run Playwright Tests on deployed browser
         working-directory: ./src
         env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.workflow_run.outputs.deployment_url }}
+          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.workflow_run.outputs.deployment_url || github.event.workflow_run.outputs.preview_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm test
