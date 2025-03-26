@@ -2,6 +2,7 @@
   "name": "deep_phishing",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
