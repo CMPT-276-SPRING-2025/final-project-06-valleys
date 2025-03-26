@@ -1,6 +1,11 @@
 name: Build and Preview
 
 on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - "src/**"
   pull_request:
     branches-ignore:
       - main
@@ -60,6 +65,8 @@ jobs:
         run: |
           PREVIEW_URL=$(vercel deploy --token="${{ secrets.VERCEL_TOKEN }}" --yes)
           echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+          echo "✅ Preview deployment completed successfully!"
+          echo "🔗 Preview URL: $PREVIEW_URL"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -67,6 +74,7 @@ jobs:
           
       - name: Comment on PR with Preview URL
         uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
         with:
           script: |
             const previewUrl = process.env.PREVIEW_URL;
