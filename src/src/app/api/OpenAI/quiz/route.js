@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
+export const maxDuration = 60;
+
 const api_key = process.env.OPENAI_API_KEY;
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";

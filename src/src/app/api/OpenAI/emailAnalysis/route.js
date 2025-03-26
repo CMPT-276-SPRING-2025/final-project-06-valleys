@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import * as prompt from "./aiPrompt.js";
 import { NextResponse } from "next/server";
 
+export const maxDuration = 60;
 const token = process.env["OPENAI_API_KEY"];
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";
