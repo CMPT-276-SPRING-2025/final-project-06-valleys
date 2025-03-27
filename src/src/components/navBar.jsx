@@ -55,7 +55,7 @@ export default function NavBar() {
           Email Generator
         </Link>
         <Link
-          href="/emailAnalysis"
+          href="/email-analysis"
           className="text-gray-800 transition hover:text-blue-500"
         >
           Email Analysis

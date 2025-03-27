@@ -34,10 +34,10 @@ export default function Footer() {
               File Scanner
             </Link>
             <Link
-              href="/item-three"
+              href="/scan/ip"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
-              Email Generator
+              IP Scanner
             </Link>
           </div>
 
@@ -51,6 +51,18 @@ export default function Footer() {
               About Us
             </Link>
             <Link
+              href="/item-three"
+              className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
+            >
+              Email Generator
+            </Link>
+            <Link
+              href="/email-analysis"
+              className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
+            >
+              Email Analysis
+            </Link>
+            <Link
               href="/quiz"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
@@ -62,13 +74,13 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <h3 className="mb-4 text-lg font-semibold">Legal</h3>
             <Link
-              href="/privacy"
+              href="/privacy-policy"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
               Privacy Policy
             </Link>
             <Link
-              href="/terms"
+              href="/terms-and-service"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
               Terms of Service
