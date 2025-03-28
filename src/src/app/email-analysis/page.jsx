@@ -71,21 +71,20 @@ export default function EmailAnalysis() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
-      {/* <div className="flex-1 flex items-center justify-center"> */}
       {/* Centered Logo and Title */}
-      <div className="mb-4 flex flex-shrink-0 flex-col items-center">
+      <div className=" mb-4 flex flex-shrink-0 flex-col items-center">
         <ShieldLogo />
         <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
-        <p className="mt-2 text-center text-gray-600">
+        <p className="mt-2 mb-10 text-center text-gray-600">
           AI-powered tool to analyze emails for potential phishing indicators.
         </p>
-        {/* </div> */}
+        
       </div>
 
       {/* Main Content (Two Columns) */}
       <div className="grid w-full max-w-screen-lg gap-6 p-4 md:grid-cols-2">
         {/* Left Column - Card */}
-        <Card className="max-h-max p-4 shadow-lg">
+        <Card className="max-h-max shadow-lg">
           <CardHeader>
             <CardTitle>Email Content</CardTitle>
             <CardDescription>
@@ -96,7 +95,7 @@ export default function EmailAnalysis() {
           <CardContent>
             {/* Text Area */}
             <textarea
-              className="h-48 w-full rounded-md border p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="h-72 w-full rounded-md border p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Paste the full content here, including headers if available..."
               value={text}
               onChange={handleTextChange}
