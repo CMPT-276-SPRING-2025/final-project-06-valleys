@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const api_key = process.env.OPENAI_API_KEY;
 const endpoint = "https://models.inference.ai.azure.com";
-const modelName = "gpt-4o";
+const modelName = "gpt-4o-mini";
 
 export async function POST(request) {
   try {
@@ -17,11 +17,11 @@ export async function POST(request) {
       messages: [
         { 
           role: "system", 
-          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object." 
+          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object. Ensure all line breaks in the JSON string values are escaped with \\n so that the response is valid JSON." 
         },
         { 
           role: "user",
-          content: `Generate 5 multiple-choice questions on phishing emails using this JSON structure. Make sure that there is only fake option and real option, nothing else. 
+          content: `Generate 1 multiple-choice question on phishing emails using this JSON structure. Make sure that there is only fake option and real option, nothing else. 
           Do NOT include markdown (\`\`\`json) or explanations. Return ONLY a valid JSON object.
 
           {
@@ -57,7 +57,7 @@ export async function POST(request) {
       ],
       model: modelName,
       temperature: 1,
-      max_tokens: 4096,
+      max_tokens: 1000,
       top_p: 1
     });
 
@@ -65,6 +65,10 @@ export async function POST(request) {
     const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
 
     let parsedContent;
+
+    console.log(cleanedResponse);
+    
+
     try 
     {
       parsedContent = JSON.parse(cleanedResponse);
