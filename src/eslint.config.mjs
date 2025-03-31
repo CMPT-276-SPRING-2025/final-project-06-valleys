@@ -9,11 +9,8 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [...compat.extends("next/core-web-vitals")];
-
-export default eslintConfig;
-
-module.exports = {
+export default {
+  ...compat.extends("next/core-web-vitals"),
   parserOptions: {
     ecmaVersion: 2021,
     sourceType: "module",
@@ -38,13 +35,11 @@ module.exports = {
   ],
   plugins: ["prettier", "react", "react-hooks"],
   rules: {
-    // JavaScript rules
     "prefer-const": "warn",
     "no-var": "warn",
     "no-unused-vars": "warn",
     "object-shorthand": "warn",
     "quote-props": ["warn", "as-needed"],
-    // React rules
     "react/jsx-fragments": ["warn", "syntax"], 
     "react/jsx-filename-extension": [
       "warn",
@@ -52,8 +47,8 @@ module.exports = {
         extensions: ["js", "jsx"],
       },
     ],
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "prettier/prettier": "warn",
