@@ -3,11 +3,26 @@
 import * as React from "react";
 import ShieldLogo from "@/components/shieldlogo";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  CardHeader,
+  CardDescription,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 export default function EmailGenerator() {
+  const [emailTemplate, setEmailTemplate] = React.useState("bank");
   const [recipientEmail, setRecipientEmail] = React.useState("");
   const [emailContent, setEmailContent] = React.useState(
     "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the link below to restore full access to your account:\n\n[SUSPICIOUS LINK]\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name"
@@ -21,13 +36,10 @@ export default function EmailGenerator() {
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailContent);
-    // You could add a toast notification here
   };
 
   const handleSendEmail = () => {
-    // Implement email sending functionality
     console.log(`Sending email to: ${recipientEmail}`);
-    // You could add API call here
   };
 
   return (
@@ -41,7 +53,7 @@ export default function EmailGenerator() {
         </p>
       </div>
 
-      {/*Content Group*/}
+      {/* Content Group */}
       <div className="mx-auto max-w-5xl items-center p-8">
         {/* Disclaimer Section */}
         <Card className="mb-7 bg-gray-100">
@@ -54,42 +66,64 @@ export default function EmailGenerator() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
           {/* Left Column - Email Generator */}
-          <div className="flex flex-col md:col-span-2">
+          <div className="flex flex-col">
             <Card className="flex-grow">
               <CardHeader>
-                <h2 className="text-lg font-semibold">Email Generator</h2>
+                <CardTitle>Email Generator</CardTitle>
+                <CardDescription>
+                  Create a simulated phishing email using templates or customize
+                  your own
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <label className="mb-2 block">Email Template</label>
-                <select className="mb-4 w-full rounded-md border p-2">
-                  <option>Banking Alert</option>
-                </select>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email-template">Email Template</Label>
+                  <Select
+                    id="email-template"
+                    value={emailTemplate}
+                    onValueChange={setEmailTemplate}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bank">Banking Alert</SelectItem>
+                      <SelectItem value="custom">Custom</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                <label className="mb-2 block">Sender Email</label>
-                <Input
-                  value="security@bankname-alerts.com"
-                  disabled
-                  className="mb-4"
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="sender-email">Sender Email</Label>
+                  <Input
+                    id="sender-email"
+                    value="security@bankname-alerts.com"
+                    disabled
+                  />
+                </div>
 
-                <label className="mb-2 block">Subject Line</label>
-                <Input
-                  value="URGENT: Unusual activity detected on your account"
-                  disabled
-                  className="mb-4"
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="subject-line">Subject Line</Label>
+                  <Input
+                    id="subject-line"
+                    value="URGENT: Unusual activity detected on your account"
+                    disabled
+                  />
+                </div>
 
-                <label className="mb-2 block">Email Content</label>
-                <Textarea
-                  value={emailContent}
-                  onChange={(e) => setEmailContent(e.target.value)}
-                  rows={8}
-                  className="mb-4"
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="email-content">Email Content</Label>
+                  <Textarea
+                    id="email-content"
+                    value={emailContent}
+                    onChange={(e) => setEmailContent(e.target.value)}
+                    rows={8}
+                  />
+                </div>
 
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 pt-2">
                   <Button onClick={handleResetTemplate}>
                     Reset to Template
                   </Button>
@@ -103,20 +137,26 @@ export default function EmailGenerator() {
           <div className="flex flex-col gap-6">
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Send Test Email</h2>
+                <CardTitle>Send Test Email</CardTitle>
+                <CardDescription>
+                  Send this phishing simulation to a recipient for testing
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <label className="mb-2 block">Recipient Email</label>
-                <Input
-                  value={recipientEmail}
-                  onChange={(e) => setRecipientEmail(e.target.value)}
-                  placeholder="recipient@example.com"
-                  className="mb-4"
-                />
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="recipient-email">Recipient Email</Label>
+                  <Input
+                    id="recipient-email"
+                    value={recipientEmail}
+                    onChange={(e) => setRecipientEmail(e.target.value)}
+                    placeholder="recipient@example.com"
+                  />
+                </div>
 
-                <p className="mb-4 text-sm text-gray-600">
+                <p className="text-sm text-gray-600">
                   By sending this email, you confirm that the recipient has
-                  given consent to receive phishing simulation emails.
+                  given consent to receive phishing simulation emails for
+                  educational purposes.
                 </p>
 
                 <Button
@@ -131,7 +171,7 @@ export default function EmailGenerator() {
 
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Email Preview</h2>
+                <CardTitle>Email Preview</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="rounded-md border bg-gray-50 p-4">
