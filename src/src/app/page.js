@@ -1,4 +1,3 @@
-import Image from "next/image"; 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Eye, Search, FileCode, BookUser, Mail, HelpCircle } from "lucide-react"; 
@@ -11,15 +10,15 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[auto_1fr_auto] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
+    <div className="grid min-h-screen grid-rows-[auto_1fr_auto] items-center justify-items-center gap-16 p-8 pb-20 sm:p-20">
 
       <section className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-16">
         {/* Left Side - Text and Buttons */}
         <div className="md:w-1/2 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight text-pretty">
             Protect Yourself from Phishing Attacks
           </h1>
-          <p className="mt-4 text-gray-700 text-lg">
+          <p className="mt-4 text-gray-700 text-lg text-pretty">
             Deep Phishing provides essential security tools and AI-powered educational resources to help you identify and prevent phishing attempts.
           </p>
 
@@ -68,7 +67,7 @@ export default function Home() {
              <Search className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">URL Scanner</h3>
              
-             <p className="mt-2 text-gray-600">
+             <p className="mt-2 text-gray-600 text-pretty">
                Upload URLs from suspicious emails to detect phishing attempts.
              </p>
              <Link href="/scan/url">
@@ -82,7 +81,7 @@ export default function Home() {
              <FileCode className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">File Scanner</h3>
              
-             <p className="mt-2 text-gray-600">
+             <p className="mt-2 text-gray-600 text-pretty">
                Upload suspicious files for analysis by multiple antivirus services.
              </p>
              <Link href="/scan/file">
@@ -192,7 +191,7 @@ export default function Home() {
            Start using our security tools today and learn how to identify and prevent phishing attempts.
          </p>
          <Link href="/email-analysis">
-           <Button className="mt-2 bg-[#5e7ab8] hover:bg-[#4a6aa0] text-lg font-semibold py-4 px-8 rounded-lg">
+           <Button className="mt-2 bg-[#5e7ab8] hover:bg-[#4a6aa0] text-lg font-semibold py-4 px-8">
              Get Started
            </Button>
          </Link>
