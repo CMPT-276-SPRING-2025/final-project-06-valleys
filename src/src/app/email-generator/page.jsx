@@ -22,16 +22,56 @@ import {
 import { Label } from "@/components/ui/label";
 
 export default function EmailGenerator() {
+  const template = {
+    bank: {
+      sender: "security@bank-name-alerts.com",
+      subject: "URGENT: Unusual activity detected on your account",
+      content:
+        "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n[Verify My Account](#)\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name",
+    },
+    lotto: {
+      sender: "claims@intl-lottowinners.com",
+      subject: "Congratulations! You’ve Won $1,000,000!",
+      content:
+        "Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n[Claim Your Prize](#)\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department",
+    },
+    "tech-support": {
+      sender: "support@windows-securityalerts.com",
+      subject: "Your PC Has Been Infected! Immediate Action Required!",
+      content:
+        "Dear User,\n\nOur security system has detected multiple viruses on your computer. Immediate action is required to prevent data loss.\n\nPlease call our certified support team at **+1-800-XXX-XXXX** or download our free security patch by clicking the protection link below:\n\n[Download Security Patch](#)\n\nFailure to act may result in complete system failure!\n\nStay safe,\nMicrosoft Security Team",
+    },
+    "job-offer": {
+      sender: "hr@globalrecruitment.com",
+      subject: "High-Paying Remote Job Opportunity - No Experience Needed!",
+      content:
+        "Dear Candidate,\n\nWe found your resume online and would like to offer you an exciting remote job opportunity. No experience required, and you can earn **$5000+ per month** working from home.\n\nTo apply, simply complete the application form by accessing the link below:\n\n[Apply Now](#)\n\nDon't miss this opportunity—limited spots available!\n\nBest regards,\nGlobal Recruitment Team",
+    },
+  };
   const [emailTemplate, setEmailTemplate] = React.useState("bank");
-  const [recipientEmail, setRecipientEmail] = React.useState("");
-  const [emailContent, setEmailContent] = React.useState(
-    "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the link below to restore full access to your account:\n\n[SUSPICIOUS LINK]\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name"
+  const [emailSender, setEmailSender] = React.useState(template["bank"].sender);
+  const [emailSubject, setEmailSubject] = React.useState(
+    template["bank"].subject
   );
+  const [emailContent, setEmailContent] = React.useState(
+    template["bank"].content
+  );
+  const [recipientEmail, setRecipientEmail] = React.useState("");
+
+  const handleChangeTemplate = (newTemplate) => {
+    // Early return for custom template
+    if (newTemplate === "custom") {
+      setEmailTemplate(newTemplate);
+      return;
+    }
+    setEmailTemplate(newTemplate);
+    setEmailSender(template[newTemplate].sender);
+    setEmailSubject(template[newTemplate].subject);
+    setEmailContent(template[newTemplate].content);
+  };
 
   const handleResetTemplate = () => {
-    setEmailContent(
-      "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the link below to restore full access to your account:\n\n[SUSPICIOUS LINK]\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name"
-    );
+    handleChangeTemplate("bank");
   };
 
   const handleCopyEmail = () => {
@@ -83,14 +123,19 @@ export default function EmailGenerator() {
                   <Select
                     id="email-template"
                     value={emailTemplate}
-                    onValueChange={setEmailTemplate}
+                    onValueChange={handleChangeTemplate}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="bank">Banking Alert</SelectItem>
-                      <SelectItem value="custom">Custom</SelectItem>
+                      <SelectItem value="lotto">Lottery Scam</SelectItem>
+                      <SelectItem value="tech-support">
+                        Tech Support Scam
+                      </SelectItem>
+                      <SelectItem value="job-offer">Job Offer Scam</SelectItem>
+                      <SelectItem value="custom">Customize</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -99,8 +144,8 @@ export default function EmailGenerator() {
                   <Label htmlFor="sender-email">Sender Email</Label>
                   <Input
                     id="sender-email"
-                    value="security@bankname-alerts.com"
-                    disabled
+                    value={emailSender}
+                    onChange={(e) => setEmailSender(e.target.value)}
                   />
                 </div>
 
@@ -108,8 +153,8 @@ export default function EmailGenerator() {
                   <Label htmlFor="subject-line">Subject Line</Label>
                   <Input
                     id="subject-line"
-                    value="URGENT: Unusual activity detected on your account"
-                    disabled
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
                   />
                 </div>
 
@@ -125,7 +170,7 @@ export default function EmailGenerator() {
 
                 <div className="flex space-x-2 pt-2">
                   <Button onClick={handleResetTemplate}>
-                    Reset to Template
+                    Reset to default template
                   </Button>
                   <Button onClick={handleCopyEmail}>Copy Email</Button>
                 </div>
@@ -176,10 +221,10 @@ export default function EmailGenerator() {
               <CardContent>
                 <div className="rounded-md border bg-gray-50 p-4">
                   <p>
-                    <strong>From:</strong> security@bankname-alerts.com
+                    <strong>From:</strong> {emailSender}
                   </p>
                   <p>
-                    <strong>Subject:</strong> URGENT: Unusual activity detected
+                    <strong>Subject:</strong> {emailSubject}
                   </p>
                   <p className="mt-4 whitespace-pre-line">{emailContent}</p>
                 </div>
