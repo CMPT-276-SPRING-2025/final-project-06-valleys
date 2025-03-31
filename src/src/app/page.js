@@ -1,7 +1,7 @@
 import Image from "next/image"; 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { FaEye,  FaSearch,  FaFileCode,  FaAddressBook, FaMailBulk, FaQuestion } from "react-icons/fa"; 
+import { Eye, Search, FileCode, BookUser, Mail, HelpCircle } from "lucide-react"; 
 
 export const metadata = {
   title: "Deep Phishing",
@@ -52,7 +52,7 @@ export default function Home() {
       </section>
 
       {/* Our Security Tools Section */}
-      <section className="py-12  bg-gray-100">
+      <section className="py-12">
        <div className="container mx-auto px-6 lg:px-12">
          <h2 className="text-5xl font-bold text-gray-900 text-center">
            Our Security Tools
@@ -65,8 +65,9 @@ export default function Home() {
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
            {/* Feature Card 1 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaSearch className="text-[#5e7ab8] text-4xl" />
+             <Search className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">URL Scanner</h3>
+             
              <p className="mt-2 text-gray-600">
                Upload URLs from suspicious emails to detect phishing attempts.
              </p>
@@ -78,8 +79,9 @@ export default function Home() {
            </div>
            {/* Feature Card 2 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaFileCode className="text-[#5e7ab8] text-4xl" />
+             <FileCode className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">File Scanner</h3>
+             
              <p className="mt-2 text-gray-600">
                Upload suspicious files for analysis by multiple antivirus services.
              </p>
@@ -91,8 +93,9 @@ export default function Home() {
            </div>
            {/* Feature Card 3 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaAddressBook className="text-[#5e7ab8] text-4xl" />
+             <BookUser className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">IP Scanner</h3>
+             
              <p className="mt-2 text-gray-600">
                Analyze the sender's IP address in emails to detect potential phishing threats.
              </p>
@@ -104,8 +107,9 @@ export default function Home() {
            </div>
            {/* Feature Card 4 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaEye className="text-[#5e7ab8] text-4xl" />
+             <Eye className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">Email Analysis</h3>
+             
              <p className="mt-2 text-gray-600">
                Analyze and get emails detailed insights on email authenticity by AI.
              </p>
@@ -117,8 +121,9 @@ export default function Home() {
            </div>
            {/* Feature Card 5 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaMailBulk className="text-[#5e7ab8] text-4xl" />
+             <Mail className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">Email Generator</h3>
+             
              <p className="mt-2 text-gray-600">
                Generate AI-powered scam emails to help recognize potential threats.
              </p>
@@ -130,8 +135,9 @@ export default function Home() {
            </div>
            {/* Feature Card 6 */}
            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md text-center transition duration-300 hover:shadow-lg">
-             <FaQuestion className="text-[#5e7ab8] text-4xl" />
+             <HelpCircle className="text-[#5e7ab8] h-8 w-8" />
              <h3 className="mt-4 text-xl font-semibold text-gray-900">Email Quiz</h3>
+             
              <p className="mt-2 text-gray-600">
                Test your ability to identify phishing emails with our AI-powered quiz.
              </p>
@@ -144,7 +150,7 @@ export default function Home() {
          </div>
        </div>
      </section>
-     <section className="py-12 bg-gray-50">
+     <section className="py-12">
        <div className="container mx-auto px-6 lg:px-12">
          <h2 className="text-5xl font-bold text-center">
            Why Security Matters
