@@ -27,6 +27,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@radix-ui/react-progress": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -39,8 +40,7 @@
     "recharts": "^2.15.1",
     "shadcn-ui": "^0.9.5",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss": "^4.0.14",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -58,7 +58,8 @@
     "lint-staged": "^15.5.0",
     "node-fetch": "^3.3.2",
     "prettier": "^3.5.3",
-    "simple-git-hooks": "^2.11.1"
+    "simple-git-hooks": "^2.11.1",
+    "tw-animate-css": "^1.2.5"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",

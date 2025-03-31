@@ -1,5 +1,5 @@
 import React from "react";
-import ShieldLogo from "../../components/shieldlogo";
+import ShieldLogo from "@/components/shieldlogo";
 
 export default function termsOfService() {
     return (
