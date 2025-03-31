@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import ShieldLogo from "../../components/shieldlogo";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,14 +12,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 
-export default function EmailAnalysis() {
+export default function EmailGenerator() {
   const [text, setText] = React.useState("");
   const [file, setFile] = React.useState(null);
   const [result, setResult] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [isHovering, setIsHovering] = React.useState(false);
+
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [emailContent, setEmailContent] = useState(
+    "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the link below to restore full access to your account:\n\n[SUSPICIOUS LINK]\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name"
+  );
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -71,110 +79,99 @@ export default function EmailAnalysis() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
-      {/* <div className="flex-1 flex items-center justify-center"> */}
       {/* Centered Logo and Title */}
-      <div className="mb-4 flex flex-shrink-0 flex-col items-center">
-        <ShieldLogo />
+      <div className="mt-10 flex flex-shrink-0 flex-col items-center">
+        <ShieldLogo size={48} />
         <h1 className="mt-4 text-3xl font-bold">Phishing Email Generator</h1>
         <p className="mt-2 text-center text-gray-600">
           Create realistic phising emails for security awareness training
         </p>
-        {/* </div> */}
       </div>
+      {/*Content Group*/}
+      <div className="mx-60 items-center p-8">
+        {/* Disclaimer Section */}
+        <div className="mb-7">
+          <Card className="bg-gray-100">
+            <CardContent>
+              <p>
+                This tool is for educational purposes only. Use it responsibly
+                to test and improve security awareness. Only send simulated
+                phishing emails to individuals who have given explicit consent.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {/* Left Column - Full Height */}
+          <div className="flex flex-col md:col-span-2">
+            <Card className="flex-grow">
+              <CardContent>
+                <h2 className="mb-4 text-lg font-semibold">Email Generator</h2>
+                <label className="mb-2 block">Email Template</label>
+                <select className="mb-4 w-full rounded-md border p-2">
+                  <option>Banking Alert</option>
+                </select>
+                <label className="mb-2 block">Sender Email</label>
+                <Input
+                  value="security@bankname-alerts.com"
+                  disabled
+                  className="mb-4"
+                />
+                <label className="mb-2 block">Subject Line</label>
+                <Input
+                  value="URGENT: Unusual activity detected on your account"
+                  disabled
+                  className="mb-4"
+                />
+                <label className="mb-2 block">Email Content</label>
+                <Textarea
+                  value={emailContent}
+                  onChange={(e) => setEmailContent(e.target.value)}
+                  rows={8}
+                  className="mb-4"
+                />
+                <Button className="mr-2">Reset to Template</Button>
+                <Button>Copy Email</Button>
+              </CardContent>
+            </Card>
+          </div>
 
-      {/* Main Content (Two Columns) */}
-      <div className="grid w-full max-w-screen-lg gap-6 p-4 md:grid-cols-2">
-        {/* Left Column - Card */}
-        <Card className="max-h-max p-4 shadow-lg">
-          <CardHeader>
-            <CardTitle>Email Content</CardTitle>
-            <CardDescription>
-              Paste the email content or upload a file for analysis.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            {/* Text Area */}
-            <textarea
-              className="h-48 w-full rounded-md border p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Paste the full content here, including headers if available..."
-              value={text}
-              onChange={handleTextChange}
-            />
-
-            <p className="text-blue-00 mt-2 text-sm">
-              Or upload a <span className="font-semibold">.txt</span> file.
-            </p>
-
-            <div className="mt-4 flex items-center space-x-2">
-              {/* File Upload Button */}
-              <label
-                htmlFor="file-upload"
-                className="cursor-pointer rounded-md px-4 py-2 text-sm text-white transition hover:bg-blue-500"
-                style={{ backgroundColor: "#5e7ab8" }}
-              >
-                Choose File
-              </label>
-
-              {/* Hidden but accessible input */}
-              <input
-                id="file-upload"
-                type="file"
-                accept=".txt"
-                onChange={handleFileChange}
-                className="absolute h-0 w-0 overflow-hidden"
-              />
-
-              {/* File Name or Placeholder with Remove option */}
-              {file ? (
-                <div
-                  className="relative flex cursor-pointer items-center"
-                  onMouseEnter={() => setIsHovering(true)}
-                  onMouseLeave={() => setIsHovering(false)}
-                  onClick={handleRemoveFile}
-                >
-                  <span className="mr-2 text-sm text-gray-500">
-                    {file.name}
-                  </span>
-                  <span
-                    className={`text-red-500 transition-opacity ${isHovering ? "opacity-100" : "opacity-0"}`}
-                  >
-                    <X size={16} />
-                  </span>
-
-                  {/* Overlay hint on hover */}
-                  {isHovering && (
-                    <div className="bg-opacity-20 absolute inset-0 flex items-center justify-center rounded">
-                      <span className="sr-only">Remove file</span>
-                    </div>
-                  )}
+          {/* Right Column - Two Stacked Components */}
+          <div className="flex flex-col gap-6">
+            <Card>
+              <CardContent>
+                <h2 className="mb-4 text-lg font-semibold">Send Test Email</h2>
+                <label className="mb-2 block">Recipient Email</label>
+                <Input
+                  value={recipientEmail}
+                  onChange={(e) => setRecipientEmail(e.target.value)}
+                  className="mb-4"
+                />
+                <p className="mb-4 text-sm text-gray-600">
+                  By sending this email, you confirm that the recipient has
+                  given consent to receive phishing simulation emails for
+                  educational purposes.
+                </p>
+                <Button className="w-full">Send Email</Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent>
+                <h2 className="mb-4 text-lg font-semibold">Email Preview</h2>
+                <div className="rounded-md border bg-gray-100 p-4">
+                  <p>
+                    <strong>From:</strong> security@bankname-alerts.com
+                  </p>
+                  <p>
+                    <strong>Subject:</strong> URGENT: Unusual activity detected
+                    on your account
+                  </p>
+                  <p className="mt-4 whitespace-pre-line">{emailContent}</p>
                 </div>
-              ) : (
-                <span className="text-sm text-gray-500">No file chosen</span>
-              )}
-            </div>
-          </CardContent>
-
-          {/* Submit Button */}
-          <CardFooter>
-            <Button
-              className="w-full"
-              disabled={!isFormValid || loading}
-              variant={isFormValid ? "default" : "secondary"}
-              onClick={handleSubmit}
-            >
-              {loading ? "Analyzing..." : "Submit"}
-            </Button>
-          </CardFooter>
-        </Card>
-
-        {/* Right Column - Result */}
-        {result && (
-          <div
-            className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md"
-            dangerouslySetInnerHTML={{ __html: result }}
-          />
-        )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
