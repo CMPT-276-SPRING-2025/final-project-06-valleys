@@ -36,7 +36,7 @@ export async function POST(request){
                 {
                     role: "user",
                     content: `Generate a phishing email template based on this context: "${enhancedContext}. 
-                    If you deems this context is unless or otherwise have nothing to do with to do with phishing, following this directive: 
+                    If you determine that this context is not relevant to phishing, follow this directive: 
                     "Create a convincing phishing email that tricks users into clicking a link" "`
                 }
             ],
