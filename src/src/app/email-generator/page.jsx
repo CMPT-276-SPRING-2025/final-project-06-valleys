@@ -56,15 +56,21 @@ export default function EmailGenerator() {
   const [emailContent, setEmailContent] = React.useState(
     template["bank"].content
   );
+  const [customizeMode, setCustomizeMode] = React.useState(false);
   const [recipientEmail, setRecipientEmail] = React.useState("");
 
   const handleChangeTemplate = (newTemplate) => {
     // Early return for custom template
     if (newTemplate === "custom") {
-      setEmailTemplate(newTemplate);
+      setEmailTemplate("custom");
+      setCustomizeMode(true);
+      setEmailSender("");
+      setEmailSubject("");
+      setEmailContent("");
       return;
     }
     setEmailTemplate(newTemplate);
+    setCustomizeMode(false);
     setEmailSender(template[newTemplate].sender);
     setEmailSubject(template[newTemplate].subject);
     setEmailContent(template[newTemplate].content);
@@ -139,13 +145,26 @@ export default function EmailGenerator() {
                     </SelectContent>
                   </Select>
                 </div>
-
+                <div className="space-y-2">
+                  {customizeMode && (
+                    <div className="space-y-2">
+                      <Label htmlFor="email-context">Email Context</Label>
+                      <Textarea
+                        id="email-context"
+                        className="min-h-[100px] w-full"
+                        placeholder="Enter the context of your phishing email..."
+                      />
+                    </div>
+                  )}
+                </div>
+                {/* Always appear field */}
                 <div className="space-y-2">
                   <Label htmlFor="sender-email">Sender Email</Label>
                   <Input
                     id="sender-email"
                     value={emailSender}
                     onChange={(e) => setEmailSender(e.target.value)}
+                    placeholder="Enter the sender of your phishing email..."
                   />
                 </div>
 
@@ -155,6 +174,7 @@ export default function EmailGenerator() {
                     id="subject-line"
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
+                    placeholder="Enter the subject of your phishing email..."
                   />
                 </div>
 
@@ -164,7 +184,7 @@ export default function EmailGenerator() {
                     id="email-content"
                     value={emailContent}
                     onChange={(e) => setEmailContent(e.target.value)}
-                    rows={8}
+                    placeholder="Enter the content of your phishing email..."
                   />
                 </div>
 
