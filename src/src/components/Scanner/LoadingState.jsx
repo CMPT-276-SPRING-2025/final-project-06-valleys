@@ -15,39 +15,25 @@ export function LoadingState({ status }) {
   const [isCompleting, setIsCompleting] = useState(false);
 
   useEffect(() => {
-    let initialValue = 0;
-
-    // Set initial progress based on status
-    if (status === "queued") {
-      initialValue = 10;
-    } else if (status === "in-progress") {
-      initialValue = 40;
+    if (status === "queued" && !isCompleting) {
+      setProgress(10);
     } else if (status === "completed" && !isCompleting) {
       // If status changes to completed, trigger completion animation
       setIsCompleting(true);
-      initialValue = progress; 
     }
 
-    if (!isCompleting) {
-      setProgress(initialValue);
-    }
-
-    // Simulate progress increment if not in completing state
-    if (status !== "completed" && !isCompleting) {
+    // Simulate progress increment for queued status
+    if (status === "queued" && !isCompleting) {
       const interval = setInterval(() => {
         setProgress((prevProgress) => {
-          // Cap progress at different levels based on status
-          const maxProgress =
-            status === "queued" ? 30 : status === "in-progress" ? 90 : 95;
-          return prevProgress < maxProgress ? prevProgress + 1 : prevProgress;
+          return prevProgress < 90 ? prevProgress + 0.5 : prevProgress;
         });
-      }, 500);
+      }, 300);
 
       return () => clearInterval(interval);
     }
-  }, [status]);
+  }, [status, isCompleting]);
 
-  // Handle completion animation separately
   useEffect(() => {
     if (isCompleting) {
       // Quickly animate to 100%
@@ -77,6 +63,17 @@ export function LoadingState({ status }) {
     return null;
   }
 
+  const displayStatus = isCompleting ? "Finalizing" : status;
+
+  let statusMessage = "Starting analysis...";
+  if (progress > 30 && progress < 70) {
+    statusMessage = "Processing data...";
+  } else if (progress >= 70 && progress < 95) {
+    statusMessage = "Almost there...";
+  } else if (progress >= 95) {
+    statusMessage = "Wrapping up...";
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -93,14 +90,16 @@ export function LoadingState({ status }) {
             <Progress value={progress} className="h-2" />
           </div>
 
-          {status && (
-            <Badge variant="outline" className="mt-2">
-              Status: {isCompleting ? "Finalizing" : status}
-            </Badge>
-          )}
+          <Badge variant="outline" className="mt-2">
+            Status: {displayStatus}
+          </Badge>
 
           <p className="text-muted-foreground mt-2 text-sm">
             {Math.round(progress)}% complete
+          </p>
+
+          <p className="text-muted-foreground mt-2 text-center text-xs">
+            {statusMessage}
           </p>
         </CardContent>
       </Card>
