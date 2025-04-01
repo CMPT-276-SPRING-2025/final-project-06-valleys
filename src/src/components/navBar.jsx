@@ -49,7 +49,7 @@ export default function NavBar() {
           Home
         </Link>
         <Link
-          href="/item-three"
+          href="/email-generator"
           className="text-gray-800 transition hover:text-blue-500"
         >
           Email Generator
@@ -98,13 +98,13 @@ export default function NavBar() {
             Home
           </Link>
           <Link
-            href="/item-three"
+            href="/email-generator"
             className="text-gray-800 transition hover:text-blue-500"
           >
             Email Generator
           </Link>
           <Link
-            href="/emailAnalysis"
+            href="/email-analysis"
             className="text-gray-800 transition hover:text-blue-500"
           >
             Email Analysis

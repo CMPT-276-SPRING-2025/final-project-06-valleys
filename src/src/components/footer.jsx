@@ -4,7 +4,7 @@ import ShieldLogo from "./shieldlogo";
 export default function Footer() {
   return (
     <footer className="bg-white py-12 text-black">
-      <div className=" container mx-auto px-4">
+      <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Column 1: Logo and Slogan */}
           <div className="flex flex-col items-center md:items-start">
@@ -45,7 +45,7 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <h3 className="mb-4 text-lg font-semibold">Education</h3>
             <Link
-              href="/item-three"
+              href="/email-generator"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
               Email Generator
