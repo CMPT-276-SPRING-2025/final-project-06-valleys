@@ -20,6 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
 
 export default function EmailGenerator() {
   const template = {
@@ -57,6 +59,7 @@ export default function EmailGenerator() {
     template["bank"].content
   );
   const [customizeMode, setCustomizeMode] = React.useState(false);
+  const [useAI, setUseAI] = React.useState(true);
   const [recipientEmail, setRecipientEmail] = React.useState("");
 
   const handleChangeTemplate = (newTemplate) => {
@@ -67,6 +70,7 @@ export default function EmailGenerator() {
       setEmailSender("");
       setEmailSubject("");
       setEmailContent("");
+      setUseAI(true); // Set AI to enabled by default for custom mode
       return;
     }
     setEmailTemplate(newTemplate);
@@ -146,14 +150,29 @@ export default function EmailGenerator() {
                   </Select>
                 </div>
                 <div className="space-y-2">
+                  {/* Appear only in customize mode */}
                   {customizeMode && (
                     <div className="space-y-2">
                       <Label htmlFor="email-context">Email Context</Label>
                       <Textarea
                         id="email-context"
                         className="min-h-[100px] w-full"
-                        placeholder="Enter the context of your phishing email..."
+                        placeholder="Enter the context of your phishing email for AI to generate..."
+                        disabled={!useAI}
                       />
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="useAI"
+                          checked={useAI}
+                          onCheckedChange={setUseAI}
+                        />
+                        <Label
+                          htmlFor="useAI"
+                          className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Use AI to generate email
+                        </Label>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -187,12 +206,33 @@ export default function EmailGenerator() {
                     placeholder="Enter the content of your phishing email..."
                   />
                 </div>
-
-                <div className="flex space-x-2 pt-2">
-                  <Button onClick={handleResetTemplate}>
-                    Reset to default template
+                <div className="flex flex-wrap gap-3 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={handleResetTemplate}
+                    className="min-w-[140px] flex-1"
+                  >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Reset to default
                   </Button>
-                  <Button onClick={handleCopyEmail}>Copy Email</Button>
+
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleChangeTemplate("custom")}
+                    className="min-w-[140px] flex-1"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Clear All
+                  </Button>
+
+                  <Button
+                    variant="default"
+                    onClick={handleCopyEmail}
+                    className="min-w-[140px] flex-1"
+                  >
+                    <Copy className="mr-2 h-4 w-4" />
+                    Copy Email
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -225,28 +265,40 @@ export default function EmailGenerator() {
                 </p>
 
                 <Button
+                  variant="default"
                   className="w-full"
                   onClick={handleSendEmail}
                   disabled={!recipientEmail}
                 >
+                  <Send className="mr-2 h-4 w-4" />
                   Send Email
                 </Button>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="flex-grow">
               <CardHeader>
                 <CardTitle>Email Preview</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="rounded-md border bg-gray-50 p-4">
-                  <p>
-                    <strong>From:</strong> {emailSender}
-                  </p>
-                  <p>
-                    <strong>Subject:</strong> {emailSubject}
-                  </p>
-                  <p className="mt-4 whitespace-pre-line">{emailContent}</p>
+              <CardContent className="h-full">
+                <div className="flex h-full flex-col rounded-md border bg-gray-50 p-6">
+                  <div className="mb-4 space-y-2">
+                    <p className="break-words text-gray-600">
+                      <strong className="break-words text-gray-900">
+                        From:
+                      </strong>{" "}
+                      {emailSender}
+                    </p>
+                    <p className="break-words text-gray-600">
+                      <strong className="text-gray-900">Subject:</strong>{" "}
+                      {emailSubject}
+                    </p>
+                  </div>
+                  <div className="flex-grow">
+                    <p className="break-words whitespace-pre-line text-gray-800">
+                      {emailContent}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
