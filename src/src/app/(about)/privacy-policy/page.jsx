@@ -58,13 +58,6 @@ export default function privacyPolicy() {
                 <h2 className="text-2xl font-semibold text-[#5e7ab8] mt-6">7. Changes to This Privacy Policy</h2>
                 <p className="mt-2">We may update this policy from time to time. Any changes will be posted on this page with an updated "Last Updated" date.</p>
 
-                <h2 className="text-2xl font-semibold text-[#5e7ab8] mt-6">8. Contact Us</h2>
-                <p className="mt-2">If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
-                <p className="mt-2">
-                    📧 <a href="mailto:[Insert Contact Email]" className="text-[#5e7ab8] hover:underline">
-                        [Insert Contact Email]
-                    </a>
-                </p>
 
                 <p className="mt-4 mb-4" >By using Deep Phishing, you agree to the terms outlined in this Privacy Policy.</p>
             </div>

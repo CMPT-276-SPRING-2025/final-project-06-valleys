@@ -45,12 +45,6 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <h3 className="mb-4 text-lg font-semibold">Education</h3>
             <Link
-              href="/about"
-              className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
-            >
-              About Us
-            </Link>
-            <Link
               href="/item-three"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
