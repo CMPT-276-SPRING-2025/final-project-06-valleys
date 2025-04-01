@@ -21,6 +21,8 @@ export default function URLResultPage() {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
 
   useEffect(() => {
     const analysisId = params.url;
@@ -44,7 +46,8 @@ export default function URLResultPage() {
         // Check if the analysis is completed
         if (analysisData.data?.attributes?.status === "completed") {
           clearInterval(pollingInterval);
-          setLoading(false);
+          // Mark as complete but don't hide loading screen yet
+          setLoadingComplete(true);
         } else if (analysisData.data?.attributes?.status === "failed") {
           clearInterval(pollingInterval);
           setError("Analysis failed. Please try again.");
@@ -68,8 +71,29 @@ export default function URLResultPage() {
     };
   }, [params.url]);
 
+  // Handle the transition from loading to showing results
+  useEffect(() => {
+    if (loadingComplete) {
+      // Wait for loading animation to complete before showing results
+      const timer = setTimeout(() => {
+        setLoading(false);
+        setShowResults(true);
+      }, 1500); 
+
+      return () => clearTimeout(timer);
+    }
+  }, [loadingComplete]);
+
   if (loading) {
-    return <LoadingState status={analysisResults?.data?.attributes?.status} />;
+    return (
+      <LoadingState
+        status={
+          loadingComplete
+            ? "completed"
+            : analysisResults?.data?.attributes?.status
+        }
+      />
+    );
   }
 
   if (error) {
@@ -82,7 +106,7 @@ export default function URLResultPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {analysisResults && (
+      {analysisResults && showResults && (
         <Card className="w-full gap-2">
           <CardHeader>
             <CardTitle className={""}>
