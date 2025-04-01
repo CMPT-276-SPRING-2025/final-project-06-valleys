@@ -126,7 +126,7 @@ export default function Home() {
              <p className="mt-2 text-gray-600">
                Generate AI-powered scam emails to help recognize potential threats.
              </p>
-             <Link href="/">
+             <Link href="/email-generator">
                <Button className="mt-4 bg-[#5e7ab8] hover:bg-[#4a6aa0]">
                  Try It
                </Button>
