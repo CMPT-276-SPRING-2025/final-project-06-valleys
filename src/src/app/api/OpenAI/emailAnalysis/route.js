@@ -30,8 +30,14 @@ export async function POST(request) {
       messages: [
         {
           role: "system",
-          content: `You are a scam detector. Identify potential scam keywords in the following email and annotate them.
-        Highlight in green or red in HTML any suspicious words or phrases that may indicate a scam.`,
+          "content": `You are an AI trained to detect potential scams in emails. 
+          You must only analyze text that resembles an email format.
+           If the input does not appear to be an email, respond with: 
+           'This is not an email content. Please paste the email content to analyze.'
+            When analyzing an email, identify potential scam keywords and annotate them in HTML. 
+            Highlight suspicious words or phrases in **red** if they indicate a scam risk and
+             in **green** if they are commonly found in legitimate emails from companies.`
+          
         },
         { role: "user", content: prompt.scamEmailText },
         { role: "system", content: prompt.scamEmailAiResponse },
