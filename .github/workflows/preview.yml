@@ -34,6 +34,11 @@ jobs:
         run: |
           npm ci
 
+      - name: Run Prettier
+        working-directory: ./src
+        run: |
+          npm run prettier
+
       - name: Install Tailwind CSS and dependencies
         working-directory: ./src
         run: |
