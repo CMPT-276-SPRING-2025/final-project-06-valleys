@@ -3,8 +3,6 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("OpenAI Quiz API Tests", () => {
-  // Remove the unit tests that directly import the route
-  // and focus on the integration test that makes a real request
   
   test('makes a real API request to quiz endpoint', async ({ request }) => {
     // Submit request to the quiz API
