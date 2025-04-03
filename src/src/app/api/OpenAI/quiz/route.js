@@ -16,9 +16,10 @@ export async function POST(request) {
 
     const response = await client.chat.completions.create({
       messages: [
-        { 
-          role: "system", 
-          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object. Ensure all line breaks in the JSON string values are escaped with \\n so that the response is valid JSON." 
+        {
+          role: "system",
+          content:
+            "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object. Ensure all line breaks in the JSON string values are escaped with \\n so that the response is valid JSON.",
         },
         {
           role: "user",
@@ -59,7 +60,7 @@ export async function POST(request) {
       model: modelName,
       temperature: 1,
       max_tokens: 1000,
-      top_p: 1
+      top_p: 1,
     });
 
     const rawContent = response.choices[0].message.content.trim();
