@@ -70,10 +70,7 @@ export default function EmailAnalysis() {
   };
 
   return (
-<div className="flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22 relative -mt-8">
-
-
-      {/* Centered Logo and Title */}
+   <div className="flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22 relative -mt-8">
       <div className=" mb-4 flex flex-shrink-0 flex-col items-center">
         <ShieldLogo />
         <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
@@ -82,8 +79,7 @@ export default function EmailAnalysis() {
         </p>
         
       </div>
-
-          {/* Main Content (Dynamic Layout) */}
+      {/* Main Content (Dynamic Layout) */}
       <div
         className={`w-full max-w-screen-lg p-4 transition-all duration-300 ${
           result ? "grid gap-6 md:grid-cols-2" : "flex justify-center"
@@ -97,7 +93,6 @@ export default function EmailAnalysis() {
               Paste the email content or upload a file for analysis.
             </CardDescription>
           </CardHeader>
-      
           <CardContent>
             {/* Text Area */}
             <textarea
@@ -109,7 +104,6 @@ export default function EmailAnalysis() {
             <p className="text-blue-00 mt-2 text-sm">
               Or upload a <span className="font-semibold">.txt</span> file.
             </p>
-      
             <div className="mt-4 flex items-center space-x-2">
               {/* File Upload Button */}
               <label
@@ -119,7 +113,6 @@ export default function EmailAnalysis() {
               >
                 Choose File
               </label>
-      
               {/* Hidden but accessible input */}
               <input
                 id="file-upload"
@@ -128,7 +121,6 @@ export default function EmailAnalysis() {
                 onChange={handleFileChange}
                 className="absolute h-0 w-0 overflow-hidden"
               />
-      
               {/* File Name or Placeholder with Remove option */}
               {file ? (
                 <div
@@ -151,7 +143,6 @@ export default function EmailAnalysis() {
               )}
             </div>
           </CardContent>
-      
           {/* Submit Button */}
           <CardFooter>
             <Button
@@ -164,11 +155,9 @@ export default function EmailAnalysis() {
             </Button>
           </CardFooter>
         </Card>
-      
         {/* Right Column - Analysis Result (Appears Dynamically) */}
         {result && (
          <div className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md">
-           {/* Title for Analyzed Email */}
            <h3 className="text-xl font-semibold mb-4 text-gray-800">
              Analyzed Email Content
            </h3>
@@ -176,7 +165,6 @@ export default function EmailAnalysis() {
          </div>
        )}
       </div>
-
     </div>
   );
 }
