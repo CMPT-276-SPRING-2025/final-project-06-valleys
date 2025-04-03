@@ -24,17 +24,17 @@ export async function GET(request) {
     // Add a try-catch specifically for the fetch operation
     let response;
     try {
-      response = await fetch(
-        "https://www.virustotal.com/api/v3/urls",
-        options
-      );
+      response = await fetch("https://www.virustotal.com/api/v3/urls", options);
     } catch (fetchError) {
       return NextResponse.json(
-        { error: "Failed to connect to VirusTotal API", details: fetchError.message },
+        {
+          error: "Failed to connect to VirusTotal API",
+          details: fetchError.message,
+        },
         { status: 500 }
       );
     }
-    
+
     // Check if the response is ok
     if (!response || !response.ok) {
       const status = response?.status || 500;
@@ -43,7 +43,7 @@ export async function GET(request) {
         { status }
       );
     }
-    
+
     const data = await response.json();
 
     if (!data.data || !data.data.id) {

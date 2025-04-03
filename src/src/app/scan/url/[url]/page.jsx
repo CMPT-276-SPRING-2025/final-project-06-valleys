@@ -78,7 +78,7 @@ export default function URLResultPage() {
       const timer = setTimeout(() => {
         setLoading(false);
         setShowResults(true);
-      }, 1500); 
+      }, 1500);
 
       return () => clearTimeout(timer);
     }

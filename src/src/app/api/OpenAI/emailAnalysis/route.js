@@ -20,7 +20,10 @@ export async function POST(request) {
     }
 
     if (!text) {
-      return NextResponse.json({ error: "Email content is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Email content is required" },
+        { status: 400 }
+      );
     }
 
     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
@@ -30,14 +33,13 @@ export async function POST(request) {
       messages: [
         {
           role: "system",
-          "content": `You are an AI trained to detect potential scams in emails. 
+          content: `You are an AI trained to detect potential scams in emails. 
           You must only analyze text that resembles an email format.
            If the input does not appear to be an email, respond with: 
            'This is not a valid email. Please paste in a valid email and try again.'
             When analyzing an email, identify potential scam keywords and annotate them in HTML. 
             Highlight suspicious words or phrases in **red** if they indicate a scam risk and
-             in **green** if they are commonly found in legitimate emails from companies.`
-          
+             in **green** if they are commonly found in legitimate emails from companies.`,
         },
         { role: "user", content: prompt.scamEmailText },
         { role: "system", content: prompt.scamEmailAiResponse },

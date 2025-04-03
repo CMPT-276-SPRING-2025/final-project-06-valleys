@@ -70,14 +70,13 @@ export default function EmailAnalysis() {
   };
 
   return (
-   <div className="flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22 relative -mt-8">
-      <div className=" mb-4 flex flex-shrink-0 flex-col items-center">
+    <div className="relative -mt-8 flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22">
+      <div className="mb-4 flex flex-shrink-0 flex-col items-center">
         <ShieldLogo />
         <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
         <p className="mt-2 mb-10 text-center text-gray-600">
           AI-powered tool to analyze emails for potential phishing indicators.
         </p>
-        
       </div>
       {/* Main Content (Dynamic Layout) */}
       <div
@@ -86,7 +85,7 @@ export default function EmailAnalysis() {
         }`}
       >
         {/* Left Column - Email Input (Initially Centered) */}
-        <Card className="max-h-max shadow-lg w-full md:w-[500px]">
+        <Card className="max-h-max w-full shadow-lg md:w-[500px]">
           <CardHeader>
             <CardTitle>Email Content</CardTitle>
             <CardDescription>
@@ -129,7 +128,9 @@ export default function EmailAnalysis() {
                   onMouseLeave={() => setIsHovering(false)}
                   onClick={handleRemoveFile}
                 >
-                  <span className="mr-2 text-sm text-gray-500">{file.name}</span>
+                  <span className="mr-2 text-sm text-gray-500">
+                    {file.name}
+                  </span>
                   <span
                     className={`text-red-500 transition-opacity ${
                       isHovering ? "opacity-100" : "opacity-0"
@@ -157,13 +158,13 @@ export default function EmailAnalysis() {
         </Card>
         {/* Right Column - Analysis Result (Appears Dynamically) */}
         {result && (
-         <div className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md">
-           <h3 className="text-xl font-semibold mb-4 text-gray-800">
-             Analyzed Email Content
-           </h3>
-           <div dangerouslySetInnerHTML={{ __html: result }} />
-         </div>
-       )}
+          <div className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md">
+            <h3 className="mb-4 text-xl font-semibold text-gray-800">
+              Analyzed Email Content
+            </h3>
+            <div dangerouslySetInnerHTML={{ __html: result }} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -24,13 +24,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
 
 export const template = {
-  "bank": {
+  bank: {
     sender: "security@bank-name-alerts.com",
     subject: "URGENT: Unusual activity detected on your account",
     content:
       "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n[Verify My Account](#)\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name",
   },
-  "lotto": {
+  lotto: {
     sender: "claims@intl-lottowinners.com",
     subject: "Congratulations! You’ve Won $1,000,000!",
     content:
@@ -103,25 +103,24 @@ export default function EmailGenerator() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          context: emailContext, 
+          context: emailContext,
         }),
       });
 
-      if (!response.ok)
-        throw new Error(`Error: ${response.statusText}`);
+      if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
       const data = await response.json();
-      
+
       setEmailSender(data.sender);
       setEmailSubject(data.subject);
       setEmailContent(data.content);
-    } catch (error){
+    } catch (error) {
       console.error("Failed to generate email:", error);
       // Set up error handling here
-    } finally{
+    } finally {
       setIsLoading(false);
     }
-    }
+  };
 
   const handleSendEmail = () => {
     console.log(`Sending email to: ${recipientEmail}`);
@@ -194,7 +193,9 @@ export default function EmailGenerator() {
                         className="min-h-[100px] w-full"
                         placeholder="Enter the context of your phishing email for AI to generate..."
                         value={emailContext}
-                        onChange={(e) => {setEmailContext(e.target.value)}}
+                        onChange={(e) => {
+                          setEmailContext(e.target.value);
+                        }}
                         disabled={!useAI}
                       />
                       <div className="flex flex-col space-y-2">
@@ -206,18 +207,18 @@ export default function EmailGenerator() {
                           />
                           <Label
                             htmlFor="useAI"
-                            className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block"
+                            className="block text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                           >
                             Use AI to generate email
                           </Label>
                         </div>
                         <Button
-                        variant="default"
-                        onClick={handleSubmitEmailContext}
-                        className="min-w-[140px] flex-1"
-                        disabled={!useAI || emailContext === "" || isLoading}
-                      >
-                        {isLoading ? "Loading..." : "Submit"}
+                          variant="default"
+                          onClick={handleSubmitEmailContext}
+                          className="min-w-[140px] flex-1"
+                          disabled={!useAI || emailContext === "" || isLoading}
+                        >
+                          {isLoading ? "Loading..." : "Submit"}
                         </Button>
                       </div>
                     </div>
