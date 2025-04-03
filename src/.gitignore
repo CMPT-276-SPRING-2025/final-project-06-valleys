@@ -12,6 +12,14 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+*test-file*.txt
+*test-file*.bin
+*invalid-file*.exe
+invalid-test-file.bin
 
 # next.js
 /.next/
