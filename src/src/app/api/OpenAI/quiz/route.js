@@ -16,9 +16,9 @@ export async function POST(request) {
 
     const response = await client.chat.completions.create({
       messages: [
-        {
-          role: "system",
-          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object. Ensure all line breaks in the JSON string values are escaped with \\n so that the response is valid JSON."
+        { 
+          role: "system", 
+          content: "Respond only with valid JSON. Do NOT include markdown formatting (` ```json `) or any extra text. Only return a JSON object. Ensure all line breaks in the JSON string values are escaped with \\n so that the response is valid JSON." 
         },
         {
           role: "user",
@@ -66,7 +66,9 @@ export async function POST(request) {
     const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
 
     let parsedContent;
-    try {
+
+    try 
+    {
       parsedContent = JSON.parse(cleanedResponse);
     } catch (error) {
       console.error("Failed to parse AI response as JSON:", error);
