@@ -1,21 +1,15 @@
 name: Run Playwright Tests
 
 on:
-  push:
-    branches: ["**"]
-    paths:
-      - "src/**"
-  pull_request:
-    branches: ["**"]
   workflow_run:
-    workflows: ["Deploy to Vercel", "Build and Preview"]
+    workflows: ["Build and Preview", "Deploy to Vercel"]
     types:
       - completed
 
 jobs:
   test-deployed:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
       - name: Checkout code
@@ -36,10 +30,34 @@ jobs:
         working-directory: ./src
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright Tests on deployed browser
+      # Determine which URL to test against
+      - name: Determine test URL
+        id: determine-url
+        run: |
+          # Default to production URL if we can't determine
+          TEST_URL="https://deep-phishing.vercel.app"
+          
+          # If this was triggered by a preview deployment, use the preview URL
+          if [[ "${{ github.event.workflow_run.name }}" == "Build and Preview" ]]; then
+            # For preview, we could use a more specific URL pattern or environment variable
+            TEST_URL="https://deep-phishing-git-${GITHUB_REF##*/}-valleys.vercel.app"
+          fi
+          
+          echo "Using test URL: $TEST_URL"
+          echo "test_url=$TEST_URL" >> $GITHUB_OUTPUT
+
+      - name: Run Unit Tests
         working-directory: ./src
         env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.workflow_run.outputs.deployment_url || github.event.workflow_run.outputs.preview_url }}
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npm test
+        run: npm test -- --grep "Unit"
+        
+      - name: Run Integration Tests
+        working-directory: ./src
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm test -- --grep "Integration"
