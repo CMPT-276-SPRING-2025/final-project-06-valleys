@@ -66,6 +66,7 @@ export async function POST(request) {
     const cleanedResponse = rawContent.replace(/```json|```/g, "").trim();
 
     let parsedContent;
+
     try {
       parsedContent = JSON.parse(cleanedResponse);
     } catch (error) {
