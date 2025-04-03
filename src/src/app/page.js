@@ -39,7 +39,7 @@ export default function Home() {
                 Start Scanning
               </Button>
             </Link>
-            <Link href="/scan/file">
+            <Link href="#security">
               <Button variant="outline" size="lg">
                 Learn More
               </Button>
@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
       {/* Our Security Tools Section */}
-      <section className="py-12">
+      <section id="security" className="py-12 bg-gray-50 scroll-mt-24">
         <div className="container mx-auto px-6 lg:px-12">
           <h2 className="text-center text-5xl font-bold text-gray-900">
             Our Security Tools
