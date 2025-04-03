@@ -67,8 +67,7 @@ export async function POST(request) {
 
     let parsedContent;
 
-    try 
-    {
+    try {
       parsedContent = JSON.parse(cleanedResponse);
     } catch (error) {
       console.error("Failed to parse AI response as JSON:", error);
