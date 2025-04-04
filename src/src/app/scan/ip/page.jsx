@@ -2,7 +2,7 @@
 
 import { Shield } from "lucide-react";
 import IPScanForm from "@/components/Scanner/IPScanForm";
-
+import RecentScans from "@/components/Scanner/RecentScans";
 export default function IPScanPage() {
   return (
     <div className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center justify-center p-4">
@@ -20,6 +20,11 @@ export default function IPScanPage() {
       </p>
 
       <IPScanForm />
+
+<div className="mt-6 w-full">
+
+      <RecentScans type="ip" />
+</div>
     </div>
   );
 }
