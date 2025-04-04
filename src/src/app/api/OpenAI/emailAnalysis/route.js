@@ -9,6 +9,7 @@ const modelName = "gpt-4o";
 
 export async function POST(request) {
   try {
+  
     const formData = await request.formData();
     let text = formData.get("text");
 
@@ -25,9 +26,8 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
+   
     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
-
     // Send the text to OpenAI for annotation
     const response = await client.chat.completions.create({
       messages: [
@@ -59,7 +59,7 @@ export async function POST(request) {
     });
   } catch (err) {
     return NextResponse.json(
-      { error: "Failed to analyze email" },
+      { error: "Failed to analyze email", errorMessage: err.message || err },
       { status: 500 }
     );
   }

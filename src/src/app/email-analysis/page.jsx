@@ -68,7 +68,7 @@ export default function EmailAnalysis() {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="relative -mt-8 flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22">
       <div className="mb-4 flex flex-shrink-0 flex-col items-center">
@@ -95,6 +95,7 @@ export default function EmailAnalysis() {
           <CardContent>
             {/* Text Area */}
             <textarea
+              name="emailContent"
               className="h-72 w-full rounded-md border p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="Paste the full content here, including headers if available..."
               value={text}
@@ -162,7 +163,10 @@ export default function EmailAnalysis() {
             <h3 className="mb-4 text-xl font-semibold text-gray-800">
               Analyzed Email Content
             </h3>
-            <div dangerouslySetInnerHTML={{ __html: result }} />
+            <div
+              id="analysis-results"
+              dangerouslySetInnerHTML={{ __html: result }}
+            />
           </div>
         )}
       </div>
