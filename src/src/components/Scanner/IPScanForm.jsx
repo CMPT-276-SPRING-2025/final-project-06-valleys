@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Locate } from "lucide-react";
+import { saveToRecentScans } from "@/utils/scanHistory";
 
 export default function IPScanForm() {
   const [ipAddress, setIpAddress] = useState("");
@@ -48,6 +49,9 @@ export default function IPScanForm() {
         throw new Error(data.error || "Failed to scan IP address");
       }
 
+      // Save to recent scans
+      saveToRecentScans("ip", data.analysisId, ipAddress);
+
       // Redirect to results page with the analysis ID
       router.push(`/scan/ip/${data.analysisId}`);
     } catch (error) {
@@ -70,13 +74,11 @@ export default function IPScanForm() {
       if (data.ip) {
         setIpAddress(data.ip);
       } else {
-        throw new Error("Could not detect your IP address");
+        throw new Error("Failed to get your IP address");
       }
     } catch (error) {
-      console.error("Error fetching IP:", error);
-      setErrorMessage(
-        "Failed to detect your IP address. Please enter it manually."
-      );
+      console.error("Error:", error);
+      setErrorMessage("Failed to get your IP address. Please try again.");
     } finally {
       setIsLoadingIP(false);
     }
@@ -96,8 +98,8 @@ export default function IPScanForm() {
         </div>
       )}
 
-      <div className="flex flex-col gap-4 md:gap-2">
-        <div className="flex flex-col gap-4 sm:flex-row">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col gap-4 sm:flex-row md:gap-2">
           <Input
             type="text"
             placeholder="Enter IP address (e.g., 8.8.8.8)"
@@ -106,36 +108,26 @@ export default function IPScanForm() {
             disabled={isSubmitting || isLoadingIP}
             className="flex-grow"
           />
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={getMyIP}
-              disabled={isSubmitting || isLoadingIP}
-              className="whitespace-nowrap"
-            >
-              {isLoadingIP ? (
-                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></div>
-              ) : (
-                <Locate className="mr-2 h-4 w-4" />
-              )}
-              My IP
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={
-                isSubmitting ||
-                isLoadingIP ||
-                !ipAddress.trim() ||
-                !ipRegex.test(ipAddress)
-              }
-              className="whitespace-nowrap"
-            >
-              {isSubmitting ? "Scanning..." : "Scan"}
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={getMyIP}
+            disabled={isSubmitting || isLoadingIP}
+            className="whitespace-nowrap"
+          >
+            {isLoadingIP ? "Loading..." : "Get My IP"}
+            <Locate className="ml-2 h-4 w-4" />
+          </Button>
         </div>
-      </div>
+
+        <Button
+          type="submit"
+          disabled={isSubmitting || isLoadingIP || !ipRegex.test(ipAddress)}
+          className="w-full"
+        >
+          {isSubmitting ? "Scanning..." : "Scan"}
+        </Button>
+      </form>
     </div>
   );
 }
