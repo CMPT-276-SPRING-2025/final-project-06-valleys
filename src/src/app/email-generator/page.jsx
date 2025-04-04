@@ -32,7 +32,7 @@ export const template = {
   },
   lotto: {
     sender: "claims@intl-lottowinners.com",
-    subject: "Congratulations! You’ve Won $1,000,000!",
+    subject: "Congratulations! You've Won $1,000,000!",
     content:
       "Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n[Claim Your Prize](#)\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department",
   },
@@ -122,8 +122,32 @@ export default function EmailGenerator() {
     }
   };
 
-  const handleSendEmail = () => {
-    console.log(`Sending email to: ${recipientEmail}`);
+  const handleSendEmail = async () => {
+    try {
+      const response = await fetch('/api/resend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipientEmail,
+          senderEmail: emailSender,
+          subject: emailSubject,
+          content: emailContent,
+        }),
+      }); 
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      const data = await response.json();
+      console.log('Email sent successfully:', data);
+      // You might want to show a success message to the user here
+    } catch (error) {
+      console.error('Error sending email:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
