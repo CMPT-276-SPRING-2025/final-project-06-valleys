@@ -60,7 +60,7 @@ export default function Footer() {
               href="/quiz"
               className="mb-2 border-b border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500"
             >
-              Take Quiz
+              Email Quiz
             </Link>
           </div>
 

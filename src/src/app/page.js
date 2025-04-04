@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
       {/* Our Security Tools Section */}
-      <section id="security" className="py-12 bg-gray-50 scroll-mt-24">
+      <section id="security" className="scroll-mt-24 bg-gray-50 py-12">
         <div className="container mx-auto px-6 lg:px-12">
           <h2 className="text-center text-5xl font-bold text-gray-900">
             Our Security Tools
