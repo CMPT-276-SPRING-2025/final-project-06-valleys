@@ -22,37 +22,35 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
+import parse from "html-react-parser";
 
 export const template = {
   bank: {
-    sender: "security@bank-name-alerts.com",
     subject: "URGENT: Unusual activity detected on your account",
     content:
-      "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n[Verify My Account](#)\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name",
+      'Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n <a href="https://deep-phishing.vercel.app/">Verify My Account</a>\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name',
   },
   lotto: {
-    sender: "claims@intl-lottowinners.com",
     subject: "Congratulations! You've Won $1,000,000!",
     content:
-      "Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n[Claim Your Prize](#)\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department",
+      'Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n<a href="#">Claim Your Prize</a>\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department',
   },
   "tech-support": {
-    sender: "support@windows-securityalerts.com",
     subject: "Your PC Has Been Infected! Immediate Action Required!",
     content:
-      "Dear User,\n\nOur security system has detected multiple viruses on your computer. Immediate action is required to prevent data loss.\n\nPlease call our certified support team at **+1-800-XXX-XXXX** or download our free security patch by clicking the protection link below:\n\n[Download Security Patch](#)\n\nFailure to act may result in complete system failure!\n\nStay safe,\nMicrosoft Security Team",
+      'Dear User,\n\nOur security system has detected multiple viruses on your computer. Immediate action is required to prevent data loss.\n\nPlease call our certified support team at **+1-800-XXX-XXXX** or download our free security patch by clicking the protection link below:\n\n<a href="#">Download Security Patch</a>\n\nFailure to act may result in complete system failure!\n\nStay safe,\nMicrosoft Security Team',
   },
   "job-offer": {
-    sender: "hr@globalrecruitment.com",
     subject: "High-Paying Remote Job Opportunity - No Experience Needed!",
     content:
-      "Dear Candidate,\n\nWe found your resume online and would like to offer you an exciting remote job opportunity. No experience required, and you can earn **$5000+ per month** working from home.\n\nTo apply, simply complete the application form by accessing the link below:\n\n[Apply Now](#)\n\nDon't miss this opportunity—limited spots available!\n\nBest regards,\nGlobal Recruitment Team",
+      'Dear Candidate,\n\nWe found your resume online and would like to offer you an exciting remote job opportunity. No experience required, and you can earn **$5000+ per month** working from home.\n\nTo apply, simply complete the application form by accessing the link below:\n\n<a href="#">Apply Now</a>\n\nDon\'t miss this opportunity—limited spots available!\n\nBest regards,\nGlobal Recruitment Team',
   },
 };
 
+const emailSender = "Acme <onboarding@resend.dev>";
+
 export default function EmailGenerator() {
   const [emailTemplate, setEmailTemplate] = React.useState("bank");
-  const [emailSender, setEmailSender] = React.useState(template["bank"].sender);
   const [emailSubject, setEmailSubject] = React.useState(
     template["bank"].subject
   );
@@ -70,7 +68,6 @@ export default function EmailGenerator() {
     if (newTemplate === "custom") {
       setEmailTemplate("custom");
       setCustomizeMode(true);
-      setEmailSender("");
       setEmailSubject("");
       setEmailContent("");
       setEmailContext("");
@@ -79,7 +76,6 @@ export default function EmailGenerator() {
     }
     setEmailTemplate(newTemplate);
     setCustomizeMode(false);
-    setEmailSender(template[newTemplate].sender);
     setEmailSubject(template[newTemplate].subject);
     setEmailContent(template[newTemplate].content);
   };
@@ -97,7 +93,7 @@ export default function EmailGenerator() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/OpenAI/generateEmail", {
+      const response = await fetch("/api/OpenAI/generateEmail/plain-text", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +107,6 @@ export default function EmailGenerator() {
 
       const data = await response.json();
 
-      setEmailSender(data.sender);
       setEmailSubject(data.subject);
       setEmailContent(data.content);
     } catch (error) {
@@ -123,29 +118,48 @@ export default function EmailGenerator() {
   };
 
   const handleSendEmail = async () => {
+    let sendContent;
     try {
-      const response = await fetch('/api/resend', {
-        method: 'POST',
+      const response = await fetch("/api/OpenAI/generateEmail/html", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: emailContent,
+        }),
+      });
+      if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+      const data = await response.json();
+
+      sendContent = data.content;
+    } catch (error) {
+      console.error("Failed to convert email to html:", error);
+    }
+
+    try {
+      const response = await fetch("/api/resend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           recipientEmail,
-          senderEmail: emailSender,
           subject: emailSubject,
-          content: emailContent,
+          content: sendContent,
         }),
-      }); 
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to send email');
+        throw new Error("Failed to send email");
       }
 
       const data = await response.json();
-      console.log('Email sent successfully:', data);
+      console.log("Email sent successfully:", data);
       // You might want to show a success message to the user here
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
       // You might want to show an error message to the user here
     }
   };
@@ -251,12 +265,7 @@ export default function EmailGenerator() {
                 {/* Always appear field */}
                 <div className="space-y-2">
                   <Label htmlFor="sender-email">Sender Email</Label>
-                  <Input
-                    id="sender-email"
-                    value={emailSender}
-                    onChange={(e) => setEmailSender(e.target.value)}
-                    placeholder="Enter the sender of your phishing email..."
-                  />
+                  <Input id="sender-email" value={emailSender} disabled />
                 </div>
 
                 <div className="space-y-2">
@@ -368,7 +377,7 @@ export default function EmailGenerator() {
                   </div>
                   <div className="flex-grow">
                     <p className="break-words whitespace-pre-line text-gray-800">
-                      {emailContent}
+                      {parse(emailContent)}
                     </p>
                   </div>
                 </div>
