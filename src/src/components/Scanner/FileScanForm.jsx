@@ -122,9 +122,7 @@ export default function FileScanForm() {
         <p className="mb-2 text-center text-sm">
           Click to upload or drag and drop
         </p>
-        <p className="text-center text-xs text-gray-500">
-          Max file size: 32MB
-        </p>
+        <p className="text-center text-xs text-gray-500">Max file size: 32MB</p>
 
         <input
           type="file"
