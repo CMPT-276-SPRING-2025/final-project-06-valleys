@@ -22,9 +22,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
+import { baseURL } from "@/utils/constant";
 import parse from "html-react-parser";
 
-const UrlLink = "http://localhost:3000/phished-warning";
+
+const baseRedirectUrl = process.env.NODE_ENV === "production" 
+? `${baseURL}` 
+: "http://localhost:3000";
+
+const UrlLink = `${baseRedirectUrl}/phished-warning`;
 
 export const template = {
   bank: {
