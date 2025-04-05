@@ -13,7 +13,7 @@ export const metadata = {
     "phishing redirect",
     "training exercise",
     "security demonstration",
-    "phishing education"
+    "phishing education",
   ],
 };
 

@@ -24,26 +24,24 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
 import parse from "html-react-parser";
 
+const UrlLink = "http://localhost:3000/phished-warning";
+
 export const template = {
   bank: {
     subject: "URGENT: Unusual activity detected on your account",
-    content:
-      'Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n <a href="https://deep-phishing.vercel.app/">Verify My Account</a>\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name',
+    content: `Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, we have temporarily limited access to sensitive account features.\n\nPlease verify your identity by clicking the secure verification link below to restore full access to your account:\n\n<a href="${UrlLink}">Verify My Account</a>\n\nIf you do not verify your account within 24 hours, your account may be suspended.\n\nThank you for your cooperation.\n\nSecurity Team\nBank Name`,
   },
   lotto: {
     subject: "Congratulations! You've Won $1,000,000!",
-    content:
-      'Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n<a href="#">Claim Your Prize</a>\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department',
+    content: `Dear Winner,\n\nCongratulations! Your email has been randomly selected as the grand prize winner of the International Lottery. You have won **$1,000,000 USD!**\n\nTo claim your prize, please confirm your details by visiting our official claim portal below:\n\n<a href="${UrlLink}">Claim Your Prize</a>\n\nAct fast! Unclaimed prizes will be forfeited within 48 hours.\n\nBest regards,\nLottery Claims Department`,
   },
   "tech-support": {
     subject: "Your PC Has Been Infected! Immediate Action Required!",
-    content:
-      'Dear User,\n\nOur security system has detected multiple viruses on your computer. Immediate action is required to prevent data loss.\n\nPlease call our certified support team at **+1-800-XXX-XXXX** or download our free security patch by clicking the protection link below:\n\n<a href="#">Download Security Patch</a>\n\nFailure to act may result in complete system failure!\n\nStay safe,\nMicrosoft Security Team',
+    content: `Dear User,\n\nOur security system has detected multiple viruses on your computer. Immediate action is required to prevent data loss.\n\nPlease call our certified support team at **+1-800-XXX-XXXX** or download our free security patch by clicking the protection link below:\n\n<a href="${UrlLink}">Download Security Patch</a>\n\nFailure to act may result in complete system failure!\n\nStay safe,\nMicrosoft Security Team`,
   },
   "job-offer": {
     subject: "High-Paying Remote Job Opportunity - No Experience Needed!",
-    content:
-      'Dear Candidate,\n\nWe found your resume online and would like to offer you an exciting remote job opportunity. No experience required, and you can earn **$5000+ per month** working from home.\n\nTo apply, simply complete the application form by accessing the link below:\n\n<a href="#">Apply Now</a>\n\nDon\'t miss this opportunity—limited spots available!\n\nBest regards,\nGlobal Recruitment Team',
+    content: `Dear Candidate,\n\nWe found your resume online and would like to offer you an exciting remote job opportunity. No experience required, and you can earn **$5000+ per month** working from home.\n\nTo apply, simply complete the application form by accessing the link below:\n\n<a href="${UrlLink}">Apply Now</a>\n\nDon't miss this opportunity—limited spots available!\n\nBest regards,\nGlobal Recruitment Team`,
   },
 };
 
@@ -60,7 +58,9 @@ export default function EmailGenerator() {
   const [customizeMode, setCustomizeMode] = React.useState(false);
   const [useAI, setUseAI] = React.useState(true);
   const [emailContext, setEmailContext] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isEmailContextSendLoading, setIsEmailContextSendLoading] =
+    React.useState(false);
+  const [isSendEmailLoading, setIsSendEmailLoading] = React.useState(false);
   const [recipientEmail, setRecipientEmail] = React.useState("");
 
   const handleChangeTemplate = (newTemplate) => {
@@ -91,7 +91,7 @@ export default function EmailGenerator() {
   const handleSubmitEmailContext = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true);
+    setIsEmailContextSendLoading(true);
     try {
       const response = await fetch("/api/OpenAI/generateEmail/plain-text", {
         method: "POST",
@@ -113,12 +113,14 @@ export default function EmailGenerator() {
       console.error("Failed to generate email:", error);
       // Set up error handling here
     } finally {
-      setIsLoading(false);
+      setIsEmailContextSendLoading(false);
     }
   };
 
   const handleSendEmail = async () => {
     let sendContent;
+    // Start the loading here
+    setIsSendEmailLoading(true);
     try {
       const response = await fetch("/api/OpenAI/generateEmail/html", {
         method: "POST",
@@ -156,6 +158,8 @@ export default function EmailGenerator() {
       }
 
       const data = await response.json();
+      // Stop the loading here
+      setIsSendEmailLoading(false);
       console.log("Email sent successfully:", data);
       // You might want to show a success message to the user here
     } catch (error) {
@@ -254,9 +258,13 @@ export default function EmailGenerator() {
                           variant="default"
                           onClick={handleSubmitEmailContext}
                           className="min-w-[140px] flex-1"
-                          disabled={!useAI || emailContext === "" || isLoading}
+                          disabled={
+                            !useAI ||
+                            emailContext === "" ||
+                            isEmailContextSendLoading
+                          }
                         >
-                          {isLoading ? "Loading..." : "Submit"}
+                          {isEmailContextSendLoading ? "Loading..." : "Submit"}
                         </Button>
                       </div>
                     </div>
@@ -349,10 +357,10 @@ export default function EmailGenerator() {
                   variant="default"
                   className="w-full"
                   onClick={handleSendEmail}
-                  disabled={!recipientEmail}
+                  disabled={!recipientEmail || isSendEmailLoading}
                 >
                   <Send className="mr-2 h-4 w-4" />
-                  Send Email
+                  {isSendEmailLoading ? "Sending the email..." : "Send Email"}
                 </Button>
               </CardContent>
             </Card>

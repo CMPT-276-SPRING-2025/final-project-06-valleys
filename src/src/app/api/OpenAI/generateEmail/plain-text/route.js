@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
-import { template } from "@/app/email-generator/page";
 
+const UrlLink = "http://localhost:3000/phished-warning";
 const token = process.env["OPENAI_API_KEY"];
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";
@@ -27,7 +27,7 @@ export async function POST(request) {
           1. A compelling, urgent, or enticing subject line that grabs the reader's attention and encourages them to open the email immediately.
           2. Email content that uses psychological triggers (urgency, fear, greed, etc.), persuading the recipient to take action.
           3. A realistic call-to-action (CTA), such as an urgent request to click on a link, reset their password, or confirm account activity.
-          4. Use a realistic a tag with the href go to https://deep-phishing.vercel.app/ and no decoration to the a tag. 
+          4. Use a realistic a tag with the href go to ${UrlLink} and no decoration to the a tag. 
          
           **Do not leave any placeholders like "[Name]", "[Account]", or "[Link]". Make up specific details where necessary to ensure the email feels real.** 
           For example, use a fake name, account details, or website link that would appear authentic. 
