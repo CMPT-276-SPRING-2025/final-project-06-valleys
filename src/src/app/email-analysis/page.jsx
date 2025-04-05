@@ -68,7 +68,7 @@ export default function EmailAnalysis() {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="relative -mt-8 flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22">
       <div className="mb-4 flex flex-shrink-0 flex-col items-center">

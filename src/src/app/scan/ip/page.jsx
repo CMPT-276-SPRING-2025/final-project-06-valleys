@@ -21,10 +21,9 @@ export default function IPScanPage() {
 
       <IPScanForm />
 
-<div className="mt-6 w-full">
-
-      <RecentScans type="ip" />
-</div>
+      <div className="mt-6 w-full">
+        <RecentScans type="ip" />
+      </div>
     </div>
   );
 }

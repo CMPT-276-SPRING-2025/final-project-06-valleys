@@ -40,7 +40,7 @@ export default {
     "no-unused-vars": "warn",
     "object-shorthand": "warn",
     "quote-props": ["warn", "as-needed"],
-    "react/jsx-fragments": ["warn", "syntax"], 
+    "react/jsx-fragments": ["warn", "syntax"],
     "react/jsx-filename-extension": [
       "warn",
       {

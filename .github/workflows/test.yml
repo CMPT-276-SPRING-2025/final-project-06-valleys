@@ -52,6 +52,7 @@ jobs:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: npm test -- --grep "Unit"
         
       - name: Run Integration Tests
@@ -60,4 +61,5 @@ jobs:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: npm test -- --grep "Integration"
