@@ -1,7 +1,13 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { baseURL } from "@/utils/constant";
 
-const UrlLink = "http://localhost:3000/phished-warning";
+const baseRedirectUrl = process.env.NODE_ENV === "production" 
+? `${baseURL}` 
+: "http://localhost:3000";
+
+const UrlLink = `${baseRedirectUrl}/phished-warning`; 
+
 const token = process.env["OPENAI_API_KEY"];
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "gpt-4o";
