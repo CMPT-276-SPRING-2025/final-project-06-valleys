@@ -58,7 +58,7 @@ export default function ScanUrlForm() {
         potential threats.
       </p>
 
-      <div className="flex flex-col gap-4 sm:flex-row md:gap-2">
+      <div className="flex flex-col gap-4">
         <Input
           type="search"
           placeholder="Enter URL To Scan"
@@ -72,7 +72,7 @@ export default function ScanUrlForm() {
           disabled={loading || !isValidUrl}
           className="whitespace-nowrap"
         >
-          {loading ? "Scanning..." : "Scan"}
+          {loading ? "Scanning URL..." : "Scan URL"}
         </Button>
       </div>
     </div>

@@ -18,9 +18,31 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+// Metadata integrated into the layout
+export const metadata = {
+  title: "Deep Phishing",
+  description:
+    "Educational tool to identify, understand, and prevent phishing scams through file scanning and threat detection.",
+  keywords: "security, phishing, scanner, threat detection, cybersecurity",
+  openGraph: {
+    title: "Deep Phishing - Advanced Security Scanner",
+    description:
+      "Educational tool to identify, understand, and prevent phishing scams through file scanning and threat detection.",
+    siteName: "Deep Phishing",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords} />
+        {/* Add more metadata tags as needed */}
+      </head>
       <body
         className={`${publicSans.className} ${jetbrainsMono.variable} antialiased`}
       >

@@ -153,7 +153,7 @@ export default function EmailAnalysis() {
               variant={isFormValid ? "default" : "secondary"}
               onClick={handleSubmit}
             >
-              {loading ? "Analyzing..." : "Submit"}
+              {loading ? "Analyzing Email..." : "Analyze Email"}
             </Button>
           </CardFooter>
         </Card>

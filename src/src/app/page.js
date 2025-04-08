@@ -114,8 +114,8 @@ export default function Home() {
               </h3>
 
               <p className="mt-2 text-gray-600">
-                Analyze the sender's IP address in emails to detect potential
-                phishing threats.
+                Analyze the sender&apos;s IP address in emails to detect
+                potential phishing threats.
               </p>
               <Link href="/scan/ip">
                 <Button className="mt-4 bg-[#5e7ab8] hover:bg-[#4a6aa0]">

@@ -148,7 +148,7 @@ export default function FileScanForm() {
         {isSubmitting ? (
           <>
             <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></div>
-            Scanning...
+            Scanning File...
           </>
         ) : (
           "Scan File"
