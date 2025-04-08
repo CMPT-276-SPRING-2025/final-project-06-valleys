@@ -9,12 +9,14 @@ All API endpoints are relative to: `/api`
 ## Authentication
 
 Endpoints require API keys to be set in your environment variables:
+
 - `VIRUSTOTAL_API_KEY`: Required for VirusTotal endpoints
 - `OPENAI_API_KEY`: Required for OpenAI endpoints
 
 ## Endpoints
 
 ### Structure
+
 The API routes are organized in the following structure:
 
 ```
@@ -36,15 +38,16 @@ api/
 
 Each endpoint follows the Next.js App Router convention with a `route.ts` file that handles the API logic. The endpoints are grouped by their respective services (VirusTotal and OpenAI) for better organization and maintainability.
 
-
 ### VirusTotal
 
 #### URL Analysis
+
 `POST /virustotal/url/analyze`
 
 Analyze a URL for potential security threats.
 
 **Request Body:**
+
 ```json
 {
   "url": "string"
@@ -52,11 +55,13 @@ Analyze a URL for potential security threats.
 ```
 
 #### IP Analysis
+
 `POST /virustotal/ip/analyze`
 
 Analyze an IP address for potential security threats.
 
 **Request Body:**
+
 ```json
 {
   "ip": "string"
@@ -64,6 +69,7 @@ Analyze an IP address for potential security threats.
 ```
 
 #### File Analysis
+
 `POST /virustotal/file/analyze`
 
 Analyze a file for potential security threats.
@@ -74,11 +80,13 @@ Multipart form data with file
 ### OpenAI
 
 #### Email Analysis
+
 `POST /OpenAI/emailAnalysis`
 
 Analyze email content using AI.
 
 **Request Body:**
+
 ```json
 {
   "content": "string"
@@ -86,11 +94,13 @@ Analyze email content using AI.
 ```
 
 #### Generate Email
+
 `POST /OpenAI/generateEmail`
 
 Generate email content using AI.
 
 **Request Body:**
+
 ```json
 {
   "prompt": "string",
@@ -99,11 +109,13 @@ Generate email content using AI.
 ```
 
 #### Quiz Generation
+
 `POST /OpenAI/quiz`
 
 Generate quiz questions using AI.
 
 **Request Body:**
+
 ```json
 {
   "topic": "string",
@@ -112,11 +124,13 @@ Generate quiz questions using AI.
 ```
 
 ### Health Check
+
 `GET /health`
 
 Check API health status.
 
 **Response:**
+
 ```json
 {
   "status": "ok"

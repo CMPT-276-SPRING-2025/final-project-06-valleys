@@ -52,7 +52,9 @@ jobs:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GMAIL_HOST: ${{ secrets.GMAIL_HOST }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_PASS }}
         run: npm test -- --grep "Unit"
         
       - name: Run Integration Tests
@@ -61,5 +63,7 @@ jobs:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.determine-url.outputs.test_url }}
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GMAIL_HOST: ${{ secrets.GMAIL_HOST }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_PASS }}
         run: npm test -- --grep "Integration"
