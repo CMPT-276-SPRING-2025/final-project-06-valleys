@@ -127,6 +127,8 @@ export default function EmailGenerator() {
     let sendContent;
     // Start the loading here
     setIsSendEmailLoading(true);
+
+
     try {
       const response = await fetch("/api/OpenAI/generateEmail/html", {
         method: "POST",
@@ -147,7 +149,7 @@ export default function EmailGenerator() {
     }
 
     try {
-      const response = await fetch("/api/resend", {
+      const response = await fetch("/api/send-mail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
