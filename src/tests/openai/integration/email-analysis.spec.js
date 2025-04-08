@@ -42,7 +42,7 @@ test.describe("Email Analysis Feature", () => {
   }) => {
     // Set a longer timeout for this test as it makes a real API call
     test.setTimeout(30000);
-
+    
     // Navigate to the email analysis page
     await page.goto("/email-analysis");
 
@@ -63,17 +63,15 @@ test.describe("Email Analysis Feature", () => {
     const analyzeButton = page.locator('[data-testid="analyze-button"]');
     await expect(analyzeButton).toBeEnabled();
     await analyzeButton.click();
-
+    
     // Wait for button to show loading state
     await expect(analyzeButton).toHaveText("Analyzing Email...");
-
+    
     // Wait for button to return to normal state (indicating request completed)
     await expect(analyzeButton).toHaveText("Analyze Email", { timeout: 30000 });
-
+    
     // Now check for results container
-    const resultContainer = page.locator(
-      '[data-testid="analysis-result-container"]'
-    );
+    const resultContainer = page.locator('[data-testid="analysis-result-container"]');
     await expect(resultContainer).toBeVisible({ timeout: 5000 });
 
     // Wait for analysis results to appear using data-testid

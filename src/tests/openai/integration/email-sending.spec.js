@@ -27,6 +27,7 @@ test.describe("Email Sending Integration", () => {
     await page.getByRole("button", { name: "Send Email" }).click();
 
     // Wait for success message
+    await page.waitForSelector('[data-testid="success-message"]');
     await expect(page.getByText("Email sent successfully")).toBeVisible();
   });
 
@@ -71,7 +72,19 @@ test.describe("Email Sending Integration", () => {
   });
 
   test("should handle AI email generation", async ({ page }) => {
-    // Mock the AI generation API response
+    // Mock the plain-text API response
+    await page.route("/api/OpenAI/generateEmail/plain-text", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          subject: "Generated Subject",
+          content: "Generated HTML content",
+        }),
+      });
+    });
+
+    // Also mock the HTML conversion endpoint for completeness
     await page.route("/api/OpenAI/generateEmail/html", async (route) => {
       await route.fulfill({
         status: 200,
@@ -82,8 +95,8 @@ test.describe("Email Sending Integration", () => {
       });
     });
 
-    // Select custom template
-    await page.getByRole("combobox").selectOption("custom");
+    await page.getByRole('combobox').click(); // Open the dropdown
+    await page.getByRole('option', { name: 'Customize' }).click(); // Select the option
 
     // Fill in the context
     await page.getByLabel("Email Context").fill("Generate a phishing email");

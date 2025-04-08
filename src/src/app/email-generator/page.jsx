@@ -24,6 +24,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
 import { baseURL } from "@/utils/constant";
 import parse from "html-react-parser";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, CheckCircle } from "lucide-react";
 
 const baseRedirectUrl =
   process.env.NODE_ENV === "production"
@@ -68,6 +70,11 @@ export default function EmailGenerator() {
     React.useState(false);
   const [isSendEmailLoading, setIsSendEmailLoading] = React.useState(false);
   const [recipientEmail, setRecipientEmail] = React.useState("");
+  // Add state for notification messages
+  const [notification, setNotification] = React.useState({
+    type: null, // 'success' or 'error'
+    message: "",
+  });
 
   const handleChangeTemplate = (newTemplate) => {
     // Early return for custom template
@@ -117,7 +124,10 @@ export default function EmailGenerator() {
       setEmailContent(data.content);
     } catch (error) {
       console.error("Failed to generate email:", error);
-      // Set up error handling here
+      setNotification({
+        type: "error",
+        message: "Failed to generate email. Please try again.",
+      });
     } finally {
       setIsEmailContextSendLoading(false);
     }
@@ -127,6 +137,8 @@ export default function EmailGenerator() {
     let sendContent;
     // Start the loading here
     setIsSendEmailLoading(true);
+    // Clear any previous notifications
+    setNotification({ type: null, message: "" });
 
     try {
       const response = await fetch("/api/OpenAI/generateEmail/html", {
@@ -145,6 +157,12 @@ export default function EmailGenerator() {
       sendContent = data.content;
     } catch (error) {
       console.error("Failed to convert email to html:", error);
+      setNotification({
+        type: "error",
+        message: "Failed to convert email to HTML",
+      });
+      setIsSendEmailLoading(false);
+      return;
     }
 
     try {
@@ -165,10 +183,29 @@ export default function EmailGenerator() {
       }
 
       const data = await response.json();
-      // Stop the loading here
-      setIsSendEmailLoading(false);
+      // Show success notification
+      setNotification({
+        type: "success",
+        message: "Email sent successfully",
+      });
     } catch (error) {
       console.error("Error sending email:", error);
+      // Show error notification
+      setNotification({
+        type: "error",
+        message: error.message || "Failed to send email",
+      });
+      
+      // Handle network errors specifically
+      if (!navigator.onLine || error.name === 'TypeError') {
+        setNotification({
+          type: "error",
+          message: "Network error occurred",
+        });
+      }
+    } finally {
+      // Stop the loading here
+      setIsSendEmailLoading(false);
     }
   };
 
@@ -185,6 +222,7 @@ export default function EmailGenerator() {
 
       {/* Content Group */}
       <div className="mx-auto max-w-5xl items-center p-8">
+      
         {/* Disclaimer Section */}
         <Card className="mb-7 bg-gray-100">
           <CardContent className="p-4">
@@ -195,6 +233,24 @@ export default function EmailGenerator() {
             </p>
           </CardContent>
         </Card>
+        {/* Notification Alert */}
+        {notification.type && (
+          <Alert 
+            className={`mb-4 ${
+              notification.type === "success" ? "bg-green-50" : "bg-red-50"
+            }`}
+            data-testid={`${notification.type}-message`}
+          >
+            {notification.type === "success" ? (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-red-600" />
+            )}
+            <AlertDescription className={notification.type === "success" ? "text-green-700" : "text-red-700"}>
+              {notification.message}
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
           {/* Left Column - Email Generator */}
