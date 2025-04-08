@@ -1,3 +1,4 @@
+// Function to prepare chart data and fetch color based on the data
 export function prepareChartData(stats) {
   if (!stats) return [];
 

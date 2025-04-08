@@ -56,7 +56,7 @@ export async function POST(request) {
     return NextResponse.json({ analysisId: ip });
   } catch (err) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: err.message || "Internal Server Error" },
       { status: 500 }
     );
   }
