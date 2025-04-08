@@ -44,16 +44,16 @@ test.describe("Email Generator Page", () => {
     // Select "Lottery Scam" template
     await page.getByRole("combobox").click();
     await page.getByRole("option", { name: "Lottery Scam" }).click();
-  
+
     // Check if subject contains "Congratulations"
     const subjectInput = page.getByLabel("Subject Line");
     await expect(subjectInput).toHaveValue(/Congratulations/);
-  
+
     // Check if content contains "lottery"
     const contentTextarea = page.getByLabel("Email Content");
     await expect(contentTextarea).toHaveValue(/lottery/i);
   });
-  
+
   test("should enable customization mode when Customize is selected", async ({
     page,
   }) => {
@@ -73,23 +73,23 @@ test.describe("Email Generator Page", () => {
     // Fill in other required fields first
     await page.getByLabel("Subject Line").fill("Test Subject");
     await page.getByLabel("Email Content").fill("Test Content");
-    
+
     // Fill in invalid email
     await page.getByLabel("Recipient Email").fill("invalid-email");
-    
+
     // Try to send
     const sendButton = page.getByRole("button", { name: "Send Email" });
-    
+
     // Click the button
     await sendButton.click();
-    
+
     // Check for error notification with the correct data-testid
     // The app uses data-testid="${notification.type}-message"
     await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
-    
+
     // Fill in valid email
     await page.getByLabel("Recipient Email").fill("valid@example.com");
-    
+
     // Mock the API response for successful email sending
     await page.route("/api/send-mail", async (route) => {
       await route.fulfill({
@@ -98,7 +98,7 @@ test.describe("Email Generator Page", () => {
         body: JSON.stringify({ message: "Email sent successfully" }),
       });
     });
-    
+
     // Also mock the HTML conversion endpoint
     await page.route("/api/OpenAI/generateEmail/html", async (route) => {
       await route.fulfill({
@@ -107,10 +107,10 @@ test.describe("Email Generator Page", () => {
         body: JSON.stringify({ content: "<p>Test Content</p>" }),
       });
     });
-    
+
     // Click send button again
     await sendButton.click();
-    
+
     // Check for success notification
     await expect(page.locator('[data-testid="success-message"]')).toBeVisible();
   });

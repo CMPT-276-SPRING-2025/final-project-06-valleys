@@ -195,9 +195,9 @@ export default function EmailGenerator() {
         type: "error",
         message: error.message || "Failed to send email",
       });
-      
+
       // Handle network errors specifically
-      if (!navigator.onLine || error.name === 'TypeError') {
+      if (!navigator.onLine || error.name === "TypeError") {
         setNotification({
           type: "error",
           message: "Network error occurred",
@@ -222,7 +222,6 @@ export default function EmailGenerator() {
 
       {/* Content Group */}
       <div className="mx-auto max-w-5xl items-center p-8">
-      
         {/* Disclaimer Section */}
         <Card className="mb-7 bg-gray-100">
           <CardContent className="p-4">
@@ -235,7 +234,7 @@ export default function EmailGenerator() {
         </Card>
         {/* Notification Alert */}
         {notification.type && (
-          <Alert 
+          <Alert
             className={`mb-4 ${
               notification.type === "success" ? "bg-green-50" : "bg-red-50"
             }`}
@@ -246,7 +245,13 @@ export default function EmailGenerator() {
             ) : (
               <AlertCircle className="h-4 w-4 text-red-600" />
             )}
-            <AlertDescription className={notification.type === "success" ? "text-green-700" : "text-red-700"}>
+            <AlertDescription
+              className={
+                notification.type === "success"
+                  ? "text-green-700"
+                  : "text-red-700"
+              }
+            >
               {notification.message}
             </AlertDescription>
           </Alert>

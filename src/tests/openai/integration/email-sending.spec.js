@@ -95,8 +95,8 @@ test.describe("Email Sending Integration", () => {
       });
     });
 
-    await page.getByRole('combobox').click(); // Open the dropdown
-    await page.getByRole('option', { name: 'Customize' }).click(); // Select the option
+    await page.getByRole("combobox").click(); // Open the dropdown
+    await page.getByRole("option", { name: "Customize" }).click(); // Select the option
 
     // Fill in the context
     await page.getByLabel("Email Context").fill("Generate a phishing email");

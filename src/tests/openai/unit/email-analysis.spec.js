@@ -22,14 +22,14 @@ test.describe("Email Analysis API", () => {
   test("should return 200 when sending texts", async ({ request }) => {
     // Send a POST request with a valid input
     const formData = new FormData();
-    formData.append('text', 'This is a valid email');
-    
+    formData.append("text", "This is a valid email");
+
     const response = await request.post("/api/OpenAI/emailAnalysis", {
       multipart: {
-        text: "This is a valid email"
-      }
+        text: "This is a valid email",
+      },
     });
-    
+
     // Assert that the response status is 200 (Successful Request)
     expect(response.status()).toBe(200);
   });
