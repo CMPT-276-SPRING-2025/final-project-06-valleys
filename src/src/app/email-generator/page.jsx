@@ -51,8 +51,6 @@ export const template = {
   },
 };
 
-const emailSender = "Acme <onboarding@resend.dev>";
-
 export default function EmailGenerator() {
   const [emailTemplate, setEmailTemplate] = React.useState("bank");
   const [emailSubject, setEmailSubject] = React.useState(
