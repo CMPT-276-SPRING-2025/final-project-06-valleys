@@ -42,7 +42,6 @@ test.describe("Email Analysis Feature", () => {
   }) => {
     // Set a longer timeout for this test as it makes a real API call
     test.setTimeout(30000);
-
     // Navigate to the email analysis page
     await page.goto("/email-analysis");
 
