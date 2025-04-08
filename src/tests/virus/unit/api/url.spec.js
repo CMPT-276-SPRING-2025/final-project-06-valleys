@@ -62,10 +62,6 @@ test.describe("VirusTotal URL API", () => {
 
       // Verify we have meta information
       expect(analyzeData).toHaveProperty("meta");
-
-      // Log some useful information for debugging
-      console.log("Analysis ID:", analyzeData.data.id);
-      console.log("Analysis Type:", analyzeData.data.type);
     }
     // If we got a 202, the analysis is still in progress
     else if (analyzeResponse.status() === 202) {

@@ -36,13 +36,5 @@ test.describe("VirusTotal IP API", () => {
     // Verify we have the expected data structure
     expect(data).toHaveProperty("data");
     expect(data.data).toHaveProperty("attributes");
-
-    // Log some useful information
-    if (data.data?.attributes?.last_analysis_stats) {
-      console.log(
-        "IP Analysis Stats:",
-        data.data.attributes.last_analysis_stats
-      );
-    }
   });
 });

@@ -167,11 +167,8 @@ export default function EmailGenerator() {
       const data = await response.json();
       // Stop the loading here
       setIsSendEmailLoading(false);
-      console.log("Email sent successfully:", data);
-      // You might want to show a success message to the user here
     } catch (error) {
       console.error("Error sending email:", error);
-      // You might want to show an error message to the user here
     }
   };
 

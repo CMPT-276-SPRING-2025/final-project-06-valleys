@@ -5,7 +5,10 @@ test.describe("Email Sending Integration", () => {
     await page.goto("/email-generator");
   });
 
-  test("should successfully send an email with valid data", async ({ page, request }) => {
+  test("should successfully send an email with valid data", async ({
+    page,
+    request,
+  }) => {
     // Mock the API response
     await page.route("/api/send-mail", async (route) => {
       await route.fulfill({
@@ -74,21 +77,23 @@ test.describe("Email Sending Integration", () => {
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
-          content: "<p>Generated HTML content</p>"
+          content: "<p>Generated HTML content</p>",
         }),
       });
     });
 
     // Select custom template
     await page.getByRole("combobox").selectOption("custom");
-    
+
     // Fill in the context
     await page.getByLabel("Email Context").fill("Generate a phishing email");
-    
+
     // Submit context
     await page.getByRole("button", { name: "Submit" }).click();
 
     // Wait for generated content
-    await expect(page.getByLabel("Email Content")).toContainText("Generated HTML content");
+    await expect(page.getByLabel("Email Content")).toContainText(
+      "Generated HTML content"
+    );
   });
-}); 
+});
