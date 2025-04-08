@@ -32,7 +32,6 @@ export async function GET(request) {
     // If we have a URL ID in the analysis data, fetch additional information
     let commentsData = null;
     let votesData = null;
-    let historicalAnalysesData = null;
 
     if (analysisData.data?.links?.item) {
       // Extract the URL ID from the item link
@@ -67,11 +66,10 @@ export async function GET(request) {
       votes: votesData,
     };
 
-    // Return the combined results
     return NextResponse.json(responseData);
   } catch (err) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: err.message || "Internal Server Error" },
       { status: 500 }
     );
   }

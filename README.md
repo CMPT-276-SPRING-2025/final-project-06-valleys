@@ -5,6 +5,14 @@
 
 A web application created to educate users about phishing scams, their consequences, and how to prevent falling victim to these potential scams. By providing features that allow people to upload files or documents to see potential red flags and learn more about these red flags. By giving people the knowledge of potential phishing scams they will be able to identify whether or not something sent directly towards them is a phishing scheme to be able to provide their knowledge to others to prevent phishing eventually. 
 
+---
+
+## Project Links
+- **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
+- **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
+
+---
+
 ## Features
 - **URL Scanner Tool**: This tool checks for malicious links. Users enter a URL and press 'Scan', and our system analyzes the link using API integration to detect potential threats.
 - **IP Scanner Tool**: This tool checks for malicious IP addresses. Users enter an IP and press 'Scan', and our system analyzes the link using API integration to detect potential threats on a selected IP address.
@@ -12,6 +20,7 @@ A web application created to educate users about phishing scams, their consequen
 - **Phishing Email Generator**: This tool creates realistic phishing emails for security training. Users select a template and provide a recipient email before sending the simulated phishing email. A preview is also available so users can review the email before sending it.
 - **Email Analysis Tool**: This tool scans emails for potential phishing indicators. Users can either paste email content into the text box or upload an email file, and our system will analyze it for risks using API integration.
 - **Phishing Email Quiz**: This page is designed to educate users on phishing threats, this AI-powered quiz presents two emails side by side, and users must identify which one is a phishing attempt. This helps them learn the key differences between real and fraudulent emails.
+---
 
 ## Tech Stack
 - **Frontend**: Next.js 15, React 19, TailwindCSS
@@ -57,7 +66,7 @@ yarn install
 
 ### 4. Set Up Environment Variables
 
-**Create a `.env.local` file in the root directory and add the following:**
+**Create a `.env` file in the root directory and add the following:**
 ```env
 VIRUSTOTAL_API_KEY=your_virustotal_api_key
 OPENAI_API_KEY=your_openai_api_key
@@ -84,13 +93,39 @@ http://localhost:3000
 ```sh
 npm run test
 ```
----
-## Project Links
-- **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
-- **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
 
+## File Structure
+src/
+├── app/                      # Next.js app directory
+│   ├── api/                  # API routes
+│   │   ├── openai/             # OpenAI API integration endpoints
+│   │   └── virustotal/         # VirusTotal API integration endpoints
+│   ├── components/           # Reusable UI components
+│   │   ├── ui/               # shadcn/ui components
+│   │   ├── Scanner/          # Scanner components
+│   ├── lib/                  # Utility functions and helpers
+│   │   └── utils/            # General utility functions
+│   ├── email-analysis/       # Email analysis tool page
+│   ├── email-generator/      # Phishing email generator page
+│   ├── scan/                 # Scanner tools directory
+│   │   ├── file/            # File scanning functionality
+│   │   ├── ip/              # IP address scanning functionality 
+│   │   ├── url/             # URL scanning functionality
+│   ├── quiz/                 # Phishing email quiz page
+│   ├── url-scanner/          # URL scanner tool page
+│   ├── page.jsx              # Home page
+│   ├── layout.jsx            # Root layout
+│   └── globals.css           # Global styles
+├── public/                   # Static assets
+├── tests/                    # Playwright tests
+├── .env                      # Environment variables
+├── .eslintrc.json           # ESLint configuration
+├── eslint.config.mjs        # ESLint flat config
+├── next.config.mjs          # Next.js configuration
+├── package.json             # Project dependencies
+├── tailwind.config.js       # Tailwind CSS configuration
+└── tsconfig.json            # TypeScript configuration
 
----
 ## License & Usage
 
 This project is licensed under the **MIT license** and is intended strictly for **educational and training purposes**. The email generator must not be used for real phishing attempts. Always conduct testing responsibly and with informed consent.

@@ -56,11 +56,9 @@ export async function POST(request) {
       fileSize: file.size,
       status: "queued",
     });
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
-      {
-        error: "Failed to process file upload",
-      },
+      { error: err.message || "Internal Server Error" },
       { status: 500 }
     );
   }

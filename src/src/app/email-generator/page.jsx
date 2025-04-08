@@ -25,10 +25,10 @@ import { RefreshCw, Trash2, Copy, Send } from "lucide-react";
 import { baseURL } from "@/utils/constant";
 import parse from "html-react-parser";
 
-
-const baseRedirectUrl = process.env.NODE_ENV === "production" 
-? `${baseURL}` 
-: "http://localhost:3000";
+const baseRedirectUrl =
+  process.env.NODE_ENV === "production"
+    ? `${baseURL}`
+    : "http://localhost:3000";
 
 const UrlLink = `${baseRedirectUrl}/phished-warning`;
 

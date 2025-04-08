@@ -125,7 +125,7 @@ export default function IPScanForm() {
           disabled={isSubmitting || isLoadingIP || !ipRegex.test(ipAddress)}
           className="w-full"
         >
-          {isSubmitting ? "Scanning..." : "Scan"}
+          {isSubmitting ? "Scanning IP Address..." : "Scan IP Address"}
         </Button>
       </form>
     </div>

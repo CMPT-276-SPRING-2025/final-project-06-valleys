@@ -1,6 +1,9 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
+import prettierPlugin from "eslint-plugin-prettier";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -9,53 +12,57 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default {
-  ...compat.extends("next/core-web-vitals"),
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-  },
-  root: true,
-  extends: [
-    "next",
-    "eslint:recommended",
-    "prettier",
-    "next/core-web-vitals",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
-  ],
-  plugins: ["prettier", "react", "react-hooks"],
-  rules: {
-    "prefer-const": "warn",
-    "no-var": "warn",
-    "no-unused-vars": "warn",
-    "object-shorthand": "warn",
-    "quote-props": ["warn", "as-needed"],
-    "react/jsx-fragments": ["warn", "syntax"],
-    "react/jsx-filename-extension": [
-      "warn",
-      {
-        extensions: ["js", "jsx"],
+const nextConfig = compat.extends("next/core-web-vitals");
+
+export default [
+  // Spread the Next.js config array items
+  ...nextConfig,
+  {
+    languageOptions: {
+      ecmaVersion: 2022,  
+      sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
-    ],
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off",
-    "prettier/prettier": "warn",
-  },
-  settings: {
-    react: {
-      version: "detect",
+      globals: {
+        browser: true,
+        es2022: true,  
+        node: true,
+      },
     },
-  },
-};
+    linterOptions: {
+      reportUnusedDisableDirectives: true,
+    },
+    plugins: {
+      prettier: prettierPlugin,
+      react: reactPlugin,
+      "react-hooks": reactHooksPlugin,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      "prefer-const": "warn",
+      "no-var": "warn",
+      "no-unused-vars": "warn",
+      "object-shorthand": "warn",
+      "quote-props": ["warn", "as-needed"],
+      "react/jsx-fragments": ["warn", "syntax"],
+      "react/jsx-filename-extension": [
+        "warn",
+        {
+          extensions: ["js", "jsx"],
+        },
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "prettier/prettier": "warn",
+    },
+  }
+];
