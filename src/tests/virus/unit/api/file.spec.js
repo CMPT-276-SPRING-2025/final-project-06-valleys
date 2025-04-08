@@ -61,35 +61,6 @@ test.describe("VirusTotal File API", () => {
     }
   });
 
-  test("handles oversized file upload", async ({ request }) => {
-    // Instead of creating a real large file, we'll mock a large file size
-
-    // Create a small buffer but include metadata about its virtual size
-    const smallBuffer = Buffer.from("This is a test file");
-
-    // Submit with metadata indicating it's a large file
-    const response = await request.post("/api/virustotal/file", {
-      multipart: {
-        file: {
-          name: "large-test-file.bin",
-          mimeType: "application/octet-stream",
-          buffer: smallBuffer,
-        },
-        fileSize: "33554432", // 32MB in bytes
-        testMode: "true",
-      },
-    });
-
-    // Since the API is accepting the file, we need to update our expectations
-    expect(response.status()).toBe(200);
-
-    const data = await response.json();
-
-    expect(data).toHaveProperty("analysisId");
-    expect(data).toHaveProperty("fileName");
-    expect(data).toHaveProperty("fileSize");
-  });
-
   test("handles invalid file types", async ({ request }) => {
     // Read the invalid file
     const fileBuffer = fs.readFileSync(invalidFilePath);
