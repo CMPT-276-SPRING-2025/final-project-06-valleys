@@ -146,6 +146,9 @@ export default function EmailQuiz() {
     <div className="flex min-h-screen flex-col items-center bg-gray-50 p-4">
       <div className="w-full max-w-4xl">
         <div className="mb-8 text-center">
+          <div className="flex justify-center">
+            <ShieldLogo />
+          </div>
           <h1 className="text-3xl font-bold">Phishing Email Quiz</h1>
           <p className="mt-2 text-gray-600">
             Test your ability to identify phishing emails
