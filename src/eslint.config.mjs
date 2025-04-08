@@ -19,7 +19,7 @@ export default [
   ...nextConfig,
   {
     languageOptions: {
-      ecmaVersion: 2022,  
+      ecmaVersion: 2022,
       sourceType: "module",
       parserOptions: {
         ecmaFeatures: {
@@ -28,7 +28,7 @@ export default [
       },
       globals: {
         browser: true,
-        es2022: true,  
+        es2022: true,
         node: true,
       },
     },
@@ -64,5 +64,5 @@ export default [
       "react/prop-types": "off",
       "prettier/prettier": "warn",
     },
-  }
+  },
 ];

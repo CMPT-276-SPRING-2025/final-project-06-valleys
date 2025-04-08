@@ -51,6 +51,8 @@ export const template = {
   },
 };
 
+const emailSender = "deepphished@gmail.com";
+
 export default function EmailGenerator() {
   const [emailTemplate, setEmailTemplate] = React.useState("bank");
   const [emailSubject, setEmailSubject] = React.useState(
@@ -125,7 +127,6 @@ export default function EmailGenerator() {
     let sendContent;
     // Start the loading here
     setIsSendEmailLoading(true);
-
 
     try {
       const response = await fetch("/api/OpenAI/generateEmail/html", {

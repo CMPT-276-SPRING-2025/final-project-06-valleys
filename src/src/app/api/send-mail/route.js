@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-import { NextResponse } from 'next/server';
+import nodemailer from "nodemailer";
+import { NextResponse } from "next/server";
 
 const transporter = nodemailer.createTransport({
   host: process.env.GMAIL_HOST,
@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
+    pass: process.env.GMAIL_PASS,
+  },
 });
 
 export async function POST(request) {
@@ -19,7 +19,7 @@ export async function POST(request) {
     // Validate required fields
     if (!recipientEmail || !subject || !content) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
@@ -29,21 +29,20 @@ export async function POST(request) {
       from: process.env.GMAIL_USER,
       to: recipientEmail,
       subject: subject,
-      html: content
+      html: content,
     };
 
     // Send email
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json(
-      { message: 'Email sent successfully' },
+      { message: "Email sent successfully" },
       { status: 200 }
     );
-
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     return NextResponse.json(
-      { error: 'Failed to send email' },
+      { error: "Failed to send email" },
       { status: 500 }
     );
   }
