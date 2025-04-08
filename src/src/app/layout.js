@@ -18,7 +18,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Metadata integrated into the layout
 export const metadata = {
   title: "Deep Phishing",
   description:
@@ -41,7 +40,6 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords} />
-        {/* Add more metadata tags as needed */}
       </head>
       <body
         className={`${publicSans.className} ${jetbrainsMono.variable} antialiased`}
