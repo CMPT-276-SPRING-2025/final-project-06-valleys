@@ -57,7 +57,7 @@ yarn install
 
 ### 4. Set Up Environment Variables
 
-**Create a `.env.local` file in the root directory and add the following:**
+**Create a `.env` file in the root directory and add the following:**
 ```env
 VIRUSTOTAL_API_KEY=your_virustotal_api_key
 OPENAI_API_KEY=your_openai_api_key
@@ -84,10 +84,49 @@ http://localhost:3000
 ```sh
 npm run test
 ```
+
 ---
+## File Structure
+
+```
+src/
+├── app/                      # Next.js app directory
+│   ├── api/                  # API routes
+│   │   ├── openai/             # OpenAI API integration endpoints
+│   │   └── virustotal/         # VirusTotal API integration endpoints
+│   ├── components/           # Reusable UI components
+│   │   ├── ui/               # shadcn/ui components
+│   │   ├── Scanner/          # Scanner components
+│   ├── lib/                  # Utility functions and helpers
+│   │   └── utils/            # General utility functions
+│   ├── email-analysis/       # Email analysis tool page
+│   ├── email-generator/      # Phishing email generator page
+│   ├── scan/                 # Scanner tools directory
+│   │   ├── file/            # File scanning functionality
+│   │   ├── ip/              # IP address scanning functionality 
+│   │   ├── url/             # URL scanning functionality
+│   ├── quiz/                 # Phishing email quiz page
+│   ├── url-scanner/          # URL scanner tool page
+│   ├── page.jsx              # Home page
+│   ├── layout.jsx            # Root layout
+│   └── globals.css           # Global styles
+├── public/                   # Static assets
+├── tests/                    # Playwright tests
+├── .env                      # Environment variables
+├── .eslintrc.json           # ESLint configuration
+├── eslint.config.mjs        # ESLint flat config
+├── next.config.mjs          # Next.js configuration
+├── package.json             # Project dependencies
+├── tailwind.config.js       # Tailwind CSS configuration
+└── tsconfig.json            # TypeScript configuration
+```
+
+---
+
 ## Project Links
 - **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
 - **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
+
 
 
 ---
