@@ -28,20 +28,21 @@ test.describe("Email Analysis API", () => {
     // Assert that the response status is 200 (Successful Request)
     expect(response.status()).toBe(200);
   });
-});
-test("should return 500 when an internal server error occurs", async ({
-  request,
-}) => {
-  // Mock an error scenario, this could be simulated by sending invalid data,
-  // Send a POST request with valid email content but in plain text.
-  const response = await request.post("/api/OpenAI/emailAnalysis", {
-    body: "This is a valid email content.",
+
+  test("should return 500 when an internal server error occurs", async ({
+    request,
+  }) => {
+    // Mock an error scenario, this could be simulated by sending invalid data,
+    // Send a POST request with valid email content but in plain text.
+    const response = await request.post("/api/OpenAI/emailAnalysis", {
+      body: "This is a valid email content.",
+    });
+
+    // Assert that the response status is 500 (Internal Server Error)
+    expect(response.status()).toBe(500);
+
+    const responseBody = await response.json();
+    // Assert that the error message is correct
+    expect(responseBody.error).toBe("Failed to analyze email");
   });
-
-  // Assert that the response status is 500 (Internal Server Error)
-  expect(response.status()).toBe(500);
-
-  const responseBody = await response.json();
-  // Assert that the error message is correct
-  expect(responseBody.error).toBe("Failed to analyze email");
 });

@@ -51,7 +51,10 @@ export default function ScanUrlForm() {
   };
 
   return (
-    <div className="w-full rounded-lg bg-white p-6 shadow-sm">
+    <div
+      className="w-full rounded-lg bg-white p-6 shadow-sm"
+      data-testid="url-scan-form"
+    >
       <h2 className="mb-1 text-xl font-medium">Enter a URL to scan</h2>
       <p className="mb-4 text-sm text-neutral-600">
         We'll check the URL against multiple security databases to identify
@@ -66,11 +69,13 @@ export default function ScanUrlForm() {
           onChange={(e) => setUrl(e.target.value)}
           disabled={loading}
           className="flex-grow"
+          data-testid="url-input"
         />
         <Button
           onClick={handleScan}
           disabled={loading || !isValidUrl}
           className="whitespace-nowrap"
+          data-testid="scan-url-button"
         >
           {loading ? "Scanning URL..." : "Scan URL"}
         </Button>

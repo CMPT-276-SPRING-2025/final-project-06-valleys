@@ -85,7 +85,10 @@ export default function IPScanForm() {
   };
 
   return (
-    <div className="w-full rounded-lg bg-white p-6 shadow-sm">
+    <div
+      className="w-full rounded-lg bg-white p-6 shadow-sm"
+      data-testid="ip-scan-form"
+    >
       <h2 className="mb-1 text-xl font-medium">Enter an IP address to scan</h2>
       <p className="mb-4 text-sm text-neutral-600">
         We'll check the IP address against multiple security databases to
@@ -93,12 +96,19 @@ export default function IPScanForm() {
       </p>
 
       {errorMessage && (
-        <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600">
+        <div
+          className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600"
+          data-testid="error-message"
+        >
           {errorMessage}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+        data-testid="ip-scan-form-container"
+      >
         <div className="flex flex-col gap-4 sm:flex-row md:gap-2">
           <Input
             type="text"
@@ -107,6 +117,7 @@ export default function IPScanForm() {
             onChange={(e) => setIpAddress(e.target.value)}
             disabled={isSubmitting || isLoadingIP}
             className="flex-grow"
+            data-testid="ip-input"
           />
           <Button
             type="button"
@@ -114,6 +125,7 @@ export default function IPScanForm() {
             onClick={getMyIP}
             disabled={isSubmitting || isLoadingIP}
             className="whitespace-nowrap"
+            data-testid="get-my-ip-button"
           >
             {isLoadingIP ? "Loading..." : "Get My IP"}
             <Locate className="ml-2 h-4 w-4" />
@@ -124,6 +136,7 @@ export default function IPScanForm() {
           type="submit"
           disabled={isSubmitting || isLoadingIP || !ipRegex.test(ipAddress)}
           className="w-full"
+          data-testid="scan-ip-button"
         >
           {isSubmitting ? "Scanning IP Address..." : "Scan IP Address"}
         </Button>

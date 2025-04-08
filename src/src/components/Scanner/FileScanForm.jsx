@@ -95,7 +95,10 @@ export default function FileScanForm() {
   };
 
   return (
-    <div className="w-full rounded-lg bg-white p-6 shadow-sm">
+    <div
+      className="w-full rounded-lg bg-white p-6 shadow-sm"
+      data-testid="file-scan-form"
+    >
       <h2 className="mb-1 text-xl font-medium">Upload a file to scan</h2>
       <p className="mb-4 text-sm text-neutral-600">
         We'll analyze your file using multiple antivirus engines to detect
@@ -103,7 +106,10 @@ export default function FileScanForm() {
       </p>
 
       {errorMessage && (
-        <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600">
+        <div
+          className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600"
+          data-testid="error-message"
+        >
           {errorMessage}
         </div>
       )}
@@ -115,6 +121,7 @@ export default function FileScanForm() {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        data-testid="file-drop-area"
       >
         <div className="text-primary mb-2">
           <Upload size={32} />
@@ -128,11 +135,15 @@ export default function FileScanForm() {
           type="file"
           onChange={handleFileChange}
           className="absolute h-full w-full cursor-pointer opacity-0"
+          data-testid="file-input"
         />
       </div>
 
       {file && (
-        <div className="mb-4 rounded-md bg-gray-50 p-3">
+        <div
+          className="mb-4 rounded-md bg-gray-50 p-3"
+          data-testid="selected-file-info"
+        >
           <p className="text-sm font-medium">Selected file:</p>
           <p className="text-sm">
             {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
@@ -144,6 +155,7 @@ export default function FileScanForm() {
         onClick={handleSubmit}
         disabled={isSubmitting || !file}
         className="w-full"
+        data-testid="scan-button"
       >
         {isSubmitting ? (
           <>

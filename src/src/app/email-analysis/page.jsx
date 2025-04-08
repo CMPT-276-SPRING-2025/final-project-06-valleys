@@ -70,7 +70,10 @@ export default function EmailAnalysis() {
   };
 
   return (
-    <div className="relative -mt-8 flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22">
+    <div
+      className="relative -mt-8 flex min-h-screen flex-col items-center justify-start bg-gray-100 pt-22"
+      data-testid="email-analysis-page"
+    >
       <div className="mb-4 flex flex-shrink-0 flex-col items-center">
         <ShieldLogo />
         <h1 className="mt-4 text-3xl font-bold">Email Analysis</h1>
@@ -83,9 +86,13 @@ export default function EmailAnalysis() {
         className={`w-full max-w-screen-lg p-4 transition-all duration-300 ${
           result ? "grid gap-6 md:grid-cols-2" : "flex justify-center"
         }`}
+        data-testid="email-analysis-container"
       >
         {/* Left Column - Email Input (Initially Centered) */}
-        <Card className="max-h-max w-full shadow-lg md:w-[500px]">
+        <Card
+          className="max-h-max w-full shadow-lg md:w-[500px]"
+          data-testid="email-input-card"
+        >
           <CardHeader>
             <CardTitle>Email Content</CardTitle>
             <CardDescription>
@@ -100,6 +107,7 @@ export default function EmailAnalysis() {
               placeholder="Paste the full content here, including headers if available..."
               value={text}
               onChange={handleTextChange}
+              data-testid="email-content-textarea"
             />
             <p className="text-blue-00 mt-2 text-sm">
               Or upload a <span className="font-semibold">.txt</span> file.
@@ -110,6 +118,7 @@ export default function EmailAnalysis() {
                 htmlFor="file-upload"
                 className="cursor-pointer rounded-md px-4 py-2 text-sm text-white transition hover:bg-blue-500"
                 style={{ backgroundColor: "#4c6bb0" }}
+                data-testid="file-upload-label"
               >
                 Choose File
               </label>
@@ -120,6 +129,7 @@ export default function EmailAnalysis() {
                 accept=".txt"
                 onChange={handleFileChange}
                 className="absolute h-0 w-0 overflow-hidden"
+                data-testid="file-upload-input"
               />
               {/* File Name or Placeholder with Remove option */}
               {file ? (
@@ -128,6 +138,7 @@ export default function EmailAnalysis() {
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
                   onClick={handleRemoveFile}
+                  data-testid="selected-file-container"
                 >
                   <span className="mr-2 text-sm text-gray-500">
                     {file.name}
@@ -136,12 +147,18 @@ export default function EmailAnalysis() {
                     className={`text-red-500 transition-opacity ${
                       isHovering ? "opacity-100" : "opacity-0"
                     }`}
+                    data-testid="remove-file-button"
                   >
                     <X size={16} />
                   </span>
                 </div>
               ) : (
-                <span className="text-sm text-gray-500">No file chosen</span>
+                <span
+                  className="text-sm text-gray-500"
+                  data-testid="no-file-text"
+                >
+                  No file chosen
+                </span>
               )}
             </div>
           </CardContent>
@@ -152,6 +169,7 @@ export default function EmailAnalysis() {
               disabled={!isFormValid || loading}
               variant={isFormValid ? "default" : "secondary"}
               onClick={handleSubmit}
+              data-testid="analyze-button"
             >
               {loading ? "Analyzing Email..." : "Analyze Email"}
             </Button>
@@ -159,12 +177,16 @@ export default function EmailAnalysis() {
         </Card>
         {/* Right Column - Analysis Result (Appears Dynamically) */}
         {result && (
-          <div className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md">
+          <div
+            className="max-h-[500px] overflow-y-auto rounded-md border bg-white p-4 shadow-md"
+            data-testid="analysis-result-container"
+          >
             <h3 className="mb-4 text-xl font-semibold text-gray-800">
               Analyzed Email Content
             </h3>
             <div
               id="analysis-results"
+              data-testid="analysis-results"
               dangerouslySetInnerHTML={{ __html: result }}
             />
           </div>
