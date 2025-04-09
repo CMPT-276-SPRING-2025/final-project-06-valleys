@@ -68,7 +68,7 @@ export default function EmailGenerator() {
     React.useState(false);
   const [isSendEmailLoading, setIsSendEmailLoading] = React.useState(false);
   const [recipientEmail, setRecipientEmail] = React.useState("");
-  const [copySuccess, setCopySuccess] = React.useState(false);
+  cont [copySuccess, setCopySuccess] = React.useState(false);
 
   const handleChangeTemplate = (newTemplate) => {
     // Early return for custom template
