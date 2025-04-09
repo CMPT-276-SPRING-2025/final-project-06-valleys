@@ -96,36 +96,40 @@ npm run test
 ```
 
 ## File Structure
+
+```bash
 src/
-├── app/                      # Next.js app directory
-│   ├── api/                  # API routes
+├── app/                        # Next.js app directory
+│   ├── api/                    # API routes
 │   │   ├── openai/             # OpenAI API integration endpoints
 │   │   └── virustotal/         # VirusTotal API integration endpoints
-│   ├── components/           # Reusable UI components
-│   │   ├── ui/               # shadcn/ui components
-│   │   ├── Scanner/          # Scanner components
-│   ├── lib/                  # Utility functions and helpers
-│   │   └── utils/            # General utility functions
-│   ├── email-analysis/       # Email analysis tool page
-│   ├── email-generator/      # Phishing email generator page
-│   ├── scan/                 # Scanner tools directory
-│   │   ├── file/            # File scanning functionality
-│   │   ├── ip/              # IP address scanning functionality 
-│   │   ├── url/             # URL scanning functionality
-│   ├── quiz/                 # Phishing email quiz page
-│   ├── url-scanner/          # URL scanner tool page
-│   ├── page.jsx              # Home page
-│   ├── layout.jsx            # Root layout
-│   └── globals.css           # Global styles
-├── public/                   # Static assets
-├── tests/                    # Playwright tests
-├── .env                      # Environment variables
-├── .eslintrc.json           # ESLint configuration
-├── eslint.config.mjs        # ESLint flat config
-├── next.config.mjs          # Next.js configuration
-├── package.json             # Project dependencies
-├── tailwind.config.js       # Tailwind CSS configuration
-└── tsconfig.json            # TypeScript configuration
+│   ├── components/             # Reusable UI components
+│   │   └── ui/                 # shadcn/ui components
+│   ├── Scanner/                # Scanner components
+│   ├── lib/                    # Utility functions and helpers
+│   ├── utils/                  # General utility functions
+│   ├── email-analysis/         # Email analysis tool page
+│   ├── email-generator/        # Phishing email generator page
+│   ├── scan/                   # Scanner tools directory
+│   │   ├── file/               # File scanning functionality
+│   │   ├── ip/                 # IP address scanning functionality
+│   │   └── url/                # URL scanning functionality
+│   ├── quiz/                   # Phishing email quiz page
+│   ├── url-scanner/            # URL scanner tool page
+│   ├── page.jsx                # Home page
+│   ├── layout.jsx              # Root layout
+│   └── globals.css             # Global styles
+├── public/                     # Static assets
+├── tests/                      # Playwright tests
+├── .env                        # Environment variables
+├── .eslintrc.json              # ESLint configuration
+├── eslint.config.mjs           # ESLint flat config
+├── next.config.mjs             # Next.js configuration
+├── package.json                # Project dependencies
+├── tailwind.config.js          # Tailwind CSS configuration
+└── tsconfig.json               # TypeScript configuration
+```
+
 
 ## License & Usage
 
