@@ -8,13 +8,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-const baseRedirectUrl =
-  process.env.NODE_ENV === "production"
-    ? `${baseURL}`
-    : "http://localhost:3000";
-
-const UrlLink = `${baseRedirectUrl}`;
+import Link from "next/link";
 
 export default function PhishedWarning() {
   return (
@@ -42,7 +36,7 @@ export default function PhishedWarning() {
             </p>
             <Button className="mt-4 p-4">
               <div className="flex flex-row items-center justify-center">
-                <a href={`${UrlLink}`}>Protect Yourself Now</a>
+                <Link href={`/`}>Protect Yourself Now</Link>
                 <ArrowRight />
               </div>
             </Button>
