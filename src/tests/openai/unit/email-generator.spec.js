@@ -42,6 +42,7 @@ test.describe("Email Generator Page", () => {
     page,
   }) => {
     // Select "Lottery Scam" template
+<<<<<<< HEAD
     await page.getByRole("combobox").selectOption("lotto");
 
     // Check if subject contains "Congratulations"
@@ -51,13 +52,30 @@ test.describe("Email Generator Page", () => {
     // Check if content contains "lottery"
     const contentTextarea = page.getByLabel("Email Content");
     await expect(contentTextarea).toContainText("lottery");
+=======
+    await page.getByRole("combobox").click();
+    await page.getByRole("option", { name: "Lottery Scam" }).click();
+
+    // Check if subject contains "Congratulations"
+    const subjectInput = page.getByLabel("Subject Line");
+    await expect(subjectInput).toHaveValue(/Congratulations/);
+
+    // Check if content contains "lottery"
+    const contentTextarea = page.getByLabel("Email Content");
+    await expect(contentTextarea).toHaveValue(/lottery/i);
+>>>>>>> 0295251f667c07aa3722cb2ad4e291945000ce2a
   });
 
   test("should enable customization mode when Customize is selected", async ({
     page,
   }) => {
     // Select "Customize" option
+<<<<<<< HEAD
     await page.getByRole("combobox").selectOption("custom");
+=======
+    await page.getByRole("combobox").click();
+    await page.getByRole("option", { name: "Customize" }).click();
+>>>>>>> 0295251f667c07aa3722cb2ad4e291945000ce2a
 
     // Check if email context input appears
     await expect(page.getByLabel("Email Context")).toBeVisible();
@@ -68,6 +86,7 @@ test.describe("Email Generator Page", () => {
   });
 
   test("should validate recipient email before sending", async ({ page }) => {
+<<<<<<< HEAD
     // Try to send without recipient email
     const sendButton = page.getByRole("button", { name: "Send Email" });
     await expect(sendButton).toBeDisabled();
@@ -79,5 +98,50 @@ test.describe("Email Generator Page", () => {
     // Enter valid email
     await page.getByLabel("Recipient Email").fill("test@example.com");
     await expect(sendButton).toBeEnabled();
+=======
+    // Fill in other required fields first
+    await page.getByLabel("Subject Line").fill("Test Subject");
+    await page.getByLabel("Email Content").fill("Test Content");
+
+    // Fill in invalid email
+    await page.getByLabel("Recipient Email").fill("invalid-email");
+
+    // Try to send
+    const sendButton = page.getByRole("button", { name: "Send Email" });
+
+    // Click the button
+    await sendButton.click();
+
+    // Check for error notification with the correct data-testid
+    // The app uses data-testid="${notification.type}-message"
+    await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
+
+    // Fill in valid email
+    await page.getByLabel("Recipient Email").fill("valid@example.com");
+
+    // Mock the API response for successful email sending
+    await page.route("/api/send-mail", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Email sent successfully" }),
+      });
+    });
+
+    // Also mock the HTML conversion endpoint
+    await page.route("/api/OpenAI/generateEmail/html", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ content: "<p>Test Content</p>" }),
+      });
+    });
+
+    // Click send button again
+    await sendButton.click();
+
+    // Check for success notification
+    await expect(page.locator('[data-testid="success-message"]')).toBeVisible();
+>>>>>>> 0295251f667c07aa3722cb2ad4e291945000ce2a
   });
 });

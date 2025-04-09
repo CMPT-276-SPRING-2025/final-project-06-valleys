@@ -10,24 +10,24 @@ test.describe("Email Analysis Feature", () => {
     // Ensure the page title is correct
     await expect(page.locator("h1")).toHaveText("Email Analysis");
 
-    // Locate the email input field and enter a test email
-    const emailInput = page.locator('textarea[name="emailContent"]');
+    // Locate the email input field and enter a test email using data-testid
+    const emailInput = page.locator('[data-testid="email-content-textarea"]');
     await emailInput.fill(`hello this is scam`);
 
-    // Click the submit button
-    await page.locator('button:has-text("Submit")').click(); // Ensure correct text for submit button
+    // Click the submit button using data-testid
+    await page.locator('[data-testid="analyze-button"]').click();
 
-    // Wait for analysis results to appear
-    const resultSection = page.locator("#analysis-results");
-    await resultSection.waitFor({ state: "visible", timeout: 10000 }); // Ensure that the result section is visible
+    // Wait for analysis results to appear using data-testid
+    const resultSection = page.locator('[data-testid="analysis-results"]');
+    await resultSection.waitFor({ state: "visible", timeout: 10000 });
 
     // Get the inner HTML of the result section and log it to the console
     const resultHTML = await resultSection.innerHTML();
-    console.log("Analysis Result HTML:", resultHTML); // Log HTML to see what is in the result section
+    console.log("Analysis Result HTML:", resultHTML);
 
     // Optionally, you can log the inner text as well
     const resultText = await resultSection.innerText();
-    console.log("Analysis Result Text:", resultText); // Log plain text of the result section
+    console.log("Analysis Result Text:", resultText);
 
     // Expect the phrase to be present in the analyzed content
     await expect(resultSection).toContainText(
@@ -40,14 +40,16 @@ test.describe("Email Analysis Feature", () => {
   test("should analyze a valid email and display result with red or green annotations", async ({
     page,
   }) => {
+    // Set a longer timeout for this test as it makes a real API call
+    test.setTimeout(30000);
     // Navigate to the email analysis page
     await page.goto("/email-analysis");
 
     // Ensure the page title is correct
     await expect(page.locator("h1")).toHaveText("Email Analysis");
 
-    // Locate the email input field and enter a test email
-    const emailInput = page.locator('textarea[name="emailContent"]');
+    // Locate the email input field and enter a test email using data-testid
+    const emailInput = page.locator('[data-testid="email-content-textarea"]');
     await emailInput.fill(`Dear User,
       Your account has been flagged for suspicious activity. 
       To secure your account, please verify your identity 
@@ -56,12 +58,26 @@ test.describe("Email Analysis Feature", () => {
       Best,
       Security Team`);
 
-    // Click the submit button
-    await page.locator('button:has-text("Submit")').click(); // Ensure correct text for submit button
+    // Click the submit button using data-testid
+    const analyzeButton = page.locator('[data-testid="analyze-button"]');
+    await expect(analyzeButton).toBeEnabled();
+    await analyzeButton.click();
 
-    // Wait for analysis results to appear
-    const resultSection = page.locator("#analysis-results");
-    await expect(resultSection).toBeVisible({ timeout: 10000 });
+    // Wait for button to show loading state
+    await expect(analyzeButton).toHaveText("Analyzing Email...");
+
+    // Wait for button to return to normal state (indicating request completed)
+    await expect(analyzeButton).toHaveText("Analyze Email", { timeout: 30000 });
+
+    // Now check for results container
+    const resultContainer = page.locator(
+      '[data-testid="analysis-result-container"]'
+    );
+    await expect(resultContainer).toBeVisible({ timeout: 5000 });
+
+    // Wait for analysis results to appear using data-testid
+    const resultSection = page.locator('[data-testid="analysis-results"]');
+    await expect(resultSection).toBeVisible({ timeout: 5000 });
 
     // Get the inner HTML of the result section and log it to the console
     const resultHTML = await resultSection.innerHTML();

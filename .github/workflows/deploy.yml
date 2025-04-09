@@ -40,7 +40,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GMAIL_HOST: ${{ secrets.GMAIL_HOST }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_PASS }}
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           
       - name: Install Vercel CLI
         run: npm install -g vercel
