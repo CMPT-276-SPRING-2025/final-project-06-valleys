@@ -10,6 +10,7 @@ A web application created to educate users about phishing scams, their consequen
 ## Project Links
 - **Website:** [deep-phishing.vercel.app](https://deep-phishing.vercel.app/)
 - **Figma Design:** [Figma Mockup](https://www.figma.com/design/y4kHVPOzWIWg3aWcmWZJC6/CMPT-276---06-Valleys?node-id=2-4&p=f&t=PgEmEwuBzdfAKXPk-0)
+- **Demo Video:** [YT Demo Video](https://www.youtube.com/watch?v=51Vm4dMfB8s)
 
 ---
 
