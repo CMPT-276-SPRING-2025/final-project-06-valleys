@@ -68,6 +68,7 @@ export default function EmailGenerator() {
     React.useState(false);
   const [isSendEmailLoading, setIsSendEmailLoading] = React.useState(false);
   const [recipientEmail, setRecipientEmail] = React.useState("");
+  const [copySuccess, setCopySuccess] = React.useState(false);
 
   const handleChangeTemplate = (newTemplate) => {
     // Early return for custom template
@@ -92,6 +93,10 @@ export default function EmailGenerator() {
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailContent);
+    setCopySuccess(true);
+    setTimeout(()=> {
+      setCopySuccess(false);
+    }, 2000)
   };
 
   const handleSubmitEmailContext = async (e) => {
@@ -327,7 +332,7 @@ export default function EmailGenerator() {
                     className="min-w-[140px] flex-1"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    Copy Email
+                    {copySuccess? "Copied!" : "Copy Email"}
                   </Button>
                 </div>
               </CardContent>
