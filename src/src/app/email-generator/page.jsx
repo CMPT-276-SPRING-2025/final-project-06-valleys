@@ -101,9 +101,9 @@ export default function EmailGenerator() {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailContent);
     setCopySuccess(true);
-    setTimeout(()=> {
+    setTimeout(() => {
       setCopySuccess(false);
-    }, 2000)
+    }, 2000);
   };
 
   const handleSubmitEmailContext = async (e) => {
@@ -390,7 +390,7 @@ export default function EmailGenerator() {
                     className="min-w-[140px] flex-1"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    {copySuccess? "Copied!" : "Copy Email"}
+                    {copySuccess ? "Copied!" : "Copy Email"}
                   </Button>
                 </div>
               </CardContent>
