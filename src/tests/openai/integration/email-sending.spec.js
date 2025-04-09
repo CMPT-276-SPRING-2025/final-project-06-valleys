@@ -17,7 +17,6 @@ test.describe("Email Sending Integration", () => {
         body: JSON.stringify({ message: "Email sent successfully" }),
       });
     });
-    f;
     // Fill in the form
     await page.getByLabel("Recipient Email").fill("test@example.com");
     await page.getByLabel("Subject Line").fill("Test Subject");

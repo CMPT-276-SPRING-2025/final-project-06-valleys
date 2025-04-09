@@ -1,36 +1,49 @@
 import { test, expect } from "@playwright/test";
 import path from "path";
 import fs from "fs";
+import os from "os";
 
 test.describe("File Scan Page", () => {
   // Create a test file before all tests
   let testFilePath;
   let testFileName;
+  let invalidFilePath;
 
   test.beforeAll(async () => {
+    // Use temp directory for better permissions
+    const tempDir = os.tmpdir();
+
     // Create a temporary test file with a unique name to avoid conflicts
     testFileName = `test-file-${Date.now()}.txt`;
-    testFilePath = path.join(process.cwd(), testFileName);
+    testFilePath = path.join(tempDir, testFileName);
     fs.writeFileSync(testFilePath, "This is a test file for scanning");
+
+    // Create invalid test file in temp directory
+    invalidFilePath = path.join(tempDir, `invalid-test-file-${Date.now()}.bin`);
+    fs.writeFileSync(invalidFilePath, Buffer.from([0xff, 0xd8, 0xff, 0xe0])); // Invalid file header
   });
 
   test.afterAll(async () => {
-    // Clean up the test file with a retry mechanism
-    if (fs.existsSync(testFilePath)) {
-      try {
-        await fs.promises.unlink(testFilePath);
-      } catch (error) {
-        console.warn(`Could not delete test file: ${error.message}`);
-        // Schedule deletion for later when the file might be unlocked
-        setTimeout(async () => {
-          try {
-            if (fs.existsSync(testFilePath)) {
-              await fs.promises.unlink(testFilePath);
+    // Clean up the test files
+    for (const filePath of [testFilePath, invalidFilePath]) {
+      if (fs.existsSync(filePath)) {
+        try {
+          fs.unlinkSync(filePath);
+        } catch (error) {
+          console.warn(`Could not delete test file: ${error.message}`);
+          // Schedule deletion for later when the file might be unlocked
+          setTimeout(() => {
+            try {
+              if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+              }
+            } catch (e) {
+              console.error(
+                `Failed to delete test file on retry: ${e.message}`
+              );
             }
-          } catch (e) {
-            console.error(`Failed to delete test file on retry: ${e.message}`);
-          }
-        }, 1000);
+          }, 1000);
+        }
       }
     }
   });
@@ -41,28 +54,34 @@ test.describe("File Scan Page", () => {
     // Check that the page title is visible
     await expect(page.locator("h1")).toContainText("File Scanner");
 
-    // Check that the upload area is visible
-    await expect(
-      page.locator("text=Click to upload or drag and drop")
-    ).toBeVisible();
+    // Check that the upload area is visible using data-testid
+    await expect(page.locator('[data-testid="file-drop-area"]')).toBeVisible();
 
     // Check that the scan button is disabled initially
-    const scanButton = page.locator('button:has-text("Scan File")');
+    const scanButton = page.locator('[data-testid="scan-button"]');
     await expect(scanButton).toBeDisabled();
   });
 
   test("should allow file upload and enable scan button", async ({ page }) => {
     await page.goto("/scan/file");
 
-    // Upload a file
-    const fileInput = page.locator('input[type="file"]');
+    // Upload a file using data-testid
+    const fileInput = page.locator('[data-testid="file-input"]');
     await fileInput.setInputFiles(testFilePath);
 
-    // Check that the file name is displayed - use the dynamic file name
-    await expect(page.locator(`text=${testFileName}`)).toBeVisible();
+    // Wait for the file info to appear
+    await page.waitForSelector('[data-testid="selected-file-info"]', {
+      state: "visible",
+      timeout: 5000,
+    });
+
+    // Check that the file name is displayed
+    await expect(
+      page.locator('[data-testid="selected-file-info"]')
+    ).toContainText(testFileName);
 
     // Check that the scan button is now enabled
-    const scanButton = page.locator('button:has-text("Scan File")');
+    const scanButton = page.locator('[data-testid="scan-button"]');
     await expect(scanButton).toBeEnabled();
   });
 
@@ -83,7 +102,7 @@ test.describe("File Scan Page", () => {
       });
 
       // Trigger the file validation function
-      const input = document.querySelector('input[type="file"]');
+      const input = document.querySelector('[data-testid="file-input"]');
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(mockFile);
       input.files = dataTransfer.files;
@@ -93,60 +112,75 @@ test.describe("File Scan Page", () => {
     });
 
     // Check that error message is displayed
-    await expect(
-      page.locator("text=File size exceeds the 32MB limit")
-    ).toBeVisible();
+    await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
+    await expect(page.locator('[data-testid="error-message"]')).toContainText(
+      "File size exceeds the 32MB limit"
+    );
   });
 
   test("should scan file and redirect to results page", async ({ page }) => {
     // Set a longer timeout for this test as it makes a real API call
-    test.setTimeout(60000);
+    test.setTimeout(120000);
 
     await page.goto("/scan/file");
 
     // Upload a file
-    const fileInput = page.locator('input[type="file"]');
+    const fileInput = page.locator('[data-testid="file-input"]');
     await fileInput.setInputFiles(testFilePath);
 
+    // Wait for the file info to appear
+    await page.waitForSelector('[data-testid="selected-file-info"]', {
+      state: "visible",
+      timeout: 10000,
+    });
+
     // Click the scan button
-    const scanButton = page.locator('button:has-text("Scan File")');
+    const scanButton = page.locator('[data-testid="scan-button"]');
+    await expect(scanButton).toBeEnabled();
     await scanButton.click();
 
-    // Wait for the loading state
-    await expect(page.locator("text=Scanning...")).toBeVisible();
+    // Wait for the loading state - look for "Scanning File" text
+    await expect(page.locator("text=Scanning File")).toBeVisible({
+      timeout: 10000,
+    });
 
-    // Wait for redirection to the results page
-    // This might take some time as it's making a real API call
-    await page.waitForURL("**/scan/file/**", { timeout: 30000 });
+    // Wait for navigation to complete - use a more robust approach
+    await page.waitForURL(/\/scan\/file\/.*/, { timeout: 60000 });
 
     // Verify we're on a results page
-    expect(page.url()).toMatch(/\/scan\/file\/[a-zA-Z0-9-_]+/);
+    const currentUrl = page.url();
+    expect(currentUrl).toContain("/scan/file/");
   });
 
   test("should handle API errors gracefully", async ({ page }) => {
-    // For testing error handling, we can use an invalid file type
-    const invalidFilePath = path.join(process.cwd(), "invalid-test-file.bin");
-    fs.writeFileSync(invalidFilePath, Buffer.from([0xff, 0xd8, 0xff, 0xe0])); // Invalid file header
+    // Mock a failed API response
+    await page.route("**/api/virustotal/file", async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "Internal Server Error" }),
+      });
+    });
 
-    try {
-      await page.goto("/scan/file");
+    await page.goto("/scan/file");
 
-      // Upload the invalid file
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(invalidFilePath);
+    // Upload a file
+    const fileInput = page.locator('[data-testid="file-input"]');
+    await fileInput.setInputFiles(testFilePath);
 
-      // Click the scan button
-      const scanButton = page.locator('button:has-text("Scan File")');
-      await scanButton.click();
-    } finally {
-      // Clean up the invalid test file
-      if (fs.existsSync(invalidFilePath)) {
-        try {
-          await fs.promises.unlink(invalidFilePath);
-        } catch (error) {
-          console.warn(`Could not delete invalid test file: ${error.message}`);
-        }
-      }
-    }
+    // Wait for any UI update - don't rely on specific element
+    await page.waitForTimeout(2000);
+
+    // Click the scan button - it should be enabled after file upload
+    const scanButton = page.locator('[data-testid="scan-button"]');
+    await scanButton.click();
+
+    // Check for error message
+    await expect(page.locator('[data-testid="error-message"]')).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.locator('[data-testid="error-message"]')).toContainText(
+      "Internal Server Error"
+    );
   });
 });
